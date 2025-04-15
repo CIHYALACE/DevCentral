@@ -1,5 +1,9 @@
+*{
+    margin: 0;
+    padding: 0;
+}
 .game-card {
-  max-width: 400px;
+    max-width: 400px;
 }
 
 .game-image {
@@ -11,4 +15,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
