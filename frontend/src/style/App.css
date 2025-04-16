@@ -1,5 +1,9 @@
+*{
+    margin: 0;
+    padding: 0;
+}
 .game-card {
-  max-width: 400px;
+    max-width: 400px;
 }
 
 .game-image {
@@ -11,6 +15,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+<<<<<<< HEAD
 
 .share-tech-mono-regular {
   font-family: "Share Tech Mono", monospace;
@@ -18,3 +23,5 @@
   font-style: normal;
 }
 
+=======
+>>>>>>> 42192ed630d43f759c95fc195974bc3c19575008
