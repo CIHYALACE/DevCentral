@@ -12,7 +12,7 @@ export default function GamesSection() {
     const games = Array(6).fill(null);
     
     return (
-        <div className="container py-5">
+        <div className="container py-5 z-0">
             <h2 className="mb-4">Popular Games</h2>
             
             <Swiper
@@ -21,7 +21,7 @@ export default function GamesSection() {
                 // slidesPerView={1}
                 pagination={{ clickable: true }}
                 autoplay={{
-                    delay: 3000,
+                    delay: 5000,
                     disableOnInteraction: false,
                 }}
                 // breakpoints={{

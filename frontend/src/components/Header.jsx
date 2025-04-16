@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <Navbar
       expand="lg"
-      className="position-sticky top-0 z-1 shadow-sm px-4 p-0"
+      className="position-sticky top-0 z-3 shadow-sm px-4 p-0"
       style={{
         backdropFilter: "blur(10px)", // Apply blur effect
         backgroundColor: "rgba(255, 255, 255, 0.7)", // Add semi-transparent background
@@ -38,7 +38,7 @@ export default function Header() {
             <input
               type="text"
               className="form-control me-2"
-              placeholder="Search campaigns..."
+              placeholder="Search..."
               // value={searchQuery}
               // onChange={(e) => setSearchQuery(e.target.value)}
             />

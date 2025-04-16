@@ -4,41 +4,16 @@ export default function Footer() {
         <div>
           <footer
             id="contact-section"
-            className="text-center text-lg-start text-white bg-dark">
-            <section
-              className="d-flex justify-content-between p-4"
-              style={{ backgroundColor: "#198754" }}
-            >
-              <div className="me-5">
-                <span>Get connected with us on social networks:</span>
-              </div>
-  
-              <div>
-                <a href="https://www.facebook.com/cihyalace.abdo/" target="_blank" className="text-white me-4">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" className="text-white me-4">
-                  <i className="fa-brands fa-x-twitter"></i>
-                </a>
-                <a href="mailto:abodyoussef2015@gmail.com" className="text-white me-4">
-                  <i className="fab fa-google"></i>
-                </a>
-                <a href="https://www.instagram.com/abdoyoussef_2/" target="_blank" className="text-white me-4">
-                  <i className="fab fa-instagram"></i>
-                </a>
-                <a href="https://www.linkedin.com/in/abdel-rahman-youssef-16664b236/" target="_blank" className="text-white me-4">
-                  <i className="fab fa-linkedin"></i>
-                </a>
-                <a href="https://github.com/CIHYALACE" target="_blank" className="text-white me-4">
-                  <i className="fab fa-github"></i>
-                </a>
-              </div>
-            </section>
+            className="text-center text-lg-start text-dark bg-white">
+
+            <hr className="container"></hr>
   
             <section className="">
               <div className="container text-center text-md-start mt-5">
                 <div className="row mt-3">
-                  <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+
+  
+                  <div className="col-md-2 col-lg-2 col-xl-2 mx-0 mb-4 share-tech-mono-regular">
                     <h6 className="text-uppercase fw-bold share-tech-mono-regular">DevCentral</h6>
                     <hr
                       className="mb-4 mt-0 d-inline-block mx-auto"
@@ -49,14 +24,29 @@ export default function Footer() {
                       }}
                     />
                     <p>
-                      Here you can use rows and columns to organize your footer
-                      content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                      elit.
+                      <a href="#!" className="text-dark">
+                        DevCentral Premium
+                      </a>
+                    </p>
+                    <p>
+                      <a href="#!" className="text-dark">
+                        Gift Cards
+                      </a>
+                    </p>
+                    <p>
+                      <a href="#!" className="text-dark">
+                        Redeem
+                      </a>
+                    </p>
+                    <p>
+                      <a href="#!" className="text-dark">
+                        Refund Policy
+                      </a>
                     </p>
                   </div>
   
-                  <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <h6 className="text-uppercase fw-bold share-tech-mono-regular">Products</h6>
+                  <div className="col-md-3 col-lg-2 col-xl-2 mx-0 mb-4 share-tech-mono-regular">
+                    <h6 className="text-uppercase fw-bold">Useful links</h6>
                     <hr
                       className="mb-4 mt-0 d-inline-block mx-auto"
                       style={{
@@ -66,60 +56,28 @@ export default function Footer() {
                       }}
                     />
                     <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
-                        Online Couching
-                      </a>
-                    </p>
-                    <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
-                        Training Program
-                      </a>
-                    </p>
-                    <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
-                        Meal Plans
-                      </a>
-                    </p>
-                    <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
-                        Trainers
-                      </a>
-                    </p>
-                  </div>
-  
-                  <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <h6 className="text-uppercase fw-bold share-tech-mono-regular">Useful links</h6>
-                    <hr
-                      className="mb-4 mt-0 d-inline-block mx-auto"
-                      style={{
-                        width: "60px",
-                        backgroundColor: "#f40006",
-                        height: "2px",
-                      }}
-                    />
-                    <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
+                      <a href="#!" className="text-dark">
                         Home
                       </a>
                     </p>
                     <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
+                      <a href="#!" className="text-dark">
                         About
                       </a>
                     </p>
                     <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
+                      <a href="#!" className="text-dark">
                         Sponsers
                       </a>
                     </p>
                     <p>
-                      <a href="#!" className="text-white share-tech-mono-regular">
+                      <a href="#!" className="text-dark">
                         Contact
                       </a>
                     </p>
                   </div>
   
-                  <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                  <div className="col-md-4 col-lg-3 col-xl-3 mx-0 mb-md-0 mb-4 share-tech-mono-regular">
                     <h6 className="text-uppercase fw-bold">Contact</h6>
                     <hr
                       className="mb-4 mt-0 d-inline-block mx-auto"
@@ -145,14 +103,27 @@ export default function Footer() {
                 </div>
               </div>
             </section>
+
+            <hr className="container"></hr>
   
             <div
-              className="text-center p-3"
+              className="text-start text-muted  px-5 p-1 pb-4 share-tech-mono-regular bg-white"
               style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
             >
-              © 2020 Copyright:
-              <a className="text-white" href="#">
-                Fit Connect
+              <a className="text-muted mx-3 text-decoration-none" href="#">
+              Terms of Service
+              </a>
+              <a className="text-muted mx-3 text-decoration-none" href="#">
+              Privacy
+              </a>
+              <a className="text-muted mx-3 text-decoration-none" href="#">
+              About DevCantral
+              </a>
+              <a className="text-muted mx-3 text-decoration-none" href="#">
+              DevCentral Store
+              </a>
+              <a className="text-muted mx-3 text-decoration-none" href="#">
+              Developers
               </a>
             </div>
           </footer>
