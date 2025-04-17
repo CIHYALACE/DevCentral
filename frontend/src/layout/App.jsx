@@ -1,20 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from '../layout/login';
-import Register from '../layout/register';
-import HomePage from '../layout/home';
+import HomePage from '../pages/homePage';
+import SharedLayout from '../sharedLayout/SharedLayout';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<SharedLayout />}>
+          <Route index element={<HomePage />} />
+        </Route>
       </Routes>
-    </Router>
   );
 }
-
-export default App
