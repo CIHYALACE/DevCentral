@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from '../layout/login';
 import Register from '../layout/register';
@@ -13,6 +14,21 @@ function App() {
       </Routes>
     </Router>
   );
+=======
+import '../style/App.css'
+import { Routes, Route } from 'react-router-dom'
+import SharedLayout from '../sharedLayout/SharedLayout'
+import HomePage from '../pages/HomePage'
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<SharedLayout />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
+    </Routes>
+  )
+>>>>>>> Games
 }
 
 export default App;
