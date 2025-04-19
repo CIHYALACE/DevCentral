@@ -1,0 +1,63 @@
+/* src/components/SpecialOffer.css */
+.special-offer-container {
+    max-width: 600px;
+    margin: 30px auto;
+    border: 2px solid #eee;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    background: #fff;
+  }
+  
+  .offer-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .offer-details {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .offer-details h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .offer-details p {
+    margin-bottom: 15px;
+    color: #666;
+  }
+  
+  .price-section {
+    margin-bottom: 20px;
+  }
+  
+  .original-price {
+    text-decoration: line-through;
+    color: red;
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  .discounted-price {
+    color: green;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .buy-now-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .buy-now-button:hover {
+    background-color: #0056b3;
+  }
+  
