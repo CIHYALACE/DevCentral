@@ -1,7 +1,7 @@
 export default function GameCard() {
     return (
         <>
-            <div class="col-6 col-md-5 col-lg-4">
+            <div class="col-12 mb-3 mb-md-0 col-md-5 col-lg-4">
                 <div class="card game-card shadow-sm h-100">
                     <a href="#" class="position-relative d-flex justify-content-center align-items-center">
                         <img src="/Genshin-Impact.webp" class="card-img-top game-image" alt="Game Thumbnail" />
