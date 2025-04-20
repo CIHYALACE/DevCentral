@@ -1,0 +1,4 @@
+react-bootstrap
+swiper
+react-router-dom
+react-slick
