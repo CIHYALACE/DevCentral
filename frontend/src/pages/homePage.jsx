@@ -8,14 +8,17 @@ import {BannerSection} from "../components/BannerSection"
 export default function HomePage() {
     return (
         <>
+           
+
             <GamesSection/>
             <BannerSection/>
 
-            <HeroSlider/>
+             <HeroSlider/>
             <RecommendedAppsSection/>
             <HealthFitness/>
             <SpecialOffer/>
 
+            
         </>
     )
 }
