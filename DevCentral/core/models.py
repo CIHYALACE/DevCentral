@@ -11,14 +11,14 @@ class AppCategory(models.Model):
         return self.name
 
 class AppImage(models.Model):
-    app = models.ForeignKey('core.App', on_delete=models.CASCADE, related_name='images')
+    app = models.ForeignKey('core.App', on_delete=models.CASCADE, related_name='app_images')
     image = models.ImageField(upload_to='app_images/')
 
     def __str__(self):
         return f"Image for {self.app.name}"
 
 class AppReview(models.Model):
-    app = models.ForeignKey('core.App', on_delete=models.CASCADE, related_name='reviews')
+    app = models.ForeignKey('core.App', on_delete=models.CASCADE, related_name='app_reviews')
     rate = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
