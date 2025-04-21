@@ -28,6 +28,6 @@ class UserProfile(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
-    apps_library = models.ManyToManyField('apps.App', blank=True, null=True, related_name='users')
+    apps_library = models.ManyToManyField('core.App', blank=True, null=True, related_name='users')
 
 # Create your models here.
