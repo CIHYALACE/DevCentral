@@ -1,42 +1,34 @@
 // src/layout/HealthFitness.jsx
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import '../style/healthFitness.css';
+import '../style/healthFitness.css'; // تأكد إن المسار صحيح
+
 
 const HealthFitness = () => {
   const [items, setItems] = useState([]);
 
+  // مكان تجيب فيه الداتا سواء API أو داتا ثابتة
   useEffect(() => {
+    // لحد ما يبقى عندك API، حطينا داتا تجريبية
     const dummyData = [
       {
-        id: 5,
+        id: 1,
         title: 'Yoga for Beginners',
         description: 'Start your fitness journey with basic yoga practices.',
-        image: 'https://images.pexels.com/photos/3823039/pexels-photo-3823039.jpeg',
-        rating: 4.8,
-        downloads: '2M+',
-        isOwned: true
+        image: 'https://via.placeholder.com/300x200?text=Yoga',
       },
       {
-        id: 6,
+        id: 2,
         title: 'Healthy Eating Plan',
         description: 'Discover healthy meals and diet tips to stay fit.',
-        image: 'https://www.morelandobgyn.com/hs-fs/hubfs/Imported_Blog_Media/GettyImages-854725402-1.jpg?width=600&name=GettyImages-854725402-1.jpg',
-        rating: 4.3,
-        downloads: '1M+',
-        isOwned: false
+        image: 'https://via.placeholder.com/300x200?text=Healthy+Food',
       },
       {
-        id: 7,
+        id: 3,
         title: 'Home Workout Routines',
         description: 'Simple and effective exercises you can do at home.',
-        image: 'https://oldschooltrainer.com/media/posts/40/responsive/micro-workout-home-2xl.webp',
-        rating: 4.7,
-        downloads: '500K+',
-        isOwned: true
-      }
+        image: 'https://via.placeholder.com/300x200?text=Workout',
+      },
     ];
-    
 
     setItems(dummyData);
   }, []);
@@ -47,19 +39,13 @@ const HealthFitness = () => {
         <h2 className="section-title">Health & Fitness</h2>
         <div className="cards-grid">
           {items.map(item => (
-            <Link
-              to={`/details/apps/${item.id}`}
-              key={item.id}
-              className="card-link"
-            >
-              <div className="card">
-                <img src={item.image} alt={item.title} className="card-image" />
-                <div className="card-body">
-                  <h3 className="card-title">{item.title}</h3>
-                  <p className="card-description">{item.description}</p>
-                </div>
+            <div key={item.id} className="card">
+              <img src={item.image} alt={item.title} className="card-image" />
+              <div className="card-body">
+                <h3 className="card-title">{item.title}</h3>
+                <p className="card-description">{item.description}</p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
