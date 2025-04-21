@@ -6,7 +6,6 @@ import Login from '../pages/login'
 import Register from '../pages/register'
 
 function App() {
-function App() {
   return (
     <Routes>
       <Route path="/" element={<SharedLayout />}>
