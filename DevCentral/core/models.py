@@ -28,14 +28,6 @@ class AppReview(models.Model):
         return f"Review for {self.app.name}"
 
 class App(models.Model):
-    active = 'active'
-    unactive = 'unactive'
-
-    STATUS_CHOICES = [
-        (active, 'Active'),
-        (unactive, 'Unactive'),
-    ]
-
     name = models.CharField(max_length=200)
     description = models.TextField()
     icon = models.ImageField(upload_to='app_icons/', null=True, blank=True)
@@ -46,6 +38,7 @@ class App(models.Model):
     catogory = models.ForeignKey(AppCategory, on_delete=models.SET_NULL, null=True, related_name="apps")
     Approximate_size = models.CharField(max_length=50, null=True, blank=True)
     install_link = models.URLField(null=True, blank=True)
+    is_published = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
