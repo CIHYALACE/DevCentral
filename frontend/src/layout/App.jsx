@@ -4,10 +4,8 @@ import SharedLayout from '../sharedLayout/SharedLayout'
 import HomePage from '../pages/homePage'
 import Login from '../pages/login'
 import Register from '../pages/register'
-import ItemDetails from '../pages/appDetails' // Assuming this is the correct path to your ItemDetails component
-import GamesPage from '../pages/games' // Assuming this is the correct path to your games component
-import AppsPage from '../pages/applications'
 
+function App() {
 function App() {
   return (
     <Routes>

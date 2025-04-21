@@ -8,7 +8,7 @@ export default function SharedLayout() {
         <>
             <Header />
             <Outlet />
-            <Footer /> 
+            <Footer />
         </>
     )
 }

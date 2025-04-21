@@ -16,7 +16,6 @@ export default function HomePage() {
              <HeroSlider/>
             <RecommendedAppsSection/>
             <HealthFitness/>
-            <EducationalAppsSection/>
             <SpecialOffer/>
 
             
