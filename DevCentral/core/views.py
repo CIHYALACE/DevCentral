@@ -9,4 +9,10 @@ class AppViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return App.objects.filter(is_published=True)
     
+class ProductivityAppset(viewsets.ModelViewSet):
+    serializer_class = AppSerializer
+
+    def get_queryset(self):
+        return App.objects.filter(catogory__name='Productivity')
+
 
