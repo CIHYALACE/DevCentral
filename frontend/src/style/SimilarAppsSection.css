@@ -1,0 +1,78 @@
+/* src/style/SimilarAppsSection.css */
+.similar-apps {
+    padding: 20px;
+    background-color: #f7f7f7; /* خلفية خفيفة لتحسين التباين */
+    border-radius: 10px;
+  }
+  
+  .similar-apps .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333; /* لون داكن للنص */
+  }
+  
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  
+  .app-card {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .card {
+    border-radius: 12px; /* زاوية أكثر انحناء */
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* شادو مع إضاءة أكثر وضوحًا */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* إضافة تأثير الشادو عند التحويم */
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* تكبير الشادو عند التحويم */
+  }
+  
+  .app-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px; /* إضافة انحناء للصورة */
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .app-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333; /* لون داكن للنص */
+  }
+  
+  .app-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .app-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .app-rating {
+    font-size: 0.9rem;
+    color: #000000;
+  }
+  
+  .app-downloads {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
+  

@@ -28,9 +28,30 @@ export default function Header() {
       </NavLink>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-1 fw-bold share-tech-mono-regular">
-          <Nav.Link className="nav-link" href="\">Home</Nav.Link>
-          <Nav.Link className="nav-link" href="#">Games</Nav.Link>
-          <Nav.Link className={"nav-link"} href="#">Apps</Nav.Link>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "nav-link active text-primary" : "nav-link"
+            }
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/games"
+            className={({ isActive }) =>
+              isActive ? "nav-link active text-primary" : "nav-link"
+            }
+          >
+            Games
+          </NavLink>
+          <NavLink
+            to="/apps"
+            className={({ isActive }) =>
+              isActive ? "nav-link active text-primary" : "nav-link"
+            }
+          >
+            Apps
+          </NavLink>
           {/* <Nav.Link className="nav-link" href="#">Contact</Nav.Link> */}
         </Nav>
         <div className="d-flex ms-auto align-items-center">
