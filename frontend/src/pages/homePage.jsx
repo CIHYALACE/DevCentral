@@ -8,15 +8,18 @@ import EducationalAppsSection from "../components/EducationalAppsSection"
 export default function HomePage() {
     return (
         <>
+           
+
             <GamesSection/>
             <BannerSection/>
 
-            <HeroSlider/>
+             <HeroSlider/>
             <RecommendedAppsSection/>
             <HealthFitness/>
             <EducationalAppsSection/>
             <SpecialOffer/>
 
+            
         </>
     )
 }
