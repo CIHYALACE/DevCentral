@@ -1,0 +1,4 @@
+.venv/
+*.pyc
+DevCentral/games/files/
+.vscode/
