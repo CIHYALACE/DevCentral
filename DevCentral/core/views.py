@@ -5,13 +5,24 @@ from rest_framework import viewsets
 from .models import *
 from .serializers import *
 
+
+class TopChartAppViewSet(viewsets.ModelViewSet):
+    queryset = App.objects.all()
+    serializer_class = AppSerializer
+
+    def get_queryset(self):
+        return App.objects.filter(is_published=True).order_by('-date_created')[:10]
+    
+
 class AppViewSet(viewsets.ModelViewSet):
+    queryset = App.objects.all()
     serializer_class = AppSerializer
 
     def get_queryset(self):
         return App.objects.filter(is_published=True)
 
-class ProductivityAppset(viewsets.ModelViewSet):
+class ProductivityAppViewSet(viewsets.ModelViewSet):
+    queryset = App.objects.all()
     serializer_class = AppSerializer
 
     def get_queryset(self):

@@ -6,10 +6,11 @@ router = DefaultRouter()
 router.register('games', GameViewSet)
 router.register('reviews', ReviewViewSet)
 router.register('media', MediaViewSet)
-# router.register('productivity', ProductivityAppset)
+router.register('top-chart-apps', TopChartAppViewSet)
+router.register('productivity', ProductivityAppViewSet, basename='productivity')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('', AppViewSet.as_view({'get': 'list'}), name='Apps'),
-    path('productivity/', ProductivityAppset.as_view({'get': 'list'}), name='ProductivityApps'),
 ]
+
