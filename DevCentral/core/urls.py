@@ -6,6 +6,7 @@ router = DefaultRouter()
 router.register('games', GameViewSet)
 router.register('reviews', ReviewViewSet)
 router.register('media', MediaViewSet)
+# router.register('productivity', ProductivityAppset)
 
 urlpatterns = [
     path('', include(router.urls)),
