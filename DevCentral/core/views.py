@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from rest_framework import viewsets
+from .models import Game, Review, Media
+from .serializers import GameSerializer, ReviewSerializer, MediaSerializer
 from .models import *
 from rest_framework import viewsets
 from .serializers import *
