@@ -1,19 +1,12 @@
 // AppsPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import "../style/AppsPage.css"; // تأكد أن ملف CSS موجود ومظبوط
+import AppCard from '../components/AppCard'; // ✅ استيراد كومبوننت AppCard
 
 const AppsPage = () => {
-  // State لتخزين التطبيقات
   const [apps, setApps] = useState([]);
-  
-  // States إضافية لاستخدامها مع API لاحقًا
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
 
   useEffect(() => {
-    // داتا وهمية (Dummy Data) مؤقتة لتجربة عرض التطبيقات
     const dummyApps = [
       {
         id: 12,
@@ -22,16 +15,18 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
         rating: 4.5,
         downloads: "5B+",
-        isOwned: true
+        isOwned: true,
+        price: 0
       },
       {
         id: 13,
         title: "Instagram",
         description: "Capture and share the world's moments.",
-        image: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg",
+        image: "https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg",
         rating: 4.4,
         downloads: "5B+",
-        isOwned: true
+        isOwned: true,
+        price: 0
       },
       {
         id: 14,
@@ -40,7 +35,8 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
         rating: 4.6,
         downloads: "1B+",
-        isOwned: false
+        isOwned: false,
+        price: 0
       },
       {
         id: 15,
@@ -49,7 +45,8 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/0/0a/TikTok_logo.svg",
         rating: 4.3,
         downloads: "1B+",
-        isOwned: false
+        isOwned: false,
+        price: 0
       },
       {
         id: 16,
@@ -58,7 +55,8 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/9/99/Google_Maps_icon.svg",
         rating: 4.7,
         downloads: "10B+",
-        isOwned: true
+        isOwned: true,
+        price: 0
       },
       {
         id: 17,
@@ -67,7 +65,8 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg",
         rating: 4.2,
         downloads: "500M+",
-        isOwned: false
+        isOwned: false,
+        price: 0
       },
       {
         id: 18,
@@ -76,7 +75,8 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/en/a/ad/Snapchat_logo.svg",
         rating: 4.2,
         downloads: "1B+",
-        isOwned: true
+        isOwned: true,
+        price: 0
       },
       {
         id: 19,
@@ -85,7 +85,8 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg",
         rating: 4.1,
         downloads: "100M+",
-        isOwned: true
+        isOwned: true,
+        price: 0
       },
       {
         id: 20,
@@ -94,7 +95,8 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
         rating: 4.2,
         downloads: "5B+",
-        isOwned: true
+        isOwned: true,
+        price: 0
       },
       {
         id: 21,
@@ -103,70 +105,21 @@ const AppsPage = () => {
         image: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
         rating: 4.5,
         downloads: "1B+",
-        isOwned: true
+        isOwned: true,
+        price: 0
       }
     ];
 
-    // تعيين الداتا الوهمية في الـ State
     setApps(dummyApps);
+  }, []);
 
-    // ✅ لتحميل بيانات حقيقية من API في المستقبل
-    /*
-    const fetchApps = async () => {
-      try {
-        const response = await fetch('https://api.example.com/apps'); // استبدل بالرابط الخاص بك
-        if (!response.ok) {
-          throw new Error('Error fetching data');
-        }
-        const data = await response.json();
-        setApps(data); // تخزين الداتا القادمة من السيرفر
-      } catch (err) {
-        setError(err.message); // تخزين الخطأ لو حصل
-      } finally {
-        setLoading(false); // إنهاء حالة التحميل
-      }
-    };
-
-    fetchApps();
-    */
-    
-  }, []); // [] = يشغل useEffect مرة واحدة فقط عند التحميل
-
-  // ✅ لو فعلت تحميل البيانات تقدر تعرض لودينج أو خطأ
-  /*
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="error">Error: {error}</div>;
-  }
-  */
-
-  // عرض التطبيقات
   return (
     <section className="apps-page">
       <h2 className="section-title">Popular Apps</h2>
 
       <div className="apps-grid">
         {apps.map((app) => (
-          <Link 
-            to={`/details/apps/${app.id}`} // رابط صفحة تفاصيل التطبيق
-            key={app.id}
-            className="app-card"
-          >
-            <img src={app.image} alt={app.title} className="app-image" />
-            
-            <div className="app-info">
-              <h3 className="app-title">{app.title}</h3>
-              <p className="app-description">{app.description}</p>
-              
-              <div className="app-details">
-                <span className="app-rating">⭐ {app.rating}</span>
-                <span className="app-downloads">⬇️ {app.downloads}</span>
-              </div>
-            </div>
-          </Link>
+          <AppCard app={app} key={app.id} />
         ))}
       </div>
     </section>
