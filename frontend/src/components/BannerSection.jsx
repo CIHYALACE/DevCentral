@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
-export function BannerSection() {
+export default function BannerSection() {
     return (
         <Container className="mt-5">
             <Row className="gx-0 d-flex flex-column flex-md-row">

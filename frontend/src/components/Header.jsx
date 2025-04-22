@@ -8,8 +8,8 @@ export default function Header() {
       expand="lg"
       className="position-sticky top-0 z-3 shadow-sm px-4 p-0"
       style={{
-        backdropFilter: "blur(10px)", // Apply blur effect
-        backgroundColor: "rgba(255, 255, 255, 0.7)", // Add semi-transparent background
+        backdropFilter: "blur(10px)",
+        backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -24,7 +24,7 @@ export default function Header() {
         <span className="fw-bold fs-4 text-black share-tech-mono-regular">DevCentral</span>
       </Navbar.Brand>
       <NavLink className={"nav-link"}>
-        <i className="fa-solid fa-user fs-5 d-inline d-lg-none px-2 text-success"></i>
+        <i className="fa-solid fa-user fs-5 d-inline d-lg-none px-2 text-black"></i>
       </NavLink>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-1 fw-bold share-tech-mono-regular">
