@@ -1,0 +1,82 @@
+.app-card {
+  background-color: #2c2c2e;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.app-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.image {
+  width: 100%;
+  height: 160px;
+  object-fit: fill;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #444;
+}
+
+.app-info {
+  padding: 15px;
+  background-color: #1f1f21;
+}
+
+.app-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0px 0 10px 0;
+  padding-bottom: 20px;
+  text-align: center;
+  color: #ffffff !important;
+}
+
+.app-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+
+
+.star-icon {
+  color: #fbc02d;
+  font-size: 1rem;
+  margin-left: 4px;
+}
+
+.price-badge {
+  background-color: #444;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.price-badge.free {
+  background-color: #000000; /* أخضر */
+  color: white;
+}
+
+.price-badge.paid {
+  background-color: #e53935; /* أحمر */
+  color: white;
+}
+
+.app-downloads {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
+}
+
+.ratingOf-app {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
+}
