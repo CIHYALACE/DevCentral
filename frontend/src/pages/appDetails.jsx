@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import "../style/ItemDetails.css";
 import SimilarAppsSection from '../components/Similar apps Section';
-
+import { HeroGameDetails } from "../components/HeroGameDetails"
+import { DescriptionSection } from "../components/DescriptionSection" 
+import { RatingSection } from  "../components/RatingSection"
+import { Feature } from "../components/Feature"
 
 const dummyData = {
     apps: [
@@ -322,6 +325,12 @@ const ItemDetails = () => {
       </div>
     </div>
         <SimilarAppsSection/>
+             <div className="bg-light">
+                      <HeroGameDetails/>
+                      <DescriptionSection/> 
+                      <RatingSection />
+                      <Feature/>
+              </div>
     </div>
   );
 };
