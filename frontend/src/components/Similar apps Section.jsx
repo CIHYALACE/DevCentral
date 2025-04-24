@@ -36,18 +36,34 @@ const similarAppsData = [
     image: 'https://images.pexels.com/photos/3889860/pexels-photo-3889860.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
     rating: 4.3,
     downloads: '1.5M+'
+  },
+  {
+    id: 1,
+    title: 'Language Master',
+    description: 'Learn new languages with fun games and interactive lessons.',
+    image: 'https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    rating: 4.6,
+    downloads: '2M+'
+  },
+  {
+    id: 4,
+    title: 'History Explorer',
+    description: 'Learn about the world’s history through engaging lessons.',
+    image: 'https://images.pexels.com/photos/3889860/pexels-photo-3889860.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    rating: 4.3,
+    downloads: '1.5M+'
   }
 ];
 
 const SimilarAppsSection = () => {
 return (
-    <section className="similar-apps">
-        <h2 className="section-title">Similar Apps</h2>
+    <section className="similar-apps col-lg-12">
+        {/* <h2 className="section-title">Similar Apps</h2> */}
         <div className="apps-grid">
             {similarAppsData.map((app) => (
                 <Link to={`/details/apps/${app.id}`} key={app.id} className="app-card">
                     <div className="card">
-                        <img src={app.image} alt={app.title} className="app-image" />
+                        <img src={app.image} alt={app.title} className="app-image"/>
                         <div className="card-body">
                             <h3 className="app-title">{app.title}</h3>
                             <p className="app-description">

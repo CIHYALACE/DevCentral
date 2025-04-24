@@ -31,17 +31,13 @@ export function RatingSection() {
   return (
     <Container className="mt-5">
       <Row>
-        <Col lg={8} className="bg-white rounded-4 border shadow-sm p-4">
+        <Col lg={12} className="bg-white rounded-4 border shadow-sm p-4">
           <h3>Rating and Reviews</h3>
           <hr />
           <div className="rating d-flex align-items-center">
             <h1>4.6</h1>
             <div className="star-rating d-flex text-warning ms-4 align-items-center">
               <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star-half-stroke"></i>
             </div>
           </div>
           <p className="text-muted">7,717 ratings</p>
