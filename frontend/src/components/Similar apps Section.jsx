@@ -58,7 +58,7 @@ const similarAppsData = [
 const SimilarAppsSection = () => {
 return (
     <section className="similar-apps col-lg-12">
-        <h2 className="section-title">Similar Apps</h2>
+        {/* <h2 className="section-title">Similar Apps</h2> */}
         <div className="apps-grid">
             {similarAppsData.map((app) => (
                 <Link to={`/details/apps/${app.id}`} key={app.id} className="app-card">
