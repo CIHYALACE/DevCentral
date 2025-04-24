@@ -2,12 +2,17 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 
-
+role_choices = [
+    ('admin', 'Admin'),
+    ('user', 'User'),
+    ('developer', 'Developer'),
+]
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=False)
     name = models.CharField(max_length=255, blank=False, null=False)
+    role = models.CharField(max_length=50, choices=role_choices, default='user')
     phone_number = models.CharField(blank=True, null=True, unique=True, max_length=11,
                     validators=[RegexValidator(
                                         regex=r'^01\d{9}$',
