@@ -1,8 +1,8 @@
 
 .hero-text{
     position: absolute;
-    top: 90px;
-    left: 100px;
+    top: 180px;
+    left: 140px;
     color: white;
     z-index: 2;
     /* background: rgba(0, 0, 0, 0.5); */
@@ -20,7 +20,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); 
+  background-color: rgba(0, 0, 0, 0.8); 
   pointer-events: none; 
 }
   

@@ -8,8 +8,8 @@ export default function Header() {
       expand="lg"
       className="position-sticky top-0 z-3 shadow-sm px-4 p-0"
       style={{
-        backdropFilter: "blur(10px)", // Apply blur effect
-        backgroundColor: "rgba(255, 255, 255, 0.7)", // Add semi-transparent background
+        backdropFilter: "blur(10px)",
+        backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -24,13 +24,34 @@ export default function Header() {
         <span className="fw-bold fs-4 text-black share-tech-mono-regular">DevCentral</span>
       </Navbar.Brand>
       <NavLink className={"nav-link"}>
-        <i className="fa-solid fa-user fs-5 d-inline d-lg-none px-2 text-success"></i>
+        <i className="fa-solid fa-user fs-5 d-inline d-lg-none px-2 text-black"></i>
       </NavLink>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-1 fw-bold share-tech-mono-regular">
-          <Nav.Link className="nav-link" href="\">Home</Nav.Link>
-          <Nav.Link className="nav-link" href="#">Games</Nav.Link>
-          <Nav.Link className={"nav-link"} href="#">Apps</Nav.Link>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "nav-link active text-primary" : "nav-link"
+            }
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/games"
+            className={({ isActive }) =>
+              isActive ? "nav-link active text-primary" : "nav-link"
+            }
+          >
+            Games
+          </NavLink>
+          <NavLink
+            to="/apps"
+            className={({ isActive }) =>
+              isActive ? "nav-link active text-primary" : "nav-link"
+            }
+          >
+            Apps
+          </NavLink>
           {/* <Nav.Link className="nav-link" href="#">Contact</Nav.Link> */}
         </Nav>
         <div className="d-flex ms-auto align-items-center">
