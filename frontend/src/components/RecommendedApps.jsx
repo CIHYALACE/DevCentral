@@ -1,7 +1,6 @@
 // src/components/RecommendedAppsSection.jsx
 import React, { useState, useEffect } from 'react';
 import AppCard from './AppCard'; 
-import "../style/RecommendedAppsSection.css";
 
 const RecommendedAppsSection = () => {
   const [recommendedAppsData, setRecommendedAppsData] = useState([]);

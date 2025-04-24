@@ -12,7 +12,7 @@ export default function HomePage() {
 
             <GamesSection/>
             <BannerSection/>
-             <HeroSlider/>
+            <HeroSlider/>
             <RecommendedAppsSection/>
             <HealthFitness/>
             <EducationalAppsSection/>

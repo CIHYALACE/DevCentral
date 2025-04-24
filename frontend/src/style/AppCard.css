@@ -16,14 +16,15 @@
 .image {
   width: 100%;
   height: 160px;
-  object-fit: fill;
+  object-fit: contain;
   background-color: #f4f4f4;
   border-bottom: 1px solid #444;
 }
 
 .app-info {
   padding: 15px;
-  background-color: #1f1f21;
+  background-color: #2c2c31;
+  height: 100%;
 }
 
 .app-name {
@@ -31,7 +32,7 @@
   font-weight: 700;
   margin: 0px 0 10px 0;
   padding-bottom: 20px;
-  text-align: center;
+  /* text-align: center; */
   color: #ffffff !important;
 }
 
@@ -60,12 +61,12 @@
 }
 
 .price-badge.free {
-  background-color: #000000; /* أخضر */
+  background-color: #000000; 
   color: white;
 }
 
 .price-badge.paid {
-  background-color: #e53935; /* أحمر */
+  background-color: #e53935;
   color: white;
 }
 

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import "../style/ItemDetails.css";
 import SimilarAppsSection from '../components/Similar apps Section';
-import '../style/HeroGameDetails.css'
-import { DescriptionSection } from "../components/DescriptionSection"
-import { RatingSection } from "../components/RatingSection"
-import { Feature } from "../components/Feature"
-import { Col, Container } from 'react-bootstrap';
 import { ScreenShotsSection } from '../components/ScreenShotsSection';
+import { DescriptionSection } from '../components/DescriptionSection';
+import { RatingSection } from '../components/RatingSection';
+import { Feature } from '../components/Feature';
+import { Container } from 'react-bootstrap';
+import "../style/HeroGameDetails.css";
 
 
 const dummyData = {
@@ -335,29 +335,27 @@ const ItemDetails = () => {
         <button className='hero-btn btn btn-info w-50 mt-4'>Download Now</button>
         <p className='mt-3 '>Offers in-app purchases</p>
       </div>
-      
+
 
       <Container className="mt-5 mb-5">
-  <div className="row">
-    <div className="col-lg-8 ">
-      < ScreenShotsSection />
-      <DescriptionSection />
-      <RatingSection />
-      <Feature />
+        <div className="row">
+          <div className="col-lg-8 ">
+            < ScreenShotsSection />
+            <DescriptionSection />
+            <RatingSection />
+            <Feature />
+          </div>
+          <div className="col-lg-4">
+            <div className="bg-white rounded-4 border shadow-sm p-4 mt-5">
+              <h3>you might also like : </h3>
+              <hr />
+              <SimilarAppsSection />
+            </div>
+          </div>
+        </div>
+      </Container>
     </div>
-    <div className="col-lg-4">
-      <div className="bg-white rounded-4 border shadow-sm p-4 mt-5">
-        <h3>you might also like : </h3>
-        <hr />
-        <SimilarAppsSection />
-      </div>
-    </div>
-  </div>
-</Container>
-
-      
-    </div>
-  );
+      );
 };
 
-export default ItemDetails;
+      export default ItemDetails;
