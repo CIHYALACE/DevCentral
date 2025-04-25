@@ -16,7 +16,7 @@ export function Feature() {
   return (
     <Container className='mt-5'>
       <Row>
-        <Col lg={8} className="bg-white rounded-4 border shadow-sm p-4">
+        <Col lg={12} className="bg-white rounded-4 border shadow-sm p-4">
           <h3>Feature</h3>
           <hr />
           {features.map((feature, index) => (

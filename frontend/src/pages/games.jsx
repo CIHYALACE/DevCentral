@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "../style/GamesPage.css"; // تأكد من إضافة CSS المناسب هنا
+import GameCard from '../components/GameCard';
 
 const GamesPage = () => {
   const [games, setGames] = useState([]);
@@ -138,25 +139,14 @@ const GamesPage = () => {
   return (
     <section className="games-page">
       <h2 className="section-title">Popular Games</h2>
-      <div className="games-grid">
-        {games.map((game) => (
-          <Link
-                to={`/details/games/${game.id}`} // الرابط إلى صفحة التفاصيل
-            key={game.id}
-            className="game-card"
-          >
-            <img src={game.image} alt={game.title} className="game-image" />
-            <div className="game-info">
-              <h3 className="game-title">{game.title}</h3>
-              <p className="game-description">{game.description}</p>
-              <div className="game-details">
-                <span className="game-rating">Rating: {game.rating}</span>
-                <span className="game-downloads">Downloads: {game.downloads}</span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <div className="row g-3">
+  {games
+    .filter((game) => game && game.id) // تصفية العناصر غير الصالحة
+    .map((game) => (
+      <GameCard game={game} key={game.id} />
+    ))}
+</div>
+
     </section>
   );
 };

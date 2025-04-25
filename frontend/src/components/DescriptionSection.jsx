@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
+import SimilarAppsSection from './Similar apps Section'
 
 // Dummy data
 const descriptionParagraphs = [
@@ -14,7 +15,7 @@ export function DescriptionSection() {
   return (
     <Container className="mt-5">
       <Row>
-        <Col lg={8} className="bg-white rounded-4 border shadow-sm p-4">
+        <Col lg={12} className="bg-white rounded-4 border shadow-sm p-4">
           <h3>Description</h3>
           <hr />
           <div className="mt-2">
@@ -25,5 +26,8 @@ export function DescriptionSection() {
         </Col>
       </Row>
     </Container>
+  
+  
   )
+
 }
