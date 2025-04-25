@@ -2,8 +2,8 @@ import React from "react";
 import "../style/UserProfile.css"
 import sideimg from "../assets/tiktok-profile-picture-template_742173-4482.avif"
 const menu = [
-  "Account", "Your info", "Subscriptions", "Devices", "Security", "Privacy",
-  "Order history", "Payment options", "Address book"
+  "Account", "Your info", "Subscriptions", "Security", "Privacy",
+  "Order history", "Payment options"
 ];
 
 export default function Sidebar({ active }) {
