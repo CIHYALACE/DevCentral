@@ -77,9 +77,9 @@ class Review(models.Model):
     def delete(self, *args, **kwargs):
         program = self.program
         super().delete(*args, **kwargs)
-        avg = game.reviews.aggregate(Avg('score'))['score__avg'] or 0
-        game.rating = avg
-        game.save(update_fields=['rating'])
+        avg = program.reviews.aggregate(Avg('score'))['score__avg'] or 0
+        program.rating = avg
+        program.save(update_fields=['rating'])
 
 
 MEDIA_TYPE_CHOICES = [
@@ -88,7 +88,7 @@ MEDIA_TYPE_CHOICES = [
     ('banner', 'Banner'),
 ]
 class Media(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='media')
+    game = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='media')
     media_type = models.CharField(max_length=20, choices=MEDIA_TYPE_CHOICES)
     file = models.FileField(upload_to='games/media/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
