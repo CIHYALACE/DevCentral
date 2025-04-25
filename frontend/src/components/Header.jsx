@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 export default function Header() {
+  let token = "bob";
   return (
     <Navbar
       expand="lg"
@@ -23,7 +24,7 @@ export default function Header() {
         />{" "}
         <span className="fw-bold fs-4 text-black share-tech-mono-regular">DevCentral</span>
       </Navbar.Brand>
-      <NavLink className={"nav-link"}>
+      <NavLink to={token ? "/profile" : "/login"} className={"nav-link"}>
         <i className="fa-solid fa-user fs-5 d-inline d-lg-none px-2 text-black"></i>
       </NavLink>
       <Navbar.Collapse id="basic-navbar-nav">
@@ -67,7 +68,7 @@ export default function Header() {
               <i className="fa-solid fa-search"></i>
             </button>
           </form>
-          <NavLink className={"nav-link"}>
+          <NavLink to={token ? "/profile" : "/login"} className={"nav-link"}>
             <i className="fa-solid fa-user fs-5 px-2 text-black"></i>
           </NavLink>
         </div>
