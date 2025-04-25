@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import "../style/GamesPage.css"; // تأكد من إضافة CSS المناسب هنا
 import GameCard from '../components/GameCard';
-
+import { useStore } from "@tanstack/react-store";
+import { gameStore, fetchGames } from "../store/gameStore";
 const GamesPage = () => {
-  const [games, setGames] = useState([]);
-//   const [loading, setLoading] = useState(true); // حالة لتحميل البيانات
+  // const [games, setGames] = useState([]);
+  const games = useStore(gameStore, (state)=> state.games)
+  useEffect(()=>{
+      fetchGames()
+      console.log(games)
+  },[])
+
+  //   const [loading, setLoading] = useState(true); // حالة لتحميل البيانات
 //   const [error, setError] = useState(null); // لحفظ الأخطاء إذا حدثت
 
   useEffect(() => {
     // الداتا الثابتة (مؤقتًا) لتجربة الكود قبل الاتصال بـ API
+    // console.log(asd)
     const dummyData = [
         {
           id: 1,
@@ -106,7 +114,7 @@ const GamesPage = () => {
       ;
 
     // قم بتعيين البيانات الثابتة بشكل مؤقت
-    setGames(dummyData);
+    // setGames(dummyData);
 
     // إذا أردت استخدام API في المستقبل، قم بإلغاء تعليق الكود التالي:
     // const fetchGames = async () => {

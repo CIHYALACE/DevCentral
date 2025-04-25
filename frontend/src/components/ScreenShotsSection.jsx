@@ -10,19 +10,19 @@ const screenshots = [
   { id: 3, src: img3, alt: 'Screenshot 3' },
 ];
 
-export function ScreenShotsSection() {
+export function ScreenShotsSection({media}) {
   return (
     <Container className="mt-5">
       <div className="bg-white rounded-4 border shadow-sm p-4">
         <h3>ScreenShots</h3>
         <hr />
         <Carousel fade indicators interval={3000}>
-          {screenshots.map((shot) => (
+          {media.map((shot) => (
             <Carousel.Item key={shot.id}>
               <img
                 className="d-block w-100 rounded"
-                src={shot.src}
-                alt={shot.alt}
+                src={shot.file}
+                alt={`app ${shot.media_type}`}
                 style={{ objectFit: 'cover', maxHeight: '400px' }}
               />
             </Carousel.Item>

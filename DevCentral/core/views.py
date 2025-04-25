@@ -17,6 +17,7 @@ class TopChartAppViewSet(viewsets.ModelViewSet):
 class ProgramViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all()
     serializer_class = ProgramSerializer
+    lookup_field = 'slug'
 
     def get_queryset(self):
         return Program.objects.filter(is_published=True)

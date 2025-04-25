@@ -27,7 +27,7 @@ const reviews = [
   },
 ];
 
-export function RatingSection() {
+export function RatingSection({reviews_}) {
   return (
     <Container className="mt-5">
       <Row>

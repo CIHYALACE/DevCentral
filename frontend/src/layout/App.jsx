@@ -16,7 +16,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/games" element={<GamesPage />} />
         <Route path="/apps" element={<AppsPage />} /> {/* Assuming you want to show the same page for apps */}
-        <Route path="/details/:type/:id" element={<ItemDetails />} />
+        <Route path="/details/:type/:slug" element={<ItemDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<UserProfile />} />

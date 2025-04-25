@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import GamesSection from "../components/GamesSection";
 import HeroSlider from "../components/HeroSlider";
 import HealthFitness from "../components/HealthANDFitness";
@@ -8,6 +8,7 @@ import BannerSection from "../components/BannerSection";
 import EducationalAppsSection from "../components/EducationalAppsSection";
 
 const HomePage = () => {
+    
     return (
         <>
             <GamesSection />
@@ -20,5 +21,6 @@ const HomePage = () => {
         </>
     );
 };
+ 
 
 export default HomePage;
