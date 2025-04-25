@@ -133,10 +133,3 @@ class Tag(models.Model):
         return self.name
 
 
-class Program(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    tags = models.ManyToManyField(Tag, related_name='programs', blank=True)
-
-    def __str__(self):
-        return self.name
