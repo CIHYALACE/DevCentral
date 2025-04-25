@@ -149,4 +149,35 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+class Download(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='downloads')
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='downloads')
+    downloaded_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.user.username} downloaded {self.program.title} on {self.downloaded_at.strftime('%Y-%m-%d %H:%M:%S')}"
+
+    class Meta:
+        ordering = ['-downloaded_at']
+        unique_together = ('user', 'program', 'downloaded_at')
+
+class Flag(models.Model):
+    REASON_CHOICES = [
+        ('inappropriate', 'Inappropriate Content'),
+        ('bug', 'Bug or Crash'),
+        ('spam', 'Spam or Scam'),
+        ('other', 'Other'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='flags')
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='flags')
+    reason = models.CharField(max_length=50, choices=REASON_CHOICES)
+    description = models.TextField(blank=True)  # Optional extra info
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} flagged {self.program.title} for {self.get_reason_display()}"
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('user', 'program')  
