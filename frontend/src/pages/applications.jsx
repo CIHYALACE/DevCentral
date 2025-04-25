@@ -1,7 +1,8 @@
 // AppsPage.jsx
 
-import React, { useState, useEffect } from 'react';
-import AppCard from '../components/AppCard'; // ✅ استيراد كومبوننت AppCard
+import React, { useState, useEffect } from 'react'
+import AppCard from '../components/AppCard'
+import {AppSliderSection} from '../components/AppSliderSection'
 
 const AppsPage = () => {
   const [apps, setApps] = useState([]);
@@ -114,15 +115,19 @@ const AppsPage = () => {
   }, []);
 
   return (
-    <section className="apps-page">
-      <h2 className="section-title">Popular Apps</h2>
+    <>
+    <AppSliderSection />
+      <section className="apps-page">
+        <h2 className="section-title">Popular Apps</h2>
 
-      <div className="apps-grid">
-        {apps.map((app) => (
-          <AppCard app={app} key={app.id} />
-        ))}
-      </div>
-    </section>
+        <div className="apps-grid">
+          {apps.map((app) => (
+            <AppCard app={app} key={app.id} />
+          ))}
+        </div>
+      </section>
+    </>
+
   );
 };
 
