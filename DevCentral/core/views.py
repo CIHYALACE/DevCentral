@@ -2,35 +2,35 @@ from django.shortcuts import render
 from rest_framework import viewsets
 # from .models import Game, Review, Media
 # from .serializers import GameSerializer, ReviewSerializer, MediaSerializer
-from .models import *
+from .models import Program, Review, Media
 from .serializers import *
 
 
 class TopChartAppViewSet(viewsets.ModelViewSet):
-    queryset = App.objects.all()
-    serializer_class = AppSerializer
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer
 
     def get_queryset(self):
-        return App.objects.filter(is_published=True).order_by('-date_created')[:10]
+        return Program.objects.filter(is_published=True).order_by('-created_at')[:10]
     
 
-class AppViewSet(viewsets.ModelViewSet):
-    queryset = App.objects.all()
-    serializer_class = AppSerializer
+class ProgramViewSet(viewsets.ModelViewSet):
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer
 
     def get_queryset(self):
-        return App.objects.filter(is_published=True)
+        return Program.objects.filter(is_published=True)
 
 class ProductivityAppViewSet(viewsets.ModelViewSet):
-    queryset = App.objects.all()
-    serializer_class = AppSerializer
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer
 
     def get_queryset(self):
-        return App.objects.filter(catogory__name='Productivity')
+        return Program.objects.filter(category__name='Productivity')
 
 class GameViewSet(viewsets.ModelViewSet):
-    queryset = Game.objects.all()
-    serializer_class = GameSerializer
+    queryset = Program.objects.filter(type='game')
+    serializer_class = ProgramSerializer
 
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()

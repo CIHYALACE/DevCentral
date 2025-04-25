@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function GameCardWide() {
     return (
-        <div className="card game-card-wide shadow-sm w-100 mb-3">
-            <div className="row g-0">
+        <div className="game-card-wide shadow-sm w-100 mb-3 border rounded">
+            <div className="row g-2 p-2">
                 {/* Left side - Game image */}
                 <div className="col-md-4 position-relative">
                     <a href="#" className="d-block h-100">
