@@ -1,9 +1,8 @@
 // src/components/SimilarAppsSection.jsx
 import React from 'react';
 import { Link } from 'react-router-dom'; // لتوجيه المستخدم إلى تفاصيل التطبيق
-import "../style/SimilarAppsSection.css"; // تأكد من إضافة ملف CSS الخاص بك
+import "../style/SimilarAppsSection.css"
 
-// بيانات التطبيقات المشابهة
 const similarAppsData = [
   {
     id: 1,

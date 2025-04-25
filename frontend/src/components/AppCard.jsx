@@ -4,6 +4,7 @@ import "../style/AppCard.css"; // ✅ استدعاء ملف الستايل ال�
 
 const AppCard = ({ app }) => {
   return (
+    
     <Link
       to={`/details/apps/${app.id}`}
       className="app-card"
