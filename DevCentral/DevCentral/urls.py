@@ -14,20 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
-# from django.urls import path, include , include , re_path
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('api/', include('core.urls')),
-#     path('apps/', include('core.urls')),
-#     # path('users/', include('users.urls')),
-# ]
-
+from django.urls import path, include , include , re_path
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-<<<<<<< HEAD
-
 from rest_framework.routers import DefaultRouter
-from django.urls import path, include
 from core.views import *
 
 router = DefaultRouter()
@@ -38,20 +29,10 @@ router.register(r'reviews', ReviewViewSet)
 router.register(r'downloads', DownloadViewSet)
 router.register(r'flags', FlagViewSet)
 
-=======
-from django.urls import path, include , include , re_path
-from django.conf import settings
-from django.conf.urls.static import static
->>>>>>> d4a2e7bc428bcff5318c4832cd545842d8ed6e1d
 urlpatterns = [
     path('usingViewset/', include(router.urls)),
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
-
-]
-=======
     path('api/', include('core.urls')),
     path('apps/', include('core.urls')),
     # path('users/', include('users.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
->>>>>>> d4a2e7bc428bcff5318c4832cd545842d8ed6e1d

@@ -6,7 +6,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_remove_app_catogory_remove_app_developer_and_more'),
         ('users', '0001_initial'),
     ]
 

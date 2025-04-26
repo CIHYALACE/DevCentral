@@ -3,7 +3,7 @@ from django.urls import path, include
 from .views import *
 
 router = DefaultRouter()
-router.register('games', GameViewSet)
+router.register('games', ProgramViewSet)
 router.register('reviews', ReviewViewSet)
 router.register('media', MediaViewSet)
 router.register('top-chart-apps', TopChartAppViewSet, basename="top-charts")
