@@ -8,6 +8,7 @@ import ItemDetails from '../pages/appDetails' // Assuming this is the correct pa
 import GamesPage from '../pages/games' // Assuming this is the correct path to your games component
 import AppsPage from '../pages/applications'
 import UserProfile from '../pages/UserProfile'
+import ActivateAccount from '../pages/ActivateAccount'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/apps" element={<AppsPage />} /> {/* Assuming you want to show the same page for apps */}
         <Route path="/details/:type/:slug" element={<ItemDetails />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<UserProfile />} />
       </Route>
