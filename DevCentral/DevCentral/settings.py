@@ -87,6 +87,51 @@ DATABASES = {
     }
 }
 
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = f"DevCentral <{os.getenv('EMAIL_HOST_USER')}>"
+
+# Optimal donor domain settings
+SITE_DOMAIN = "localhost:5173"  # Update to the frontend's domain and port
+SITE_NAME = "DevCentral"
+
+DJOSER = {
+    "USER_ID_FIELD": "email",
+    "LOGIN_FIELD": "email",
+    'DOMAIN':SITE_DOMAIN,
+    'PASSWORD_RESET_CONFIRM_RETYPE':True,
+    'USERNAME_CHANGED_EMAIL_CONFIRMATION':True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
+    'SEND_CONFIRMATION_EMAIL':True,
+    'SET_USERNAME_RETYPE':True,
+    'SET_PASSWORD_RETYPE':True,
+    'PASSWORD_RESET_CONFIRM_URL':'password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL':'email/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL':'users/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL':True,
+    "SITE_NAME": SITE_NAME,
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.CustomUserSerializer',
+        'user': 'users.serializers.CustomUserSerializer',
+        # 'user_delete':'djoser.serializers.UserDeleteSerializer',
+        'current_user': 'users.serializers.CustomUserSerializer',
+    },
+    'EMAIL': {
+        'activation': 'users.email.CustomActivationEmail',
+        'password_reset': 'users.email.CustomPasswordResetEmail',
+    },
+}
+
+
+# DevCentral domain settings
+SITE_DOMAIN = "localhost:5173"  # Update to the frontend's domain and port
+SITE_NAME = "DevCentral"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
