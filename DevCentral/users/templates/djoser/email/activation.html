@@ -1,0 +1,12 @@
+{% block subject %}
+Activate your account on DevCentral
+{% endblock %}
+
+{% block html_body %}
+<p>
+  You're receiving this email because you need to finish the activation process
+  for your account on {{ site_name }}.
+</p>
+<p>To activate your account, please click the link below:</p>
+<p><a href="{{ url }}">Activate your account</a></p>
+{% endblock %}
