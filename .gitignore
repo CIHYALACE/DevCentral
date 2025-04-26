@@ -1,7 +1,40 @@
+# Python virtual environment
 .venv/
+
+# Python cache files
 *.pyc
-DevCentral/games/files/
+__pycache__/
+
+# Node.js dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+
+# IDE and editor settings
 .vscode/
-DevCentral/games/media/
+.idea/
+
+# Lock files
 pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Media and files
+DevCentral/games/files/
+DevCentral/games/media/
+
+# Environment variables
+.env
+.env.local
+
+# Temporary files
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
 
