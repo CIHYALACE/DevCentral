@@ -1,35 +1,59 @@
 from rest_framework import serializers
-from .models import Review, Media, Program, Category
+from django.contrib.auth import get_user_model
+from .models import Category, Program, Media, Review, Download, Flag
 
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = ['id', 'program', 'user', 'score', 'comment', 'created_at', 'updated_at']
-
-class MediaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Media
-        fields = ['id', 'program', 'media_type', 'file', 'uploaded_at']
-
-class ProgramSerializer(serializers.ModelSerializer):
-    reviews = ReviewSerializer(many=True, read_only=True)
-    media = MediaSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Program
-        fields = [
-            'id', 'title', 'slug', 'description', 'developer', 
-            'release_date', 'last_update_date', 'price', 'category', 'rating', 'download_count',
-            'icon', 'download_url', 'is_published', 'created_at', 'updated_at',
-            'reviews', 'media', 'type'
-        ]
-
-
-
+User = get_user_model()
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'related_type']
+        fields = '__all__'
 
 
+class MediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Media
+        fields = '__all__'
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+        read_only_fields = ['created_at', 'updated_at']
+
+
+class ProgramSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), source='category', write_only=True
+    )
+    media = MediaSerializer(many=True, read_only=True)
+    reviews = ReviewSerializer(many=True, read_only=True)
+    rating = serializers.DecimalField(max_digits=3, decimal_places=2, read_only=True)
+
+    class Meta:
+        model = Program
+        fields = '__all__'
+
+
+class DownloadSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    program = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Download
+        fields = '__all__'
+        read_only_fields = ['downloaded_at']
+
+
+class FlagSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    program = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Flag
+        fields = '__all__'
+        read_only_fields = ['created_at']
