@@ -2,3 +2,4 @@ react-bootstrap
 swiper
 react-router-dom
 react-slick
+@tanstack/react-store
