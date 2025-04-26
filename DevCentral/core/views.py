@@ -54,7 +54,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProgramViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all()
     serializer_class = ProgramSerializer
+<<<<<<< HEAD
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+=======
+    lookup_field = 'slug'
+>>>>>>> d4a2e7bc428bcff5318c4832cd545842d8ed6e1d
 
 
 class MediaViewSet(viewsets.ModelViewSet):

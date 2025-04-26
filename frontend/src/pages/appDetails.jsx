@@ -8,6 +8,9 @@ import { RatingSection } from '../components/RatingSection';
 import { Feature } from '../components/Feature';
 import { Container } from 'react-bootstrap';
 import "../style/HeroGameDetails.css";
+import { useStore } from '@tanstack/react-store';
+import { gameStore } from '../store';
+import { fetchGameDetails } from '../store/gameStore';
 
 
 const dummyData = {
@@ -295,18 +298,13 @@ const dummyData = {
 };
 
 const ItemDetails = () => {
-  const { type, id } = useParams();
-  const [item, setItem] = useState(null);
-
+  const { type, slug } = useParams();
+  const appDetails = useStore(gameStore, (state)=> state.currentGame)
   useEffect(() => {
-    const selectedCategory = dummyData[type];
-    if (selectedCategory) {
-      const selectedItem = selectedCategory.find(el => el.id === parseInt(id));
-      setItem(selectedItem);
-    }
-  }, [type, id]);
+    fetchGameDetails(slug)
+  }, [type, slug]);
 
-  if (!item) {
+  if (!appDetails || appDetails.slug != slug) {
     return <div className="loading">Loading...</div>;
   }
 
@@ -315,20 +313,20 @@ const ItemDetails = () => {
       <div className="imgContainer">
         <img
           className="d-block w-100"
-          src={item.image}
-          alt={item.title}
+          src={appDetails?.media.find((media) => media.media_type === 'screenshot')?.file}
+          alt={appDetails.title}
           style={{ height: '600px', objectFit: 'cover' }}
         />
         <div className="overlay"></div>
       </div>
       <div className='hero-text'>
         <div className=' d-flex  align-items-center'>
-          <img src={item.image} alt="imgLogo" className='rounded' width={'100px'} />
-          <h2 className='hero-caption mx-3'>{item.title}</h2>
+          <img src={appDetails?.icon} alt="imgLogo" className='rounded' width={'100px'} />
+          <h2 className='hero-caption mx-3'>{appDetails.title}</h2>
         </div>
-        <p className='mt-5'>{item.description}</p>
+        <p className='mt-5'>{appDetails.description}</p>
         <div className='d-flex  align-items-center mt-4 text-info'>
-          <p className='me-4'>4.6  <i class="fa-solid fa-star "></i> </p>
+          <p className='me-4'>{appDetails.rating}  <i class="fa-solid fa-star "></i> </p>
           <p>280 ratings</p>
           <p className='ms-4'>100M+ <i class="fa-solid fa-download"></i></p>
         </div>
@@ -340,8 +338,8 @@ const ItemDetails = () => {
       <Container className="mt-5 mb-5">
         <div className="row">
           <div className="col-lg-8 ">
-            < ScreenShotsSection />
-            <DescriptionSection />
+            < ScreenShotsSection media={appDetails.media}/>
+            <DescriptionSection description={appDetails.description} />
             <RatingSection />
             <Feature />
           </div>

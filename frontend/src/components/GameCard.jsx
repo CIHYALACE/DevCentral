@@ -47,8 +47,8 @@ export default function GameCard({game }) {
   return (
     <div className="col-12 mb-3 mb-md-0 col-md-5 col-lg-4">
       <div className="card game-card shadow-sm h-100">
-        <Link to={`/details/games/${game.id}`} className="position-relative d-flex justify-content-center align-items-center">
-          <img src={game.image} className="card-img-top game-image" alt="Game Thumbnail" />
+        <Link to={`/details/games/${game.slug}`} className="position-relative d-flex justify-content-center align-items-center">
+          <img src={game?.media?.find((media) => media.media_type === 'screenshot')?.file} className="card-img-top game-image" alt="Game Thumbnail" />
           <span className="position-absolute top-0 end-0 badge bg-dark m-2">In-app</span>
           <span className="position-absolute badge bg-dark p-3">
             <i className="fa-solid fa-play"></i>
@@ -57,7 +57,7 @@ export default function GameCard({game }) {
         <div className="card-body d-flex flex-column">
           <div className="d-flex align-items-center mb-0">
             <Link to={`/details/games/${game.id}`} className="me-4">
-              <img src={game.logo} alt="Game Logo" className="img-fluid border border-black rounded" style={{ maxWidth: "60px" }} />
+              <img src={game.icon} alt="Game Logo" className="img-fluid border border-black rounded" style={{ maxWidth: "60px" }} />
             </Link>
             <div className="flex-grow-1">
               <h5 className="card-title game-title fs-6 mb-1">{game.title}</h5>

@@ -12,5 +12,6 @@ router.register('productivity', ProductivityAppViewSet, basename="productivity")
 urlpatterns = [
     path('', include(router.urls)),
     path('', ProgramViewSet.as_view({'get': 'list'}), name='Apps'),
+    path('<str:slug>/', ProgramViewSet.as_view({'get': 'retrieve'}), name='AppDetails')
 ]
 
