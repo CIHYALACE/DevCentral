@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
+
 export default function GameCard() {
 
-  let dumbData = {
+  let game = {
     id: 1,
     title: "Epic Adventure Quest",
     image: "/Genshin-Impact.webp",
@@ -16,22 +18,22 @@ export default function GameCard() {
                 <div className="card game-card shadow-sm h-100">
                     <a href="#" className="position-relative d-flex justify-content-center align-items-center">
                         <img src="/Genshin-Impact.webp" className="card-img-top game-image" alt="Game Thumbnail" />
-                        <span className="position-absolute top-0 end-0 badge bg-dark m-2"> {dumbData.payment} </span>
+                        <span className="position-absolute top-0 end-0 badge bg-dark m-2"> {game.payment} </span>
                         <span className="position-absolute badge bg-dark p-3">
                             <i className="fa-solid fa-play"></i>
                         </span>
                     </a>
                     <div className="card-body d-flex flex-column">
                         <div className="d-flex align-items-center mb-0">
-                            <a href="#" className="me-4"><img src="/Genshin-Impact-Icon.webp" alt="Game Logo" className="img-fluid border border-black rounded" style={{ maxWidth: "60px" }} /></a>
+                            <Link to={`/details/games/${game.id}`} className="me-4"><img src="/Genshin-Impact-Icon.webp" alt="Game Logo" className="img-fluid border border-black rounded" style={{ maxWidth: "60px" }} /></Link>
                             <div className="flex-grow-1">
-                                <h5 className="card-title game-title fs-6 mb-1"> {dumbData.title} </h5>
-                                <p className="card-text text-muted small mb-2"> {dumbData.studio} </p>
+                                <h5 className="card-title game-title fs-6 mb-1"> {game.title} </h5>
+                                <p className="card-text text-muted small mb-2"> {game.studio} </p>
                                 <div className="d-flex align-items-center">
                                     <div className="text-warning me-1">
                                         <i className="fa-solid fa-star"></i>
                                     </div>
-                                    <small className="text-muted"> {dumbData.rating} </small>
+                                    <small className="text-muted"> {game.rating} </small>
                                 </div>
                             </div>
                         </div>
