@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import CustomUser
 from rest_framework.parsers import MultiPartParser, FormParser
+from djoser.views import UserViewSet
 
 
-class CustomUserViewSet(viewsets.ModelViewSet):
+class CustomUserViewSet(UserViewSet, viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     def get_queryset(self):
