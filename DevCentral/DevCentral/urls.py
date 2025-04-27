@@ -35,9 +35,8 @@ urlpatterns = [
     path('usingViewset/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
+    path('api/', include('djoser.urls')),
     path('apps/', include('core.urls')),
-    path('auth/users/activate/', csrf_exempt(CustomUserViewSet.as_view({'post': 'activation'}))),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-    # path('users/', include('users.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

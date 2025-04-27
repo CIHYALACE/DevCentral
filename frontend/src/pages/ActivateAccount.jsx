@@ -1,27 +1,45 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function ActivateAccount() {
   const { uid, token } = useParams();
+  const [status, setStatus] = useState('Activating your account...');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const activateAccount = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/auth/users/activate/${uid}/${token}/`, {
-          method: 'GET',
+        // Match the URL structure from CustomActivationEmail
+        const response = await fetch(`http://127.0.0.1:8000/api/users/activation/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uid,
+            token
+          })
         });
+
         if (response.ok) {
-          console.log('Account activated successfully');
+          setStatus('Account activated successfully!');
+          setTimeout(() => navigate('/login'), 3000);
         } else {
-          console.error('Failed to activate account');
+          const data = await response.json();
+          setStatus('Activation failed. Please try again.');
         }
       } catch (error) {
         console.error('Error:', error);
+        setStatus('An error occurred during activation.');
       }
     };
 
     activateAccount();
-  }, [uid, token]);
+  }, [uid, token, navigate]);
 
-  return <div>Activating your account...</div>;
-};
+  return (
+    <div className="text-center p-4">
+      <h2>{status}</h2>
+    </div>
+  );
+}

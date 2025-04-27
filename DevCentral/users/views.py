@@ -8,6 +8,10 @@ from rest_framework import status
 from .models import CustomUser
 from rest_framework.parsers import MultiPartParser, FormParser
 from djoser.views import UserViewSet
+from django.contrib.auth.tokens import default_token_generator
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.http import Http404
 
 
 class CustomUserViewSet(UserViewSet, viewsets.ModelViewSet):
@@ -49,3 +53,16 @@ class DeleteAccountView(APIView):
 def activate_redirect(request, uid, token):
     return redirect('http://localhost:5173/')
 
+
+def activate_user(request, uid, token):
+    try:
+        user = get_user_model().objects.get(id=uid)
+    except get_user_model().DoesNotExist:
+        raise Http404("User not found")
+    
+    if default_token_generator.check_token(user, token):
+        # Activate the user account (e.g. setting `user.is_active = True`)
+        user.is_active = True
+        user.save()
+    else:
+        raise Http404("Invalid token")

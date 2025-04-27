@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-uh)&^o9v%&2lv0v!qy#@x)atjvw%rksb28q4j)e-o1@=(-8w@u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -57,6 +57,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 ROOT_URLCONF = 'DevCentral.urls'
 
@@ -128,6 +134,12 @@ DJOSER = {
         'activation': 'users.email.CustomActivationEmail',
         'password_reset': 'users.email.CustomPasswordResetEmail',
     },
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.IsAuthenticated'],
+        'user_create': ['rest_framework.permissions.AllowAny'],
+        'user_activation': ['rest_framework.permissions.AllowAny'],
+        'user_resend_activation': ['rest_framework.permissions.AllowAny'],
+    }
 }
 
 
