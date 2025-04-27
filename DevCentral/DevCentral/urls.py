@@ -19,7 +19,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
+from django.views.decorators.csrf import csrf_exempt
 from core.views import *
+from users.views import CustomUserViewSet
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
@@ -34,6 +36,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
     path('apps/', include('core.urls')),
+    path('auth/users/activate/', csrf_exempt(CustomUserViewSet.as_view({'post': 'activation'}))),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     # path('users/', include('users.urls')),

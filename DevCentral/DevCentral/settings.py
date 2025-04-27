@@ -134,7 +134,7 @@ DJOSER = {
 # DevCentral domain settings
 SITE_DOMAIN = "localhost:5173"  # Update to the frontend's domain and port
 SITE_NAME = "DevCentral"
-FRONTEND_URL = "http://localhost:5173"  # Replace with your actual frontend URL
+FRONTEND_URL = "http://localhost:5173"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
