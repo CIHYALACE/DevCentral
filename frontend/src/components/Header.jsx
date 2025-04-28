@@ -53,7 +53,7 @@ export default function Header() {
           >
             Apps
           </NavLink>
-          {/* <Nav.Link className="nav-link" href="#">Contact</Nav.Link> */}
+          <NavLink to="/admin" className="nav-link">Admin</NavLink>
         </Nav>
         <div className="d-flex ms-auto align-items-center">
           <form className="d-flex me-3 share-tech-mono-regular">
