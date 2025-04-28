@@ -14,7 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include , include , re_path
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -32,11 +32,19 @@ router.register(r'downloads', DownloadViewSet)
 router.register(r'flags', FlagViewSet)
 
 urlpatterns = [
-    path('usingViewset/', include(router.urls)),
+    # Admin site
     path('admin/', admin.site.urls),
-    path('api/', include('core.urls')),
-    path('api/', include('djoser.urls')),
+    
+    # API viewsets from the router
+    path('', include(router.urls)),
+    
+    # Core app endpoints
     path('apps/', include('core.urls')),
+    
+    # User authentication endpoints
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
+    # User management endpoints
+    path('users/', include('users.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
