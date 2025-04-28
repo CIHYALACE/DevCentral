@@ -1,9 +1,9 @@
 export default function AdminSideBar({ active, setActive }) {
     const menu = [
         "Dashboard",
-        "Tokens",
-        "Categorys",
-        "Medias",
+        "User Tokens",
+        "categories",
+        "Media",
         "Programs",
         "Reviews",
     ];
