@@ -9,10 +9,16 @@ import GamesPage from '../pages/games' // Assuming this is the correct path to y
 import AppsPage from '../pages/applications'
 import UserProfile from '../pages/UserProfile'
 import ActivateAccount from '../pages/ActivateAccount'
+import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
+import AdminPage from '../pages/AdminPage'
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/admin" element={<AdminSharedLayout />}>
+        <Route path="/admin" element={<AdminPage />} />
+        {/* Add your admin routes here */}
+      </Route>
       <Route path="/" element={<SharedLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/games" element={<GamesPage />} />
