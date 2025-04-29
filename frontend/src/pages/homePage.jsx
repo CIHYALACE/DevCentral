@@ -5,9 +5,12 @@ import RecommendedAppsSection from "../components/RecommendedApps"
 import SpecialOffer from "../components/SpecialOffer"
 import BannerSection from "../components/BannerSection"
 import EducationalAppsSection from "../components/EducationalAppsSection"
+// import PaymentOptions from '../components/PaymentOptions';
+// import Subscriptions from '../components/Subscriptions';
+// import Devices from "../components/Devices"
+// import OrderHistory from "../components/OrderHistory"
 
-
-export default function HomePage() {
+export default function HomePage()  {
     return (
         <>
            
@@ -19,11 +22,14 @@ export default function HomePage() {
             <HealthFitness/>
             <EducationalAppsSection/>
             <SpecialOffer/>
-          
+            
+             {/* <PaymentOptions/>
+{/*           
+                <Subscriptions/> */}
+                {/* <Devices/> */}
+                {/* <OrderHistory/>  */}
 
             
-
-            
-        </>
-    )
-}
+            </>
+        )
+    }
