@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Form, Badge } from 'react-bootstrap';
+import TokensForm from './forms/TokensForm';
 
 export default function TokensManagement() {
     const [tokens, setTokens] = useState([
@@ -21,10 +22,17 @@ export default function TokensManagement() {
         }
     ]);
 
+    const [users, setUsers] = useState([
+        { id: 1, name: 'John Doe', email: 'john@example.com' },
+        { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
+        { id: 3, name: 'Bob Wilson', email: 'bob@example.com' }
+    ]);
+
     const [showModal, setShowModal] = useState(false);
     const [newToken, setNewToken] = useState({
         name: '',
-        expiresAt: ''
+        expiresAt: '',
+        userId: ''
     });
 
     const handleGenerateToken = () => {
@@ -107,31 +115,21 @@ export default function TokensManagement() {
                     <Modal.Title>Generate New Token</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Token Name</Form.Label>
-                            <Form.Control 
-                                type="text"
-                                value={newToken.name}
-                                onChange={(e) => setNewToken({...newToken, name: e.target.value})}
-                                placeholder="Enter a name for this token"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Expiration Date</Form.Label>
-                            <Form.Control 
-                                type="date"
-                                value={newToken.expiresAt}
-                                onChange={(e) => setNewToken({...newToken, expiresAt: e.target.value})}
-                            />
-                        </Form.Group>
-                    </Form>
+                    <TokensForm 
+                        users={users}
+                        newToken={newToken}
+                        setNewToken={setNewToken}
+                    />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowModal(false)}>
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={handleGenerateToken}>
+                    <Button 
+                        variant="primary" 
+                        onClick={handleGenerateToken}
+                        disabled={!newToken.userId || !newToken.name}
+                    >
                         Generate Token
                     </Button>
                 </Modal.Footer>
