@@ -40,4 +40,4 @@ const login = (email, password) => {
 
 
 
-export { authStore, login, fetchUser };
+export { authStore, login };
