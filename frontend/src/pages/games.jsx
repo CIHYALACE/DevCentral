@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import "../style/GamesPage.css"; // تأكد من إضافة CSS المناسب هنا
+import "../style/GamesPage.css";
 import GameCard from '../components/GameCard';
 import { useStore } from "@tanstack/react-store";
 import { gameStore, fetchGames } from "../store/gameStore";
+import Paginator from '../components/common/Paginator';
 const GamesPage = () => {
-  // const [games, setGames] = useState([]);
-  const games = useStore(gameStore, (state)=> state.games)
-  useEffect(()=>{
-      fetchGames()
-      console.log(games)
-  },[])
+  const { games, loading, error, totalGames, currentPage } = useStore(gameStore);
+  const [currentPageState, setCurrentPageState] = useState(1);
+  const [itemsPerPage] = useState(12);
+  
+  useEffect(() => {
+    const loadGames = async () => {
+      try {
+        await fetchGames(currentPageState, itemsPerPage);
+      } catch (error) {
+        console.error('Error fetching games:', error);
+      }
+    };
+    
+    loadGames();
+  }, [currentPageState, itemsPerPage]);
 
   //   const [loading, setLoading] = useState(true); // حالة لتحميل البيانات
 //   const [error, setError] = useState(null); // لحفظ الأخطاء إذا حدثت
@@ -147,14 +157,46 @@ const GamesPage = () => {
   return (
     <section className="games-page">
       <h2 className="section-title">Popular Games</h2>
-      <div className="row g-3">
-  {games
-    .filter((game) => game && game.id) // تصفية العناصر غير الصالحة
-    .map((game) => (
-      <GameCard game={game} key={game.id} />
-    ))}
-</div>
-
+      
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : error ? (
+        <div className="alert alert-danger">
+          Error loading games. Please try again later.
+        </div>
+      ) : games.length === 0 ? (
+        <div className="alert alert-info">
+          No games available at the moment. Check back later!
+        </div>
+      ) : (
+        <>
+          <div className="row g-3">
+            {Array.isArray(games) ? 
+              games
+                .filter((game) => game && game.id)
+                .map((game) => (
+                  <GameCard game={game} key={game.id} />
+                ))
+              : 
+              <div className="alert alert-warning col-12">
+                No games data available
+              </div>
+            }
+          </div>
+          
+          {/* Pagination */}
+          <Paginator
+            currentPage={currentPageState}
+            totalItems={totalGames}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPageState}
+          />
+        </>
+      )}
     </section>
   );
 };

@@ -15,7 +15,7 @@ const HomePage = () => {
             <BannerSection />
             <HeroSlider />
             <RecommendedAppsSection />
-            <HealthFitness />
+            <HealthFitness/>
             <EducationalAppsSection />
             <SpecialOffer />
         </>

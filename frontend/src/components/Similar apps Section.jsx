@@ -60,7 +60,7 @@ return (
         {/* <h2 className="section-title">Similar Apps</h2> */}
         <div className="apps-grid">
             {similarAppsData.map((app) => (
-                <Link to={`/details/apps/${app.id}`} key={app.id} className="app-card">
+                <Link to={`/details/apps/${app.slug}`} key={app.id} className="app-card">
                     <div className="card">
                         <img src={app.image} alt={app.title} className="app-image"/>
                         <div className="card-body">

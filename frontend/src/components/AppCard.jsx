@@ -1,34 +1,64 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import "../style/AppCard.css"; // ✅ استدعاء ملف الستايل الخاص بالكارت
+import "../style/AppCard.css";
+import { formatPrice, formatRating } from '../utils';
 
 const AppCard = ({ app }) => {
+  if (!app || !app.id) {
+    return null; // Don't render anything if no valid app data is provided
+  }
+
+  // Get the icon or first screenshot from media if available
+  const appImage = app.icon || 
+    (app.media && app.media.length > 0 ? app.media[0].file : null) || 
+    "http://127.0.0.1:8000/media/media/placeholder_screenshot_1.png";
+
+  // Use title as name if name is not available
+  const appName = app.name || app.title || "Unknown App";
+  
+  // Format the price
+  const priceDisplay = app.price ? formatPrice(app.price) : "Free";
+  const isPaid = app.price && parseFloat(app.price) > 0;
+  
   return (
-    
     <Link
-      to={`/details/apps/${app.id}`}
+      to={`/details/apps/${app.slug}`}
       className="app-card"
       style={{ textDecoration: 'none', color: 'inherit' }}
     >
       <div className="image-container">
-        <img src={app.image} alt={app.name} className="image" />
+        <img 
+          src={appImage} 
+          alt={appName} 
+          className="image" 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "http://127.0.0.1:8000/media/media/placeholder_screenshot_1.png";
+          }}
+        />
       </div>
 
       <div className="app-info">
-        <h3 className="app-name">{app.name}</h3>
+        <h3 className="app-name">{appName}</h3>
 
         <div className="app-meta">
           <div className="ratingOf-app">
-            {app.rating}<span className="star-icon">★</span>
+            {formatRating(app.rating)}<span className="star-icon">★</span>
           </div>
-          <div className={`price-badge ${app.price === 0 ? 'free' : 'paid'}`}>
-            {app.price === 0 ? "Free" : `$${app.price}`}
+          <div className={`price-badge ${isPaid ? 'paid' : 'free'}`}>
+            {priceDisplay}
           </div>
         </div>
 
-        {/* <div className="app-downloads">
-          {app.downloads}
-        </div> */}
+        {app.download_count && (
+          <div className="app-downloads">
+            {app.download_count > 1000000 
+              ? `${Math.floor(app.download_count / 1000000)}M+` 
+              : app.download_count > 1000 
+                ? `${Math.floor(app.download_count / 1000)}K+` 
+                : `${app.download_count}`} downloads
+          </div>
+        )}
       </div>
     </Link>
   );
