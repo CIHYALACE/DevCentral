@@ -1,9 +1,11 @@
 import React from "react";
 import profileimg from "../assets/tiktok-profile-picture-template_742173-4482.avif"
+import ProfileHeader from "./ProfileHeader";
 
 export default function InfoSection() {
   return (
     <section className="info-section">
+      <ProfileHeader title="Your info" />
       <div className="warning">
         ⚠ Never lose access to your Microsoft account.
         <button>Add a phone number</button>

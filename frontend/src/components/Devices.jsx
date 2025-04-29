@@ -7,9 +7,7 @@ import '../style/Devices.css';
 export default function Devices() {
   return (
     <div>
-      <ProfileHeader />
       <div className="user-profile">
-        <Sidebar active="Devices" />
         <div className="info-section">
           <h2 className="section-title">Your Devices</h2>
           <p className="section-description">Manage devices where your account is logged in.</p>

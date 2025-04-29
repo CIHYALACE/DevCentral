@@ -7,18 +7,26 @@ import Register from '../pages/register'
 import ItemDetails from '../pages/appDetails' // Assuming this is the correct path to your ItemDetails component
 import GamesPage from '../pages/games' // Assuming this is the correct path to your games component
 import AppsPage from '../pages/applications'
-import UserProfile from '../pages/UserProfile'
 import ActivateAccount from '../pages/ActivateAccount'
 import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
 import AdminPage from '../pages/AdminPage'
+import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
+import ProfilePage from '../pages/ProfilePage'
+
+
 
 export default function App() {
   return (
     <Routes>
+
       <Route path="/admin" element={<AdminSharedLayout />}>
         <Route path="/admin" element={<AdminPage />} />
-        {/* Add your admin routes here */}
       </Route>
+
+      <Route path="/profile" element={<ProfileSharedLayout />}>
+        <Route path="/profile" element={<ProfilePage />} />
+      </Route>
+
       <Route path="/" element={<SharedLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/games" element={<GamesPage />} />
@@ -27,7 +35,6 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<UserProfile />} />
       </Route>
     </Routes>
   )

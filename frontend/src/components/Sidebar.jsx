@@ -1,12 +1,15 @@
 import React from "react";
-import "../style/UserProfile.css"
-import sideimg from "../assets/tiktok-profile-picture-template_742173-4482.avif"
+import "../style/UserProfile.css";
+import sideimg from "../assets/tiktok-profile-picture-template_742173-4482.avif";
 const menu = [
-  "Account", "Your info", "Subscriptions", "Security", "Privacy",
-  "Order history", "Payment options"
+  "Your info",
+  "Subscriptions",
+  "Devices",
+  "Order history",
+  "Payment options",
 ];
 
-export default function Sidebar({ active }) {
+export default function Sidebar({ active , setActive }) {
   return (
     <aside className="sidebar">
       <div className="user">
@@ -16,7 +19,9 @@ export default function Sidebar({ active }) {
       </div>
       <ul className="sidebar-menu">
         {menu.map((item, i) => (
-          <li key={i} className={active === item ? "active" : ""}>{item}</li>
+          <li key={i} className={active === item ? "active" : "" } onClick={() => setActive(item)}>
+            {item}
+          </li>
         ))}
       </ul>
     </aside>

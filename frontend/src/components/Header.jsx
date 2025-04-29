@@ -3,7 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 export default function Header() {
-  let token = "bob";
+  let token = "token";
   return (
     <Navbar
       expand="lg"

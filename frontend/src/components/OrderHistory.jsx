@@ -9,9 +9,7 @@ export default function OrderHistory() {
 
   return (
     <div>
-      <ProfileHeader />
       <div className="user-profile">
-        <Sidebar active="Order History" />
         <div className="info-section">
           <h2 className="section-title">Order History</h2>
           <p className="section-description">
