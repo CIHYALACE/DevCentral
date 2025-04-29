@@ -28,7 +28,9 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 from core.views import *
+from users.views import *
 
+# core urls
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
 router.register(r'programs', ProgramViewSet)
@@ -36,9 +38,18 @@ router.register(r'media', MediaViewSet)
 router.register(r'reviews', ReviewViewSet)
 router.register(r'downloads', DownloadViewSet)
 router.register(r'flags', FlagViewSet)
+router.register(r'myprograms', ProgramViewSet, basename='myprograms')
+
+# users urls
+router.register(r'users', CustomUserViewSet, basename='customuser')
+router.register(r'profiles', UserProfileViewSet, basename='userprofile')
+
+
 
 urlpatterns = [
     path('usingViewset/', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('delete-account/<int:user_id>/', DeleteAccountView.as_view(), name='delete-account'),
+    path('activate/<uid>/<token>/', activate_redirect, name='activate-redirect'),
 
 ]

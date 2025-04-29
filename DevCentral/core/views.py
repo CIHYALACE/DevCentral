@@ -88,3 +88,29 @@ class FlagViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+# class MyProgramsViewSet(viewsets.ModelViewSet):
+#     serializer_class = ProgramSerializer
+#     # permission_classes = [permissions.IsAuthenticated]
+
+#     def get_queryset(self):
+#         user = self.request.user
+#         if user.role == 'developer':
+#             return Program.objects.filter(developer=user.name)
+#         return Program.objects.none()
+
+#     def perform_create(self, serializer):
+#         serializer.save(developer=self.request.user.name)
+
+
+class ProgramViewSet(viewsets.ModelViewSet):
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(developer=self.request.user)
+
+    def get_queryset(self):
+        return Program.objects.filter(developer=self.request.user)
+

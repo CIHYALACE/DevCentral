@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg
-
+from django.conf import settings
 User = get_user_model()
 
 # Create your models here.
@@ -27,7 +27,9 @@ class Program(models.Model):
     description = models.TextField()
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='apps')
-    developer = models.CharField(max_length=200)
+    # developer = models.CharField(max_length=200)
+    developer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='programs')
+
     release_date = models.DateField()
     last_update_date = models.DateField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
