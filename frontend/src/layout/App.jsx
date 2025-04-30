@@ -8,8 +8,8 @@ import ItemDetails from '../pages/appDetails' // Assuming this is the correct pa
 import GamesPage from '../pages/games' // Assuming this is the correct path to your games component
 import AppsPage from '../pages/applications'
 import UserProfile from '../pages/UserProfile'
-import MyPrograms from './pages/MyPrograms';
-import AddProgram from './pages/AddProgram';
+import MyPrograms from '../pages/MyPrograms';
+import AddProgram from '../pages/AddProgram';
 
 export default function App() {
   return (
