@@ -12,8 +12,6 @@ import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
 import AdminPage from '../pages/AdminPage'
 import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
 import ProfilePage from '../pages/ProfilePage'
-
-
 import UserProfile from '../pages/UserProfile'
 import MyPrograms from './pages/MyPrograms';
 import AddProgram from './pages/AddProgram';
