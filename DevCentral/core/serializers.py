@@ -18,11 +18,20 @@ class MediaSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
+    user_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Review
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at']
+        
+    def get_user_name(self, obj):
+        # Return the user's name if available, otherwise return their username or email
+        if hasattr(obj.user, 'name') and obj.user.name:
+            return obj.user.name
+        elif obj.user.get_full_name():
+            return obj.user.get_full_name()
+        return getattr(obj.user, 'username', obj.user.email)
 
 
 class ProgramSerializer(serializers.ModelSerializer):

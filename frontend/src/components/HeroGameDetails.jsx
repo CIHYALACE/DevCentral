@@ -29,9 +29,9 @@ export function HeroGameDetails() {
                         </div>
                         <p className='mt-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi officiis maiores nisi sunt animi. Deleniti alias est ullam reprehenderit id!</p>
                         <div className='d-flex  align-items-center mt-4 text-info'>
-                            <p className='me-4'>4.6  <i class="fa-solid fa-star "></i> </p>
+                            <p className='me-4'>4.6  <i className="fa-solid fa-star "></i> </p>
                             <p>280 ratings</p>
-                            <p className='ms-4'>100M+ <i class="fa-solid fa-download"></i></p>
+                            <p className='ms-4'>100M+ <i className="fa-solid fa-download"></i></p>
                         </div>
                         <button className='hero-btn btn btn-info w-50 mt-4'>Download Now</button>
                         <p className='mt-3 '>Offers in-app purchases</p>
@@ -55,9 +55,9 @@ export function HeroGameDetails() {
                         </div>
                         <p className='mt-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi officiis maiores nisi sunt animi. Deleniti alias est ullam reprehenderit id!</p>
                         <div className='d-flex  align-items-center mt-4 text-info'>
-                            <p className='me-4'>4.6  <i class="fa-solid fa-star"></i> </p>
+                            <p className='me-4'>4.6  <i className="fa-solid fa-star"></i> </p>
                             <p>280 ratings</p>
-                            <p className='ms-5'>100M+ <i class="fa-solid fa-download"></i></p>
+                            <p className='ms-5'>100M+ <i className="fa-solid fa-download"></i></p>
                         </div>
                         <button className='hero-btn btn btn-info w-50 mt-4'>Download Now</button>
                         <p className='mt-3'>Offers in-app purchases</p>
@@ -81,9 +81,9 @@ export function HeroGameDetails() {
                         </div>
                         <p className='mt-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi officiis maiores nisi sunt animi. Deleniti alias est ullam reprehenderit id!</p>
                         <div className='d-flex  align-items-center mt-4 text-info'>
-                            <p className='me-4'>4.6  <i class="fa-solid fa-star"></i> </p>
+                            <p className='me-4'>4.6  <i className="fa-solid fa-star"></i> </p>
                             <p>280 ratings</p>
-                            <p className='ms-5'>100M+ <i class="fa-solid fa-download"></i></p>
+                            <p className='ms-5'>100M+ <i className="fa-solid fa-download"></i></p>
                         </div>
                         <button className='hero-btn btn btn-info w-50 mt-4'>Download Now</button>
                         <p className='mt-3'>Offers in-app purchases</p>

@@ -1,58 +1,81 @@
 // src/components/RecommendedAppsSection.jsx
 import React, { useState, useEffect } from 'react';
-import AppCard from './AppCard'; 
+import AppCard from './AppCard';
+import { useStore } from '@tanstack/react-store';
+import { programStore, fetchPrograms, getProgramsByType } from '../store';
 
 const RecommendedAppsSection = () => {
+  const programs = useStore(programStore, (state) => state.programs);
   const [recommendedAppsData, setRecommendedAppsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPrograms = async () => {
+      setLoading(true);
+      try {
+        await fetchPrograms();
+      } catch (error) {
+        console.error('Error fetching programs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPrograms();
+  }, []);
 
   useEffect(() => {
     const fetchRecommendedApps = async () => {
-      const updatedAppsData = [
-        {
-          id: 8,
-          image: "https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg",
-          name: "Instagram",
-          rating: 4.5,
-          downloads: "500M+",
-          price: 0
-        },
-        {
-          id: 9,
-          image: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
-          name: "WhatsApp",
-          rating: 4.7,
-          downloads: "2B+",
-          price: 0
-        },
-        {
-          id: 10,
-          image: "https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png",
-          name: "YouTube",
-          rating: 4.8,
-          downloads: "10B+",
-          price: 0
-        },
-        {
-          id: 11,
-          image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-          name: "Facebook",
-          rating: 4.3,
-          downloads: "5B+",
-          price: 0
-        }
-      ];
-      setRecommendedAppsData(updatedAppsData);
+      try {
+        // Fetch apps directly with type=app and limit=4 parameters
+        // This replaces the previous approach of fetching all programs and filtering
+        const apps = await fetchPrograms(1, 4, null, null, 'app', false, 4);
+        
+        // Set the recommended apps data directly from the API response
+        // The API already sorts by newest/most popular
+        setRecommendedAppsData(Array.isArray(apps) ? apps : []);
+      } catch (error) {
+        console.error('Error fetching recommended apps:', error);
+        setRecommendedAppsData([]);
+      }
     };
+    
+    // Only fetch recommended apps when loading is complete
+    // This prevents the infinite loop by not depending on recommendedAppsData.length
+    if (!loading) {
+      fetchRecommendedApps();
+    }
+  }, [loading]); // Only depend on loading state
 
-    fetchRecommendedApps();
-  }, []);
+  if (loading) {
+    return (
+      <section className="recommended-apps">
+        <h2 className="section-title">Recommended Apps</h2>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // If no apps are found, show placeholder message
+  if (recommendedAppsData.length === 0) {
+    return (
+      <section className="recommended-apps">
+        <h2 className="section-title">Recommended Apps</h2>
+        <p>No recommended apps available at the moment. Check back later!</p>
+      </section>
+    );
+  }
 
   return (
     <section className="recommended-apps">
       <h2 className="section-title">Recommended Apps</h2>
       <div className="apps-grid">
         {recommendedAppsData.map((app) => (
-          <AppCard app={app} key={app.id} /> 
+          <AppCard app={app} key={app.id} />
         ))}
       </div>
     </section>

@@ -9,8 +9,8 @@ import { Feature } from '../components/Feature';
 import { Container } from 'react-bootstrap';
 import "../style/HeroGameDetails.css";
 import { useStore } from '@tanstack/react-store';
-import { gameStore } from '../store';
-import { fetchGameDetails } from '../store/gameStore';
+import { programStore } from '../store';
+import { fetchProgramDetails } from '../store/programStore';
 
 
 const dummyData = {
@@ -299,9 +299,9 @@ const dummyData = {
 
 const ItemDetails = () => {
   const { type, slug } = useParams();
-  const appDetails = useStore(gameStore, (state)=> state.currentGame)
+  const appDetails = useStore(programStore, (state) => state.currentProgram)
   useEffect(() => {
-    fetchGameDetails(slug)
+    fetchProgramDetails(slug)
   }, [type, slug]);
 
   if (!appDetails || appDetails.slug != slug) {
@@ -326,9 +326,9 @@ const ItemDetails = () => {
         </div>
         <p className='mt-5'>{appDetails.description}</p>
         <div className='d-flex  align-items-center mt-4 text-info'>
-          <p className='me-4'>{appDetails.rating}  <i class="fa-solid fa-star "></i> </p>
+          <p className='me-4'>{appDetails.rating}  <i className="fa-solid fa-star "></i> </p>
           <p>280 ratings</p>
-          <p className='ms-4'>100M+ <i class="fa-solid fa-download"></i></p>
+          <p className='ms-4'>100M+ <i className="fa-solid fa-download"></i></p>
         </div>
         <button className='hero-btn btn btn-info w-50 mt-4'>Download Now</button>
         <p className='mt-3 '>Offers in-app purchases</p>
@@ -340,7 +340,7 @@ const ItemDetails = () => {
           <div className="col-lg-8 ">
             < ScreenShotsSection media={appDetails.media}/>
             <DescriptionSection description={appDetails.description} />
-            <RatingSection />
+            <RatingSection programId={appDetails.id} />
             <Feature />
           </div>
           <div className="col-lg-4">
