@@ -14,6 +14,9 @@ import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
 import ProfilePage from '../pages/ProfilePage'
 
 
+import UserProfile from '../pages/UserProfile'
+import MyPrograms from './pages/MyPrograms';
+import AddProgram from './pages/AddProgram';
 
 export default function App() {
   return (
@@ -25,6 +28,8 @@ export default function App() {
 
       <Route path="/profile" element={<ProfileSharedLayout />}>
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/my-programs" element={<MyPrograms />} />
+        <Route path="/add-program" element={<AddProgram />} />
       </Route>
 
       <Route path="/" element={<SharedLayout />}>
@@ -35,6 +40,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="/register" element={<Register />} />
+        {/* <Route path="/profile" element={<UserProfile />} /> */}
       </Route>
     </Routes>
   )
