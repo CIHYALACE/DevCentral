@@ -20,3 +20,20 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.book-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.book-card:hover {
+  transform: scale(1.03);
+}
+
+.slider-container:hover .carousel-controls a {
+  opacity: 1 !important;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-controls a {
+  transition: opacity 0.3s ease;
+}

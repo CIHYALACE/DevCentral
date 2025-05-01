@@ -7,6 +7,7 @@ import Register from '../pages/register'
 import ItemDetails from '../pages/appDetails' // Assuming this is the correct path to your ItemDetails component
 import GamesPage from '../pages/games' // Assuming this is the correct path to your games component
 import AppsPage from '../pages/applications'
+import BooksPage from '../pages/BooksPage'
 import ActivateAccount from '../pages/ActivateAccount'
 import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
 import AdminPage from '../pages/AdminPage'
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/games" element={<GamesPage />} />
         <Route path="/apps" element={<AppsPage />} /> {/* Assuming you want to show the same page for apps */}
+        <Route path="/books" element={<BooksPage />} />
         <Route path="/details/:type/:slug" element={<ItemDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
