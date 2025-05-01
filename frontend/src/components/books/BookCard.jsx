@@ -8,12 +8,25 @@ const BookCard = ({ book }) => {
       className="book-card h-100" 
       style={{ width: '190px', cursor: 'pointer' }}
     >
-      <Card.Img 
-        variant="top" 
-        src={book.coverUrl} 
-        alt={book.title}
-        style={{ height: '260px', objectFit: 'cover' }}
-      />
+      <div style={{ 
+        width: '100%',
+        height: '260px',
+        overflow: 'hidden',
+        position: 'relative'
+      }}>
+        <Card.Img 
+          variant="top" 
+          src={book.coverUrl} 
+          alt={book.title}
+          style={{ 
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center'
+          }}
+        />
+      </div>
       <Card.Body className="p-2">
         <div className="d-flex flex-column h-100">
           <h6 className="text-truncate mb-1">{book.title}</h6>
