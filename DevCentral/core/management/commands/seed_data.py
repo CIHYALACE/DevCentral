@@ -18,6 +18,9 @@ class Command(BaseCommand):
         # Create categories
         self.create_categories()
         
+        # Create users first (moved from create_reviews)
+        self.create_users()
+        
         # Create programs (apps and games)
         self.create_programs()
         
@@ -80,6 +83,80 @@ class Command(BaseCommand):
             )
             self.stdout.write(f'  Created game category: {category_name}')
     
+    def create_users(self):
+        self.stdout.write('Creating users...')
+        
+        # Ensure we have at least one admin user
+        admin_user, created = User.objects.get_or_create(
+            email='admin@admin.com',
+            defaults={
+                'name': 'Admin',
+                'is_active': True,
+                'is_staff': True,
+                'is_superuser': True,
+            }
+        )
+        
+        if created:
+            admin_user.set_password('admin')
+            admin_user.save()
+            self.stdout.write('  Created admin user: admin@admin.com (password: admin)')
+        
+        # Create developer users
+        developer_emails = [
+            'productivity@example.com',
+            'educational@example.com',
+            'fitness@example.com',
+            'social@example.com',
+            'entertainment@example.com',
+            'utility@example.com',
+            'photography@example.com',
+            'finance@example.com',
+            'travel@example.com',
+            'food@example.com',
+            'adventure@example.com',
+            'action@example.com',
+            'puzzle@example.com',
+            'racing@example.com',
+            'strategy@example.com'
+        ]
+        
+        self.developers = []
+        for i, email in enumerate(developer_emails):
+            name = email.split('@')[0].title()
+            user, created = User.objects.get_or_create(
+                email=email,
+                defaults={
+                    'name': f'{name} Developer',
+                    'is_active': True,
+                }
+            )
+            
+            if created:
+                user.set_password(f'dev{i+1}pass')
+                user.save()
+                self.stdout.write(f'  Created developer user: {email} (password: dev{i+1}pass)')
+            
+            self.developers.append(user)
+        
+        # Create regular users if needed
+        self.users = list(User.objects.all())
+        if len(self.users) < 10:
+            for i in range(1, 6):
+                user, created = User.objects.get_or_create(
+                    email=f'user{i}@example.com',
+                    defaults={
+                        'name': f'User {i}',
+                        'is_active': True,
+                    }
+                )
+                
+                if created:
+                    user.set_password(f'user{i}pass')
+                    user.save()
+                    self.users.append(user)
+                    self.stdout.write(f'  Created user: user{i}@example.com (password: user{i}pass)')
+    
     def create_programs(self):
         self.stdout.write('Creating programs (apps and games)...')
         
@@ -88,7 +165,7 @@ class Command(BaseCommand):
             {
                 'title': 'Productivity Pro',
                 'description': 'Boost your productivity with this all-in-one task manager, calendar, and note-taking app.',
-                'developer': 'Productivity Solutions Inc.',
+                'developer': self.developers[0],  # Using user object instead of string
                 'category_name': 'Productivity',
                 'price': 4.99,
                 'rating': 4.7,
@@ -97,7 +174,7 @@ class Command(BaseCommand):
             {
                 'title': 'Language Master',
                 'description': 'Learn new languages with interactive lessons, quizzes, and speech recognition.',
-                'developer': 'Educational Apps Ltd.',
+                'developer': self.developers[1],
                 'category_name': 'Education',
                 'price': 0.00,
                 'rating': 4.8,
@@ -106,7 +183,7 @@ class Command(BaseCommand):
             {
                 'title': 'Fitness Tracker',
                 'description': 'Track your workouts, monitor your progress, and achieve your fitness goals.',
-                'developer': 'Health & Fitness Apps',
+                'developer': self.developers[2],
                 'category_name': 'Health & Fitness',
                 'price': 2.99,
                 'rating': 4.5,
@@ -115,7 +192,7 @@ class Command(BaseCommand):
             {
                 'title': 'Social Connect',
                 'description': 'Stay connected with friends and family through messages, photos, and video calls.',
-                'developer': 'Social Media Inc.',
+                'developer': self.developers[3],
                 'category_name': 'Social Networking',
                 'price': 0.00,
                 'rating': 4.2,
@@ -124,7 +201,7 @@ class Command(BaseCommand):
             {
                 'title': 'Movie Stream',
                 'description': 'Watch thousands of movies and TV shows on your device.',
-                'developer': 'Entertainment Studios',
+                'developer': self.developers[4],
                 'category_name': 'Entertainment',
                 'price': 9.99,
                 'rating': 4.6,
@@ -133,7 +210,7 @@ class Command(BaseCommand):
             {
                 'title': 'File Manager',
                 'description': 'Organize, manage, and secure your files with this powerful file manager.',
-                'developer': 'Utility Apps Co.',
+                'developer': self.developers[5],
                 'category_name': 'Utilities',
                 'price': 0.00,
                 'rating': 4.3,
@@ -142,7 +219,7 @@ class Command(BaseCommand):
             {
                 'title': 'Photo Editor Pro',
                 'description': 'Edit your photos with professional tools, filters, and effects.',
-                'developer': 'Photography Apps',
+                'developer': self.developers[6],
                 'category_name': 'Photography',
                 'price': 3.99,
                 'rating': 4.4,
@@ -151,7 +228,7 @@ class Command(BaseCommand):
             {
                 'title': 'Budget Planner',
                 'description': 'Take control of your finances with this comprehensive budget planning app.',
-                'developer': 'Financial Solutions',
+                'developer': self.developers[7],
                 'category_name': 'Finance',
                 'price': 1.99,
                 'rating': 4.5,
@@ -160,7 +237,7 @@ class Command(BaseCommand):
             {
                 'title': 'Travel Guide',
                 'description': 'Discover new destinations, plan your trips, and find the best places to visit.',
-                'developer': 'Travel Apps Inc.',
+                'developer': self.developers[8],
                 'category_name': 'Travel',
                 'price': 0.00,
                 'rating': 4.1,
@@ -169,7 +246,7 @@ class Command(BaseCommand):
             {
                 'title': 'Recipe Finder',
                 'description': 'Find and save thousands of recipes, create shopping lists, and plan your meals.',
-                'developer': 'Food & Drink Apps',
+                'developer': self.developers[9],
                 'category_name': 'Food & Drink',
                 'price': 0.00,
                 'rating': 4.7,
@@ -182,7 +259,7 @@ class Command(BaseCommand):
             {
                 'title': 'Epic Adventure',
                 'description': 'Embark on an epic adventure in a vast open world filled with quests, monsters, and treasures.',
-                'developer': 'Adventure Games Studio',
+                'developer': self.developers[10],
                 'category_name': 'Adventure',
                 'price': 0.00,
                 'rating': 4.9,
@@ -191,7 +268,7 @@ class Command(BaseCommand):
             {
                 'title': 'Space Shooter',
                 'description': 'Defend the galaxy from alien invaders in this action-packed space shooter.',
-                'developer': 'Action Games Inc.',
+                'developer': self.developers[11],
                 'category_name': 'Action',
                 'price': 0.00,
                 'rating': 4.6,
@@ -200,7 +277,7 @@ class Command(BaseCommand):
             {
                 'title': 'Puzzle Master',
                 'description': 'Challenge your brain with hundreds of puzzles of increasing difficulty.',
-                'developer': 'Puzzle Games Ltd.',
+                'developer': self.developers[12],
                 'category_name': 'Puzzle',
                 'price': 1.99,
                 'rating': 4.8,
@@ -209,7 +286,7 @@ class Command(BaseCommand):
             {
                 'title': 'Racing Champions',
                 'description': 'Race against opponents on tracks around the world with realistic physics and graphics.',
-                'developer': 'Racing Games Studio',
+                'developer': self.developers[13],
                 'category_name': 'Racing',
                 'price': 4.99,
                 'rating': 4.7,
@@ -218,7 +295,7 @@ class Command(BaseCommand):
             {
                 'title': 'Word Challenge',
                 'description': 'Test your vocabulary and spelling skills with this addictive word game.',
-                'developer': 'Word Games Co.',
+                'developer': self.developers[13],
                 'category_name': 'Word',
                 'price': 0.00,
                 'rating': 4.5,
@@ -227,7 +304,7 @@ class Command(BaseCommand):
             {
                 'title': 'Strategy Empire',
                 'description': 'Build your empire, train your army, and conquer your enemies in this strategic game.',
-                'developer': 'Strategy Games Inc.',
+                'developer': self.developers[14],
                 'category_name': 'Strategy',
                 'price': 2.99,
                 'rating': 4.6,
@@ -236,7 +313,7 @@ class Command(BaseCommand):
             {
                 'title': 'Sports League',
                 'description': 'Compete in various sports with realistic gameplay and multiplayer modes.',
-                'developer': 'Sports Games Studio',
+                'developer': self.developers[13],
                 'category_name': 'Sports',
                 'price': 3.99,
                 'rating': 4.4,
@@ -245,7 +322,7 @@ class Command(BaseCommand):
             {
                 'title': 'Arcade Classic',
                 'description': 'Enjoy classic arcade games with modern graphics and controls.',
-                'developer': 'Arcade Games Ltd.',
+                'developer': self.developers[13],
                 'category_name': 'Arcade',
                 'price': 0.00,
                 'rating': 4.3,
@@ -254,7 +331,7 @@ class Command(BaseCommand):
             {
                 'title': 'Simulation City',
                 'description': 'Build and manage your own city with realistic simulation mechanics.',
-                'developer': 'Simulation Games Co.',
+                'developer': self.developers[13],
                 'category_name': 'Simulation',
                 'price': 5.99,
                 'rating': 4.8,
@@ -263,7 +340,7 @@ class Command(BaseCommand):
             {
                 'title': 'Role Playing Quest',
                 'description': 'Create your character, level up, and embark on an epic quest in this RPG.',
-                'developer': 'RPG Games Studio',
+                'developer': self.developers[13],
                 'category_name': 'Role Playing',
                 'price': 0.00,
                 'rating': 4.9,
@@ -349,40 +426,6 @@ class Command(BaseCommand):
     def create_reviews(self):
         self.stdout.write('Creating reviews...')
         
-        # Ensure we have at least one user
-        admin_user, created = User.objects.get_or_create(
-            email='admin@example.com',
-            defaults={
-                'name': 'Admin User',
-                'is_active': True,
-                'is_staff': True,
-                'is_superuser': True,
-            }
-        )
-        
-        if created:
-            admin_user.set_password('admin123')
-            admin_user.save()
-            self.stdout.write('  Created admin user: admin@example.com (password: admin123)')
-        
-        # Create regular users if needed
-        users = list(User.objects.all())
-        if len(users) < 5:
-            for i in range(1, 6):
-                user, created = User.objects.get_or_create(
-                    email=f'user{i}@example.com',
-                    defaults={
-                        'name': f'User {i}',
-                        'is_active': True,
-                    }
-                )
-                
-                if created:
-                    user.set_password(f'user{i}pass')
-                    user.save()
-                    users.append(user)
-                    self.stdout.write(f'  Created user: user{i}@example.com (password: user{i}pass)')
-        
         # Add reviews to programs
         programs = Program.objects.all()
         
@@ -391,7 +434,7 @@ class Command(BaseCommand):
             num_reviews = random.randint(3, 10)
             
             for _ in range(num_reviews):
-                user = random.choice(users)
+                user = random.choice(self.users)
                 score = random.randint(3, 5)  # Mostly positive reviews (3-5 stars)
                 
                 # Skip if this user already reviewed this program

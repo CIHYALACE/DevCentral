@@ -234,12 +234,52 @@ class ProductivityAppViewSet(viewsets.ModelViewSet):
 
 
 class ProgramViewSet(viewsets.ModelViewSet):
-    queryset = Program.objects.all()
+    queryset = Program.objects.all().order_by('-created_at')
     serializer_class = ProgramSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(developer=self.request.user)
-
+    pagination_class = StandardPagination
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = 'slug'
+    
     def get_queryset(self):
-        return Program.objects.filter(developer=self.request.user)
-
+        queryset = Program.objects.all().order_by('-created_at')
+        
+        # Filter by query parameters
+        category = self.request.query_params.get('category', None)
+        search = self.request.query_params.get('search', None)
+        program_type = self.request.query_params.get('type', None)
+        is_top_chart = self.request.query_params.get('top_chart', 'false').lower() == 'true'
+        limit = self.request.query_params.get('limit', None)
+        
+        # Apply filters based on query parameters
+        if category:
+            queryset = queryset.filter(category__name=category)
+            
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+            
+        if program_type:
+            queryset = queryset.filter(type=program_type)
+        
+        # Filter for published programs only for public endpoints
+        queryset = queryset.filter(is_published=True)
+        
+        # For top charts, limit to the most recent ones
+        if is_top_chart:
+            queryset = queryset.order_by('-created_at', '-download_count')
+            
+        # Apply limit if specified
+        if limit and limit.isdigit():
+            queryset = queryset[:int(limit)]
+            
+        return queryset
+        
+    def list(self, request, *args, **kwargs):
+        # Handle count_only parameter for pagination support
+        count_only = request.query_params.get('count_only', 'false').lower() == 'true'
+        
+        if count_only:
+            queryset = self.get_queryset()
+            count = queryset.count()
+            return Response({'count': count})
+        
+        return super().list(request, *args, **kwargs)

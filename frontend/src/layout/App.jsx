@@ -14,8 +14,8 @@ import AdminPage from '../pages/AdminPage'
 import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
 import ProfilePage from '../pages/ProfilePage'
 import UserProfile from '../pages/UserProfile'
-import MyPrograms from './pages/MyPrograms';
-import AddProgram from './pages/AddProgram';
+import MyPrograms from '../pages/MyPrograms';
+import AddProgram from '../pages/AddProgram';
 
 export default function App() {
   return (
@@ -27,8 +27,8 @@ export default function App() {
 
       <Route path="/profile" element={<ProfileSharedLayout />}>
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/my-programs" element={<MyPrograms />} />
-        <Route path="/add-program" element={<AddProgram />} />
+        <Route path="/profile/my-programs" element={<MyPrograms />} />
+        <Route path="/profile/add-program" element={<AddProgram />} />
       </Route>
 
       <Route path="/" element={<SharedLayout />}>
