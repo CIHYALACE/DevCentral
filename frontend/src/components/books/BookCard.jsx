@@ -16,7 +16,7 @@ export default function BookCard ({ book }) {
       }}>
         <Card.Img 
           variant="top" 
-          src={book.coverUrl} 
+          src={book.coverUrl || '/BookCover.webp'}  // Use a default cover if missing
           alt={book.title}
           style={{ 
             position: 'absolute',
@@ -34,7 +34,6 @@ export default function BookCard ({ book }) {
             <div className="d-flex align-items-center gap-1">
               <FaStar className="text-warning" />
               <small className="text-muted">{book.rating}</small>
-              <small className="text-muted">({book.ratingCount})</small>
             </div>
           </div>
         </div>

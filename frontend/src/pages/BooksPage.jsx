@@ -15,7 +15,12 @@ export default function BooksPage() {
     useStore(bookStore);
 
   useEffect(() => {
-    fetchNewReleases();
+    fetchNewReleases().then(() => {
+      console.log(bookStore.state.newReleases); // Log the data
+    });
+  }, []);
+
+  useEffect(() => {
     fetchSelfHelpBooks();
     fetchBusinessBooks();
     fetchBooks(1, 18); // Fetch the top 18 books

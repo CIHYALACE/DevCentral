@@ -17,7 +17,7 @@ export default function HorizontalBookCard({ book }) {
           position: 'relative'
         }}>
           <Card.Img 
-            src={book.coverUrl} 
+            src={book.coverUrl || '/BookCover.webp'}  // Use a default cover if missing
             alt={book.title}
             style={{ 
               position: 'absolute',
@@ -35,7 +35,7 @@ export default function HorizontalBookCard({ book }) {
             <div className="d-flex align-items-center gap-1">
               <FaStar className="text-warning" size={12} />
               <small className="text-muted" style={{ fontSize: '0.8rem' }}>
-                {book.rating} ({book.ratingCount})
+                {book.rating}
               </small>
             </div>
           </div>

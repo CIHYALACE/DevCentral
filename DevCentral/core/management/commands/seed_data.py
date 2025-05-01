@@ -503,82 +503,50 @@ class Command(BaseCommand):
             {
                 "title": "The Lean Startup",
                 "author": self.authors[0],
-                "category_name": "Business",  # Updated category
+                "category_name": "Business",
                 "description": "A guide to building a successful startup using lean principles.",
-                "publish_date": datetime.now(),  # Published 30 days ago
+                "publish_date": datetime.now() - timedelta(days=30),  # Published 30 days ago
                 "rating": 4.7
             },
             {
-                "title": "Good to Great",
+                "title": "AI Revolution",
                 "author": self.authors[1],
-                "category_name": "Business",  # Updated category
-                "description": "Why some companies make the leap and others don't.",
-                "publish_date": datetime.now(),  # Published 30 days ago
+                "category_name": "New Release",
+                "description": "Exploring the future of artificial intelligence.",
+                "publish_date": datetime.now() - timedelta(days=15),  # Published 15 days ago
                 "rating": 4.8
             },
             {
-                "title": "The 7 Habits of Highly Effective People",
+                "title": "The Modern Startup",
                 "author": self.authors[2],
-                "category_name": "Self-help",  # Updated category
-                "description": "Powerful lessons in personal change.",
-                "publish_date": datetime(1989, 8, 15),
+                "category_name": "New Release",
+                "description": "A guide to building a modern startup.",
+                "publish_date": datetime.now() - timedelta(days=10),  # Published 10 days ago
+                "rating": 4.6
+            },
+            {
+                "title": "The Modern Startup2",
+                "author": self.authors[2],
+                "category_name": "New Release",
+                "description": "A guide to building a modern startup.",
+                "publish_date": datetime.now() - timedelta(days=10),  # Published 10 days ago
+                "rating": 4.6
+            },
+            {
+                "title": "Future of Tech",
+                "author": self.authors[3],
+                "category_name": "New Release",
+                "description": "A deep dive into the future of technology.",
+                "publish_date": datetime.now() - timedelta(days=5),  # Published 5 days ago
                 "rating": 4.9
             },
             {
-                "title": "Atomic Habits",
-                "author": self.authors[3],
-                "category_name": "Self-help",  # Updated category
-                "description": "An easy and proven way to build good habits and break bad ones.",
-                "publish_date": datetime.now(),
-                "rating": 4.8
-            },
-            {
-                "title": "Zero to One",
+                "title": "Innovative Minds",
                 "author": self.authors[4],
-                "category_name": "Business",  # Updated category
-                "description": "Notes on startups, or how to build the future.",
-                "publish_date": datetime(2014, 9, 16),
-                "rating": 4.6
-            },
-            {
-                "title": "Deep Work",
-                "author": self.authors[5],
-                "category_name": "Self-help",  # Updated category
-                "description": "Rules for focused success in a distracted world.",
-                "publish_date": datetime(2016, 1, 5),
+                "category_name": "New Release",
+                "description": "Stories of innovation and creativity.",
+                "publish_date": datetime.now(),  # Published today
                 "rating": 4.7
-            },
-            {
-                "title": "The Art of War",
-                "author": self.authors[6],
-                "category_name": "Business",  # Updated category
-                "description": "An ancient Chinese military treatise attributed to Sun Tzu.",
-                "publish_date": datetime.now(),  # Published 15 days ago
-                "rating": 4.5
-            },
-            {
-                "title": "The Power of Now",
-                "author": self.authors[7],
-                "category_name": "Self-help",  # Updated category
-                "description": "A guide to spiritual enlightenment.",
-                "publish_date": datetime(1997, 10, 6),
-                "rating": 4.8
-            },
-            {
-                "title": "Start with Why",
-                "author": self.authors[8],
-                "category_name": "Business",  # Updated category
-                "description": "How great leaders inspire everyone to take action.",
-                "publish_date": datetime(2009, 10, 29),
-                "rating": 4.7
-            },
-            {
-                "title": "The Subtle Art of Not Giving a F*ck",
-                "author": self.authors[9],
-                "category_name": "Self-help",  # Updated category
-                "description": "A counterintuitive approach to living a good life.",
-                "publish_date": datetime.now(),  # Published 15 days ago
-                "rating": 4.6
             }
         ]
 
