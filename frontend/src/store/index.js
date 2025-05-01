@@ -60,7 +60,5 @@ export {
 export { 
   bookStore, 
   fetchBooks, 
-  fetchBookDetails, 
-  fetchSimilarBooks,
-  fetchAuthorBooks 
+  fetchBookDetails 
 } from "./bookStore.js";

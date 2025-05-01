@@ -196,27 +196,3 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = 'slug'
-
-    @action(detail=True, methods=['GET'])
-    def similar_books(self, request, slug=None):
-        """Get similar books based on category"""
-        book = self.get_object()
-        similar_books = Book.objects.filter(
-            category=book.category
-        ).exclude(
-            id=book.id
-        )[:6]  # Limit to 6 similar books
-        serializer = self.get_serializer(similar_books, many=True)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=['GET'])
-    def author_books(self, request, slug=None):
-        """Get other books by the same author"""
-        book = self.get_object()
-        author_books = Book.objects.filter(
-            author=book.author
-        ).exclude(
-            id=book.id
-        )[:6]  # Limit to 6 books
-        serializer = self.get_serializer(author_books, many=True)
-        return Response(serializer.data)
