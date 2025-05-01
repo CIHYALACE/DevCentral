@@ -2,7 +2,7 @@ import React from 'react';
 import { Carousel } from 'react-bootstrap';
 import HorizontalBookCard from './BookCard2';
 
-export default function HorizontalBooksSlider({ books = [] }) {
+export default function BooksSlider2({ books = [] }) {
   const chunkArray = (arr, size) => {
     return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
       arr.slice(i * size, i * size + size)

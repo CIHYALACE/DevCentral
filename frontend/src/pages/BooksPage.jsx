@@ -1,10 +1,9 @@
-import BookCard from "../components/books/BookCard";
 import BooksSlider from "../components/books/BooksSlider";
-import HorizontalBooksSlider from "../components/books/BooksSlider2";
+import BooksSlider2 from "../components/books/BooksSlider2";
 
 export default function BooksPage() {
-  const books = Array.from({ length: 15 }, (_, i) => ({
-    coverUrl: "https://example.com/book-cover.jpg",
+  const books = Array.from({ length: 18 }, (_, i) => ({
+    coverUrl: "../public/BookCover.webp",
     title: `Book Title ${i + 1}`,
     author: "Author Name",
     rating: 4.5,
@@ -25,7 +24,7 @@ export default function BooksPage() {
       {/* Top-selling ebooks section with horizontal cards */}
       <section className="mb-5 mt-5">
         <h3 className="ms-5 mb-3">Top-selling ebooks</h3>
-        <HorizontalBooksSlider books={books} />
+        <BooksSlider2 books={books} />
       </section>
 
       {/* Self-help ebooks section */}

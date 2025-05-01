@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa';
 
-const BookCard = ({ book }) => {
+export default function BookCard ({ book }) {
   return (
     <Card 
       className="book-card h-100" 
@@ -44,4 +44,3 @@ const BookCard = ({ book }) => {
   );
 };
 
-export default BookCard;
