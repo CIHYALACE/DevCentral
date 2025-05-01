@@ -22,7 +22,9 @@ from rest_framework.routers import DefaultRouter
 from django.views.decorators.csrf import csrf_exempt
 from core.views import *
 from users.views import CustomUserViewSet
+from users.views import *
 
+# core urls
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
 router.register(r'programs', ProgramViewSet)
@@ -30,6 +32,13 @@ router.register(r'media', MediaViewSet)
 router.register(r'reviews', ReviewViewSet)
 router.register(r'downloads', DownloadViewSet)
 router.register(r'flags', FlagViewSet)
+router.register(r'myprograms', ProgramViewSet, basename='myprograms')
+
+# users urls
+router.register(r'users', CustomUserViewSet, basename='customuser')
+router.register(r'profiles', UserProfileViewSet, basename='userprofile')
+
+
 
 urlpatterns = [
     # Admin site
@@ -47,4 +56,6 @@ urlpatterns = [
     
     # User management endpoints
     path('users/', include('users.urls')),
+    path('delete-account/<int:user_id>/', DeleteAccountView.as_view(), name='delete-account'),
+    path('activate/<uid>/<token>/', activate_redirect, name='activate-redirect'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
