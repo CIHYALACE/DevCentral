@@ -53,6 +53,14 @@ export default function Header() {
           >
             Apps
           </NavLink>
+          <NavLink
+            to="/books"
+            className={({ isActive }) =>
+              isActive ? "nav-link active text-primary" : "nav-link"
+            }
+          >
+            Books
+          </NavLink>
           <NavLink to="/admin" className="nav-link">Admin</NavLink>
         </Nav>
         <div className="d-flex ms-auto align-items-center">
