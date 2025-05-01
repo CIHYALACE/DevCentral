@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
-from core.models import Category, Program, Media, Review
+from core.models import Category, Program, Media, Review, Book, Author
 from django.conf import settings
 
 User = get_user_model()
@@ -26,6 +26,12 @@ class Command(BaseCommand):
         
         # Create reviews
         self.create_reviews()
+
+        # Create authors
+        self.create_authors()
+
+        # Create books
+        self.create_books()
         
         self.stdout.write(self.style.SUCCESS('Database seeding completed successfully!'))
     
@@ -462,3 +468,143 @@ class Command(BaseCommand):
                 )
             
             self.stdout.write(f"  Added {num_reviews} reviews to: {program.title}")
+
+    def create_authors(self):
+        self.stdout.write('Creating authors...')
+        author_names = [
+            "J.K. Rowling",
+            "George R.R. Martin",
+            "J.R.R. Tolkien",
+            "Agatha Christie",
+            "Stephen King",
+            "Isaac Asimov",
+            "Jane Austen",
+            "Mark Twain",
+            "Charles Dickens",
+            "Ernest Hemingway"
+        ]
+
+        self.authors = []
+        for name in author_names:
+            author, created = Author.objects.get_or_create(
+                name=name,
+                defaults={
+                    "bio": f"{name} is a renowned author known for their works.",
+                    "website": f"https://{slugify(name)}.com"
+                }
+            )
+            if created:
+                self.stdout.write(f"  Created author: {name}")
+            self.authors.append(author)
+
+    def create_books(self):
+        self.stdout.write('Creating books...')
+        book_data = [
+            {
+                "title": "Harry Potter and the Sorcerer's Stone",
+                "author": self.authors[0],
+                "category_name": "Fantasy",
+                "description": "A young wizard's journey begins.",
+                "publish_date": datetime(1997, 6, 26),
+                "rating": 4.9
+            },
+            {
+                "title": "A Game of Thrones",
+                "author": self.authors[1],
+                "category_name": "Fantasy",
+                "description": "A tale of power, betrayal, and war.",
+                "publish_date": datetime(1996, 8, 6),
+                "rating": 4.8
+            },
+            {
+                "title": "The Hobbit",
+                "author": self.authors[2],
+                "category_name": "Fantasy",
+                "description": "A hobbit's unexpected adventure.",
+                "publish_date": datetime(1937, 9, 21),
+                "rating": 4.7
+            },
+            {
+                "title": "Murder on the Orient Express",
+                "author": self.authors[3],
+                "category_name": "Mystery",
+                "description": "A detective solves a murder on a train.",
+                "publish_date": datetime(1934, 1, 1),
+                "rating": 4.6
+            },
+            {
+                "title": "The Shining",
+                "author": self.authors[4],
+                "category_name": "Horror",
+                "description": "A family's stay at a haunted hotel.",
+                "publish_date": datetime(1977, 1, 28),
+                "rating": 4.5
+            },
+            {
+                "title": "Foundation",
+                "author": self.authors[5],
+                "category_name": "Science Fiction",
+                "description": "A visionary tale of the future.",
+                "publish_date": datetime(1951, 5, 1),
+                "rating": 4.4
+            },
+            {
+                "title": "Pride and Prejudice",
+                "author": self.authors[6],
+                "category_name": "Romance",
+                "description": "A classic tale of love and society.",
+                "publish_date": datetime(1813, 1, 28),
+                "rating": 4.3
+            },
+            {
+                "title": "Adventures of Huckleberry Finn",
+                "author": self.authors[7],
+                "category_name": "Adventure",
+                "description": "A boy's journey down the Mississippi River.",
+                "publish_date": datetime(1884, 12, 10),
+                "rating": 4.2
+            },
+            {
+                "title": "Great Expectations",
+                "author": self.authors[8],
+                "category_name": "Classic",
+                "description": "A young man's journey to find himself.",
+                "publish_date": datetime(1861, 8, 1),
+                "rating": 4.1
+            },
+            {
+                "title": "The Old Man and the Sea",
+                "author": self.authors[9],
+                "category_name": "Classic",
+                "description": "An epic struggle between man and nature.",
+                "publish_date": datetime(1952, 9, 1),
+                "rating": 4.0
+            }
+        ]
+
+        for data in book_data:
+            # Fetch or create the category
+            category, created = Category.objects.get_or_create(
+                name=data["category_name"],
+                defaults={"related_type": "book"}  # Assuming "book" is the related type for books
+            )
+            if created:
+                self.stdout.write(f"  Created category: {category.name}")
+
+            # Create the book
+            slug = slugify(data["title"])
+            book, created = Book.objects.get_or_create(
+                slug=slug,
+                defaults={
+                    "title": data["title"],
+                    "author": data["author"],
+                    "category": category,  # Use the Category instance
+                    "description": data["description"],
+                    "publish_date": data["publish_date"],
+                    "rating": data["rating"]
+                }
+            )
+            if created:
+                self.stdout.write(f"  Created book: {data['title']}")
+            else:
+                self.stdout.write(f"  Book already exists: {data['title']}")
