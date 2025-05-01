@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Category, Program, Media, Review, Download, Flag, Book, Author
 from .serializers import *
+from datetime import datetime, timedelta
 
 class StandardPagination(PageNumberPagination):
     page_size = 10
@@ -196,3 +197,25 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = 'slug'
+
+    @action(detail=False, methods=['get'])
+    def new_releases(self, request):
+        """Get books published in the last 90 days."""
+        recent_date = datetime.now().date() - timedelta(days=90)
+        books = Book.objects.filter(publish_date__gte=recent_date)
+        serializer = self.get_serializer(books, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def self_help(self, request):
+        """Get books in the 'Self-help' category."""
+        books = Book.objects.filter(category__name__iexact='Self-help')
+        serializer = self.get_serializer(books, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def business(self, request):
+        """Get books in the 'Business' category."""
+        books = Book.objects.filter(category__name__iexact='Business')
+        serializer = self.get_serializer(books, many=True)
+        return Response(serializer.data)

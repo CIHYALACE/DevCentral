@@ -36,7 +36,6 @@ export default function BookCard ({ book }) {
               <small className="text-muted">{book.rating}</small>
               <small className="text-muted">({book.ratingCount})</small>
             </div>
-            <strong>{book.price === 0 ? 'Free' : `$${book.price.toFixed(2)}`}</strong>
           </div>
         </div>
       </Card.Body>

@@ -501,84 +501,84 @@ class Command(BaseCommand):
         self.stdout.write('Creating books...')
         book_data = [
             {
-                "title": "Harry Potter and the Sorcerer's Stone",
+                "title": "The Lean Startup",
                 "author": self.authors[0],
-                "category_name": "Fantasy",
-                "description": "A young wizard's journey begins.",
-                "publish_date": datetime(1997, 6, 26),
-                "rating": 4.9
-            },
-            {
-                "title": "A Game of Thrones",
-                "author": self.authors[1],
-                "category_name": "Fantasy",
-                "description": "A tale of power, betrayal, and war.",
-                "publish_date": datetime(1996, 8, 6),
-                "rating": 4.8
-            },
-            {
-                "title": "The Hobbit",
-                "author": self.authors[2],
-                "category_name": "Fantasy",
-                "description": "A hobbit's unexpected adventure.",
-                "publish_date": datetime(1937, 9, 21),
+                "category_name": "Business",  # Updated category
+                "description": "A guide to building a successful startup using lean principles.",
+                "publish_date": datetime.now(),  # Published 30 days ago
                 "rating": 4.7
             },
             {
-                "title": "Murder on the Orient Express",
+                "title": "Good to Great",
+                "author": self.authors[1],
+                "category_name": "Business",  # Updated category
+                "description": "Why some companies make the leap and others don't.",
+                "publish_date": datetime.now(),  # Published 30 days ago
+                "rating": 4.8
+            },
+            {
+                "title": "The 7 Habits of Highly Effective People",
+                "author": self.authors[2],
+                "category_name": "Self-help",  # Updated category
+                "description": "Powerful lessons in personal change.",
+                "publish_date": datetime(1989, 8, 15),
+                "rating": 4.9
+            },
+            {
+                "title": "Atomic Habits",
                 "author": self.authors[3],
-                "category_name": "Mystery",
-                "description": "A detective solves a murder on a train.",
-                "publish_date": datetime(1934, 1, 1),
+                "category_name": "Self-help",  # Updated category
+                "description": "An easy and proven way to build good habits and break bad ones.",
+                "publish_date": datetime.now(),
+                "rating": 4.8
+            },
+            {
+                "title": "Zero to One",
+                "author": self.authors[4],
+                "category_name": "Business",  # Updated category
+                "description": "Notes on startups, or how to build the future.",
+                "publish_date": datetime(2014, 9, 16),
                 "rating": 4.6
             },
             {
-                "title": "The Shining",
-                "author": self.authors[4],
-                "category_name": "Horror",
-                "description": "A family's stay at a haunted hotel.",
-                "publish_date": datetime(1977, 1, 28),
+                "title": "Deep Work",
+                "author": self.authors[5],
+                "category_name": "Self-help",  # Updated category
+                "description": "Rules for focused success in a distracted world.",
+                "publish_date": datetime(2016, 1, 5),
+                "rating": 4.7
+            },
+            {
+                "title": "The Art of War",
+                "author": self.authors[6],
+                "category_name": "Business",  # Updated category
+                "description": "An ancient Chinese military treatise attributed to Sun Tzu.",
+                "publish_date": datetime.now(),  # Published 15 days ago
                 "rating": 4.5
             },
             {
-                "title": "Foundation",
-                "author": self.authors[5],
-                "category_name": "Science Fiction",
-                "description": "A visionary tale of the future.",
-                "publish_date": datetime(1951, 5, 1),
-                "rating": 4.4
-            },
-            {
-                "title": "Pride and Prejudice",
-                "author": self.authors[6],
-                "category_name": "Romance",
-                "description": "A classic tale of love and society.",
-                "publish_date": datetime(1813, 1, 28),
-                "rating": 4.3
-            },
-            {
-                "title": "Adventures of Huckleberry Finn",
+                "title": "The Power of Now",
                 "author": self.authors[7],
-                "category_name": "Adventure",
-                "description": "A boy's journey down the Mississippi River.",
-                "publish_date": datetime(1884, 12, 10),
-                "rating": 4.2
+                "category_name": "Self-help",  # Updated category
+                "description": "A guide to spiritual enlightenment.",
+                "publish_date": datetime(1997, 10, 6),
+                "rating": 4.8
             },
             {
-                "title": "Great Expectations",
+                "title": "Start with Why",
                 "author": self.authors[8],
-                "category_name": "Classic",
-                "description": "A young man's journey to find himself.",
-                "publish_date": datetime(1861, 8, 1),
-                "rating": 4.1
+                "category_name": "Business",  # Updated category
+                "description": "How great leaders inspire everyone to take action.",
+                "publish_date": datetime(2009, 10, 29),
+                "rating": 4.7
             },
             {
-                "title": "The Old Man and the Sea",
+                "title": "The Subtle Art of Not Giving a F*ck",
                 "author": self.authors[9],
-                "category_name": "Classic",
-                "description": "An epic struggle between man and nature.",
-                "publish_date": datetime(1952, 9, 1),
-                "rating": 4.0
+                "category_name": "Self-help",  # Updated category
+                "description": "A counterintuitive approach to living a good life.",
+                "publish_date": datetime.now(),  # Published 15 days ago
+                "rating": 4.6
             }
         ]
 

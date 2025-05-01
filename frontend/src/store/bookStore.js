@@ -4,6 +4,9 @@ import { API_URL } from ".";
 
 const bookStore = new Store({
   books: [],
+  newReleases: [],
+  selfHelpBooks: [],
+  businessBooks: [],
   currentBook: null,
   loading: false,
   error: null,
@@ -55,8 +58,65 @@ const fetchBookDetails = async (slug) => {
   }
 };
 
+const fetchNewReleases = async () => {
+  bookStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.get(`${API_URL}/api/books/new_releases/`);
+    bookStore.setState((state) => ({
+      ...state,
+      newReleases: response.data,
+      loading: false,
+    }));
+  } catch (error) {
+    bookStore.setState((state) => ({
+      ...state,
+      error: error.response?.data || { message: "Failed to fetch new releases" },
+      loading: false,
+    }));
+  }
+};
+
+const fetchSelfHelpBooks = async () => {
+  bookStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.get(`${API_URL}/api/books/self_help/`);
+    bookStore.setState((state) => ({
+      ...state,
+      selfHelpBooks: response.data,
+      loading: false,
+    }));
+  } catch (error) {
+    bookStore.setState((state) => ({
+      ...state,
+      error: error.response?.data || { message: "Failed to fetch self-help books" },
+      loading: false,
+    }));
+  }
+};
+
+const fetchBusinessBooks = async () => {
+  bookStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.get(`${API_URL}/api/books/business/`);
+    bookStore.setState((state) => ({
+      ...state,
+      businessBooks: response.data,
+      loading: false,
+    }));
+  } catch (error) {
+    bookStore.setState((state) => ({
+      ...state,
+      error: error.response?.data || { message: "Failed to fetch business books" },
+      loading: false,
+    }));
+  }
+};
+
 export { 
   bookStore, 
   fetchBooks,
-  fetchBookDetails 
+  fetchBookDetails,
+  fetchNewReleases, 
+  fetchSelfHelpBooks, 
+  fetchBusinessBooks 
 };

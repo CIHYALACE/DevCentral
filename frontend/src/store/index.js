@@ -60,5 +60,8 @@ export {
 export { 
   bookStore, 
   fetchBooks, 
-  fetchBookDetails 
+  fetchBookDetails,
+  fetchNewReleases,
+  fetchSelfHelpBooks,
+  fetchBusinessBooks
 } from "./bookStore.js";
