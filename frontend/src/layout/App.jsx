@@ -10,10 +10,8 @@ import AppsPage from '../pages/applications'
 import BooksPage from '../pages/BooksPage'
 import ActivateAccount from '../pages/ActivateAccount'
 import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
-import AdminPage from '../pages/AdminPage'
 import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
 import ProfilePage from '../pages/ProfilePage'
-import UserProfile from '../pages/UserProfile'
 import MyPrograms from '../pages/MyPrograms';
 import AddProgram from '../pages/AddProgram';
 
@@ -22,7 +20,6 @@ export default function App() {
     <Routes>
 
       <Route path="/admin" element={<AdminSharedLayout />}>
-        <Route path="/admin" element={<AdminPage />} />
       </Route>
 
       <Route path="/profile" element={<ProfileSharedLayout />}>

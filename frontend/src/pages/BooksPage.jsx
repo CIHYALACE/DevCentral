@@ -14,7 +14,7 @@ export default function BooksPage() {
   return (
     <div className="container mt-5 mb-5">
       <a href="/booklibrary" className="btn text-primary ms-5"> <i class="fa-solid fa-arrow-up-right-from-square"></i> Your Libraray </a>
-      <a href="/booklibrary" className="btn text-primary ms-2"> <i class="fa-solid fa-arrow-up-right-from-square"></i> Your Libraray </a>      
+      <a href="/booklibrary" className="btn text-primary ms-2"> <i class="fa-solid fa-arrow-up-right-from-square"></i> Your WishList </a>      
       {/* New release ebooks section */}
       <section className="mb-5 mt-5">
         <h3 className="ms-5 mb-3">New release ebooks</h3>
