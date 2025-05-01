@@ -55,3 +55,12 @@ export {
   fetchUserFlags, 
   submitFlag 
 } from "./flagStore.js";
+
+// Book Store
+export { 
+  bookStore, 
+  fetchBooks, 
+  fetchBookDetails, 
+  fetchSimilarBooks,
+  fetchAuthorBooks 
+} from "./bookStore.js";
