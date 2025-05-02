@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Category, Program, Media, Review, Download, Flag
+from .models import Category, Program, Media, Review, Download, Flag, Book, Author
 
 User = get_user_model()
 
@@ -66,3 +66,18 @@ class FlagSerializer(serializers.ModelSerializer):
         model = Flag
         fields = '__all__'
         read_only_fields = ['created_at']
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = '__all__'
+
+
+class BookSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source='author.name', read_only=True)
+    category_name = serializers.CharField(source='category.name', read_only=True)
+
+    class Meta:
+        model = Book
+        fields = '__all__'

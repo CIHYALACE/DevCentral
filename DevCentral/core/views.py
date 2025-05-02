@@ -1,45 +1,20 @@
-# from django.shortcuts import render
-# from rest_framework import viewsets
-# # from .models import Game, Review, Media
-# # from .serializers import GameSerializer, ReviewSerializer, MediaSerializer
-# from .models import Program, Review, Media
-# from .serializers import *
-
-
-
-    
-
-# class ProgramViewSet(viewsets.ModelViewSet):
-#     queryset = Program.objects.all()
-#     serializer_class = ProgramSerializer
-
-#     def get_queryset(self):
-#         return Program.objects.filter(is_published=True)
-
-
-
-# class GameViewSet(viewsets.ModelViewSet):
-#     queryset = Program.objects.filter(type='game')
-#     serializer_class = ProgramSerializer
-
-# class ReviewViewSet(viewsets.ModelViewSet):
-#     queryset = Review.objects.all()
-#     serializer_class = ReviewSerializer
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from .models import Category, Program, Media, Review, Download, Flag
+from rest_framework.decorators import action
+from .models import Category, Program, Media, Review, Download, Flag, Book, Author
 from .serializers import *
+from datetime import datetime, timedelta
 
 class StandardPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
 
 class ProgramViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all().order_by('-created_at')
@@ -92,13 +67,10 @@ class ProgramViewSet(viewsets.ModelViewSet):
         
         return super().list(request, *args, **kwargs)
 
-
 class MediaViewSet(viewsets.ModelViewSet):
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-
 
 class ReviewPagination(PageNumberPagination):
     page_size = 5
@@ -135,7 +107,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-
 class DownloadViewSet(viewsets.ModelViewSet):
     queryset = Download.objects.all().order_by('-downloaded_at')
     serializer_class = DownloadSerializer
@@ -170,7 +141,6 @@ class DownloadViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-
 class FlagViewSet(viewsets.ModelViewSet):
     queryset = Flag.objects.all().order_by('-created_at')
     serializer_class = FlagSerializer
@@ -204,7 +174,6 @@ class FlagViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-
 class TopChartAppViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all()
     serializer_class = ProgramSerializer
@@ -212,34 +181,41 @@ class TopChartAppViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Program.objects.filter(is_published=True).order_by('-created_at')[:10]
     
-
 class ProductivityAppViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all()
     serializer_class = ProgramSerializer
 
     def get_queryset(self):
         return Program.objects.filter(category__name='Productivity')
-# class MyProgramsViewSet(viewsets.ModelViewSet):
-#     serializer_class = ProgramSerializer
-#     # permission_classes = [permissions.IsAuthenticated]
 
-#     def get_queryset(self):
-#         user = self.request.user
-#         if user.role == 'developer':
-#             return Program.objects.filter(developer=user.name)
-#         return Program.objects.none()
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    lookup_field = 'id'
 
-#     def perform_create(self, serializer):
-#         serializer.save(developer=self.request.user.name)
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    lookup_field = 'slug'
 
+    @action(detail=False, methods=['get'])
+    def new_releases(self, request):
+        """Get books published in the last 90 days."""
+        recent_date = datetime.now().date() - timedelta(days=90)
+        books = Book.objects.filter(publish_date__gte=recent_date)
+        serializer = self.get_serializer(books, many=True)
+        return Response(serializer.data)
 
-class ProgramViewSet(viewsets.ModelViewSet):
-    queryset = Program.objects.all()
-    serializer_class = ProgramSerializer
+    @action(detail=False, methods=['get'])
+    def self_help(self, request):
+        """Get books in the 'Self-help' category."""
+        books = Book.objects.filter(category__name__iexact='Self-help')
+        serializer = self.get_serializer(books, many=True)
+        return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        serializer.save(developer=self.request.user)
-
-    def get_queryset(self):
-        return Program.objects.filter(developer=self.request.user)
-
+    @action(detail=False, methods=['get'])
+    def business(self, request):
+        """Get books in the 'Business' category."""
+        books = Book.objects.filter(category__name__iexact='Business')
+        serializer = self.get_serializer(books, many=True)
+        return Response(serializer.data)

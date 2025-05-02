@@ -10,10 +10,8 @@ import AppsPage from '../pages/applications'
 import BooksPage from '../pages/BooksPage'
 import ActivateAccount from '../pages/ActivateAccount'
 import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
-import AdminPage from '../pages/AdminPage'
 import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
 import ProfilePage from '../pages/ProfilePage'
-import UserProfile from '../pages/UserProfile'
 import MyPrograms from '../pages/MyPrograms';
 import AddProgram from '../pages/AddProgram';
 
@@ -22,10 +20,12 @@ export default function App() {
     <Routes>
 
       <Route path="/admin" element={<AdminSharedLayout />}>
-        <Route path="/admin" element={<AdminPage />} />
       </Route>
 
       <Route path="/profile" element={<ProfileSharedLayout />}>
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/my-programs" element={<MyPrograms />} />
+        <Route path="/profile/add-program" element={<AddProgram />} />
         <Route index element={<ProfilePage />} /> {/* Default child route */}
         <Route path="my-programs" element={<MyPrograms />} /> {/* Relative path */}
         <Route path="add-program" element={<AddProgram />} /> {/* Relative path */}

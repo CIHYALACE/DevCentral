@@ -135,4 +135,35 @@ class Flag(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-        unique_together = ('user', 'program')  
+        unique_together = ('user', 'program')
+
+class Author(models.Model):
+    name = models.CharField(max_length=200)
+    bio = models.TextField(blank=True)
+    website = models.URLField(blank=True)
+    profile_picture = models.ImageField(upload_to='authors/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='books')
+    description = models.TextField()
+    cover_image = models.ImageField(upload_to='book_covers/')
+    publish_date = models.DateField()
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    is_published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-publish_date']

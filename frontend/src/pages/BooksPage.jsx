@@ -1,44 +1,65 @@
+import { useEffect } from "react";
+import { useStore } from "@tanstack/react-store";
+import {
+  bookStore,
+  fetchNewReleases,
+  fetchSelfHelpBooks,
+  fetchBusinessBooks,
+  fetchBooks, // Import fetchBooks to get all books
+} from "../store";
 import BooksSlider from "../components/books/BooksSlider";
-import BooksSlider2 from "../components/books/BooksSlider2";
+import BooksSlider2 from "../components/books/BooksSlider2"; // Import BooksSlider2 for Top Books
 
 export default function BooksPage() {
-  const books = Array.from({ length: 18 }, (_, i) => ({
-    coverUrl: "../public/BookCover.webp",
-    title: `Book Title ${i + 1}`,
-    author: "Author Name",
-    rating: 4.5,
-    ratingCount: 128,
-    price: 9.99,
-  }));
+  const { newReleases, selfHelpBooks, businessBooks, books, loading, error } =
+    useStore(bookStore);
+
+  useEffect(() => {
+    fetchNewReleases().then(() => {
+      console.log(bookStore.state.newReleases); // Log the data
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchSelfHelpBooks();
+    fetchBusinessBooks();
+    fetchBooks(1, 18); // Fetch the top 18 books
+  }, []);
+
+  if (loading) {
+    return <div className="container mt-5 text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="container mt-5 text-center">
+        Error: {error.message || "Failed to fetch books"}
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-5 mb-5">
-      <a href="/booklibrary" className="btn text-primary ms-5"> <i class="fa-solid fa-arrow-up-right-from-square"></i> Your Libraray </a>
-      <a href="/booklibrary" className="btn text-primary ms-2"> <i class="fa-solid fa-arrow-up-right-from-square"></i> Your Libraray </a>      
-      {/* New release ebooks section */}
+      
       <section className="mb-5 mt-5">
-        <h3 className="ms-5 mb-3">New release ebooks</h3>
-        <BooksSlider books={books} />
+        <h3 className="ms-5 mb-3">New Release Ebooks</h3>
+        <BooksSlider books={newReleases} />
       </section>
 
-      {/* Top-selling ebooks section with horizontal cards */}
       <section className="mb-5 mt-5">
-        <h3 className="ms-5 mb-3">Top-selling ebooks</h3>
-        <BooksSlider2 books={books} />
+        <h3 className="ms-5 mb-3">Top Books</h3>
+        <BooksSlider2 books={books} /> {/* Use BooksSlider2 for Top Books */}
       </section>
 
-      {/* Self-help ebooks section */}
       <section className="mb-5 mt-5">
-        <h3 className="ms-5 mb-3">Self-help ebooks</h3>
-        <BooksSlider books={books} />
+        <h3 className="ms-5 mb-3">Self-help Ebooks</h3>
+        <BooksSlider books={selfHelpBooks} />
       </section>
 
-      {/* Business books section */}
       <section className="mb-5 mt-5">
-        <h3 className="ms-5 mb-3">Business books</h3>
-        <BooksSlider books={books} />
+        <h3 className="ms-5 mb-3">Business Books</h3>
+        <BooksSlider books={businessBooks} />
       </section>
-
     </div>
   );
 }
