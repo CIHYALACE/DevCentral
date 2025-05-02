@@ -15,8 +15,8 @@ const fetchGames = async (page = 1, pageSize = 12, category = null) => {
   
   try {
     // Build query parameters
-    let countUrl = `${API_URL}/apps/?count_only=true&type=game`;
-    let url = `${API_URL}/apps/?page=${page}&page_size=${pageSize}&type=game`;
+    let countUrl = `${API_URL}/programs/?count_only=true&type=game`;
+    let url = `${API_URL}/programs/?page=${page}&page_size=${pageSize}&type=game`;
     
     if (category) {
       countUrl += `&category=${category}`;
@@ -57,7 +57,7 @@ const fetchGameDetails = async (slug) => {
   gameStore.setState((state) => ({ ...state, loading: true, error: null }));
   
   try {
-    const response = await axios.get(`${API_URL}/apps/${slug}/`);
+    const response = await axios.get(`${API_URL}/programs/${slug}/`);
     
     gameStore.setState((state) => ({
       ...state,

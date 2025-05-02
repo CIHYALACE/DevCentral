@@ -1,26 +1,38 @@
-export default function AdminSideBar({ active, setActive }) {
-    const menu = [
-        "Dashboard",
-        "User Tokens",
-        "categories",
-        "Media",
-        "Programs",
-        "Reviews",
+import { Link } from 'react-router-dom';
+
+export default function AdminSideBar({ active, onItemClick }) {
+    const menuItems = [
+        { name: "Dashboard", path: "/admin/dashboard", icon: "bi-speedometer2" },
+        { name: "Programs", path: "/admin/programs", icon: "bi-grid" },
+        { name: "Reviews", path: "/admin/reviews", icon: "bi-star" },
+        { name: "Media", path: "/admin/media", icon: "bi-images" },
+        { name: "User Tokens", path: "/admin/tokens", icon: "bi-person-badge" },
+        { name: "Categories", path: "/admin/categories", icon: "bi-folder" },
     ];
 
+    const handleClick = () => {
+        if (onItemClick) onItemClick();
+    };
+
     return (
-        <aside className="sidebar">
-            <div className="user">
-                <div className="user-name">Rawan El-Saadany</div>
+        <aside className="sidebar p-0">
+            <div className="user p-3 border-bottom">
+                <div className="user-name fw-bold">Admin Panel</div>
             </div>
-            <ul className="sidebar-menu">
-                {menu.map((item, i) => (
+            <ul className="sidebar-menu list-unstyled p-0 m-0">
+                {menuItems.map((item, i) => (
                     <li 
                         key={i} 
-                        className={active === item ? "active" : ""} 
-                        onClick={() => setActive(item)}
+                        className={`border-bottom ${active === item.name ? "active bg-primary" : ""}`}
+                        onClick={handleClick}
                     >
-                        {item}
+                        <Link 
+                            to={item.path} 
+                            className={`d-flex align-items-center p-3 text-decoration-none ${active === item.name ? "text-white" : "text-dark"}`}
+                        >
+                            <i className={`bi ${item.icon} me-2`}></i>
+                            {item.name}
+                        </Link>
                     </li>
                 ))}
             </ul>

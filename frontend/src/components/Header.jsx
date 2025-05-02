@@ -1,9 +1,13 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import Button from "react-bootstrap/Button";
 
-export default function Header() {
+export default function Header({ onToggleSidebar }) {
   let token = "token";
+  const location = useLocation();
+  const isProfilePage = location.pathname.startsWith('/profile');
+  
   return (
     <Navbar
       expand="lg"
@@ -13,6 +17,15 @@ export default function Header() {
         backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
+      {isProfilePage && (
+        <Button 
+          variant="outline-secondary" 
+          className="d-md-none me-2" 
+          onClick={onToggleSidebar}
+        >
+          <i className="bi bi-list"></i>
+        </Button>
+      )}
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Brand href="\" className="font-weight-bold fs-md-3 fw-bold big-shoulders d-flex align-items-center flex-row gap-2">
         <img
@@ -22,7 +35,8 @@ export default function Header() {
           height="60"
           className="d-inline-block align-top"
         />{" "}
-        <span className="fw-bold fs-4 text-black share-tech-mono-regular">DevCentral</span>
+        <span className="fw-bold fs-4 text-black share-tech-mono-regular d-none d-sm-inline">DevCentral</span>
+        <span className="fw-bold fs-4 text-black share-tech-mono-regular d-inline d-sm-none">DC</span>
       </Navbar.Brand>
       <NavLink to={token ? "/profile" : "/login"} className={"nav-link"}>
         <i className="fa-solid fa-user fs-5 d-inline d-lg-none px-2 text-black"></i>

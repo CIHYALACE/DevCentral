@@ -66,5 +66,3 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     apps_library = models.ManyToManyField('core.Program', blank=True, related_name='users')
-
-# Create your models here.

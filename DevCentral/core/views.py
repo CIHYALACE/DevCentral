@@ -14,13 +14,13 @@ class StandardPagination(PageNumberPagination):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class ProgramViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all().order_by('-created_at')
     serializer_class = ProgramSerializer
     pagination_class = StandardPagination
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'slug'
     
     def get_queryset(self):
@@ -70,7 +70,7 @@ class ProgramViewSet(viewsets.ModelViewSet):
 class MediaViewSet(viewsets.ModelViewSet):
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class ReviewPagination(PageNumberPagination):
     page_size = 5
@@ -81,7 +81,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all().order_by('-created_at')
     serializer_class = ReviewSerializer
     pagination_class = ReviewPagination
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
     def get_queryset(self):
         queryset = Review.objects.all().order_by('-created_at')
@@ -111,7 +111,7 @@ class DownloadViewSet(viewsets.ModelViewSet):
     queryset = Download.objects.all().order_by('-downloaded_at')
     serializer_class = DownloadSerializer
     pagination_class = StandardPagination
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
         queryset = Download.objects.all().order_by('-downloaded_at')
@@ -145,7 +145,7 @@ class FlagViewSet(viewsets.ModelViewSet):
     queryset = Flag.objects.all().order_by('-created_at')
     serializer_class = FlagSerializer
     pagination_class = StandardPagination
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
         queryset = Flag.objects.all().order_by('-created_at')

@@ -17,7 +17,7 @@ const fetchPrograms = async (page = 1, pageSize = 10, category = null, search = 
   programStore.setState((state) => ({ ...state, loading: true, error: null, currentPage: page }));
   try {
     // Build query parameters
-    let url = `${API_URL}/apps/?page=${page}&page_size=${pageSize}`;
+    let url = `${API_URL}/programs/?page=${page}&page_size=${pageSize}`;
     if (category) url += `&category=${category}`;
     if (search) url += `&search=${search}`;
     if (type) url += `&type=${type}`;
@@ -25,7 +25,7 @@ const fetchPrograms = async (page = 1, pageSize = 10, category = null, search = 
     if (limit) url += `&limit=${limit}`;
     
     // First get the total count
-    const countResponse = await axios.get(`${API_URL}/apps/?count_only=true${type ? `&type=${type}` : ''}${category ? `&category=${category}` : ''}${search ? `&search=${search}` : ''}`);
+    const countResponse = await axios.get(`${API_URL}/programs/?count_only=true${type ? `&type=${type}` : ''}${category ? `&category=${category}` : ''}${search ? `&search=${search}` : ''}`);
     const totalPrograms = countResponse.data.count || 0;
     
     // Then get the paginated data
@@ -54,7 +54,7 @@ const fetchPrograms = async (page = 1, pageSize = 10, category = null, search = 
 const fetchProgramDetails = async (slug) => {
   programStore.setState((state) => ({ ...state, loading: true, error: null }));
   try {
-    const response = await axios.get(`${API_URL}/apps/${slug}/`);
+    const response = await axios.get(`${API_URL}/programs/${slug}/`);
     programStore.setState((state) => ({
       ...state,
       currentProgram: response.data,
@@ -74,7 +74,7 @@ const fetchProgramDetails = async (slug) => {
 const fetchTopCharts = async () => {
   programStore.setState((state) => ({ ...state, loading: true, error: null }));
   try {
-    const response = await axios.get(`${API_URL}/apps/?top_chart=true&limit=10`);
+    const response = await axios.get(`${API_URL}/programs/?top_chart=true&limit=10`);
     
     // Handle both paginated and non-paginated responses
     const topCharts = response.data.results ? response.data.results : response.data;
@@ -98,7 +98,7 @@ const fetchTopCharts = async () => {
 const fetchProductivityApps = async () => {
   programStore.setState((state) => ({ ...state, loading: true, error: null }));
   try {
-    const response = await axios.get(`${API_URL}/apps/?category=Productivity`);
+    const response = await axios.get(`${API_URL}/programs/?category=Productivity`);
     
     // Handle both paginated and non-paginated responses
     const productivityApps = response.data.results ? response.data.results : response.data;

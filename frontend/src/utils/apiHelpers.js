@@ -24,7 +24,12 @@ import {
 } from '../store';
 
 // Setup axios interceptor for authentication
+let isInterceptorSetup = false;
+
 const setupAxiosInterceptors = () => {
+  // Only set up interceptors once to avoid duplicates
+  if (isInterceptorSetup) return;
+  
   // Request interceptor to add token to requests
   axios.interceptors.request.use(
     (config) => {
@@ -56,6 +61,9 @@ const setupAxiosInterceptors = () => {
           const refreshToken = localStorage.getItem('refresh');
           if (refreshToken) {
             await refresh();
+            // Get the new token and update the request
+            const newToken = localStorage.getItem('token');
+            originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
             // Retry the original request with new token
             return axios(originalRequest);
           }
@@ -69,6 +77,8 @@ const setupAxiosInterceptors = () => {
       return Promise.reject(error);
     }
   );
+  
+  isInterceptorSetup = true;
 };
 
 // Authentication helpers

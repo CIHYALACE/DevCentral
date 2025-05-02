@@ -1,35 +1,57 @@
 import '../style/App.css'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
+// Layouts
 import SharedLayout from '../sharedLayout/SharedLayout'
+import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
+import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
+// Pages
 import HomePage from '../pages/homePage'
 import Login from '../pages/login'
 import Register from '../pages/register'
-import ItemDetails from '../pages/appDetails' // Assuming this is the correct path to your ItemDetails component
-import GamesPage from '../pages/games' // Assuming this is the correct path to your games component
+import ItemDetails from '../pages/appDetails'
+import GamesPage from '../pages/games'
 import AppsPage from '../pages/applications'
 import BooksPage from '../pages/BooksPage'
 import ActivateAccount from '../pages/ActivateAccount'
-import AdminSharedLayout from '../sharedLayout/AdminSharedLayout'
-import ProfileSharedLayout from '../sharedLayout/ProfileSharedLayout'
+// Profile Pages
 import ProfilePage from '../pages/ProfilePage'
-import MyPrograms from '../pages/MyPrograms';
-import AddProgram from '../pages/AddProgram';
+import MyPrograms from '../pages/MyPrograms'
+import AddProgram from '../pages/AddProgram'
+import InfoSection from '../pages/profile/InfoSection'
+import PaymentOptions from '../pages/profile/PaymentOptions'
+import Subscriptions from '../pages/profile/Subscriptions'
+import Devices from '../pages/profile/Devices'
+import OrderHistory from '../pages/profile/OrderHistory'
+// Admin Pages
+import AdminDashboard from '../pages/admin/AdminDashboard'
+import AdminPrograms from '../pages/admin/AdminPrograms'
+import AdminReviews from '../pages/admin/AdminReviews'
+import AdminMedia from '../pages/admin/AdminMedia'
+import AdminTokens from '../pages/admin/AdminTokens'
+import AdminCategories from '../pages/admin/AdminCategories'
 
 export default function App() {
   return (
     <Routes>
 
       <Route path="/admin" element={<AdminSharedLayout />}>
+        <Route index element={<Navigate to="/admin/dashboard" />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="programs" element={<AdminPrograms />} />
+        <Route path="reviews" element={<AdminReviews />} />
+        <Route path="media" element={<AdminMedia />} />
+        <Route path="tokens" element={<AdminTokens />} />
+        <Route path="categories" element={<AdminCategories />} />
       </Route>
 
       <Route path="/profile" element={<ProfileSharedLayout />}>
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/profile/my-programs" element={<MyPrograms />} />
-        <Route path="/profile/add-program" element={<AddProgram />} />
-        <Route index element={<ProfilePage />} /> {/* Default child route */}
-        <Route path="my-programs" element={<MyPrograms />} /> {/* Relative path */}
-        <Route path="add-program" element={<AddProgram />} /> {/* Relative path */}
-
+        <Route index element={<InfoSection />} />
+        <Route path="my-programs" element={<MyPrograms />} />
+        <Route path="add-program" element={<AddProgram />} />
+        <Route path="payment-options" element={<PaymentOptions />} />
+        <Route path="subscriptions" element={<Subscriptions />} />
+        <Route path="devices" element={<Devices />} />
+        <Route path="order-history" element={<OrderHistory />} />
       </Route>
 
       <Route path="/" element={<SharedLayout />}>

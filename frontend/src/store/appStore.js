@@ -9,7 +9,7 @@ const fetchApps = () => {
   });
 };
 const fetchAppDetails = (slug)=>{
-  axios.get(`${API_URL}/apps/${slug}/`).then((response) => {
+  axios.get(`${API_URL}/programs/${slug}/`).then((response) => {
     appStore.setState((state) => ({...state, currentApp:response.data}));
   });
 };

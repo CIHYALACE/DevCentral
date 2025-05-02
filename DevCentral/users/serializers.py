@@ -4,11 +4,12 @@ from django.db import models
 
 class CustomUserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'name', 'phone_number', 'password']
+        fields = ['id', 'email', 'name', 'role', 'phone_number', 'picture', 'is_active', 'password']
+        read_only_fields = ['id', 'is_active', 'email']
 
     def create(self, validated_data):
         user = CustomUser(
@@ -34,36 +35,60 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = CustomUserSerializer(required=False)
+    phone_number = serializers.CharField(source='user.phone_number', required=False)
 
     class Meta:
         model = UserProfile
         fields = [
             "id",
             "user",
+            "phone_number",
             "bio",
             "location",
             "date_of_birth",
             "picture",
+            "country",
+            "apps_library"
         ]
+        read_only_fields = ['id']
+        extra_kwargs = {'location': {'required': False, 'allow_null': True}}
         
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user', None)
-        if user_data:
-            user_serializer = CustomUserSerializer(instance.user, data=user_data, partial=True)
-            user_serializer.is_valid(raise_exception=True)
-            user_serializer.save()
+        # Print received data for debugging
+        print(f"Validated data: {validated_data}")
+        
+        # Handle phone_number field
+        phone_number = validated_data.pop('phone_number', None)
+        if phone_number is None and 'user' in validated_data and 'phone_number' in validated_data['user']:
+            phone_number = validated_data['user'].pop('phone_number')
+        
+        # Remove any fields that don't exist in the model
+        for field in list(validated_data.keys()):
+            if field not in [f.name for f in UserProfile._meta.get_fields()] and field != 'user':
+                print(f"Removing unknown field: {field}")
+                validated_data.pop(field)
+        
+        # Update user data if present
+        user_data = validated_data.pop('user', {})
+        if user_data or phone_number:
+            if not user_data:
+                user_data = {}
+            if phone_number:
+                user_data['phone_number'] = phone_number
+            
+            if user_data:
+                print(f"Updating user with data: {user_data}")
+                user_serializer = CustomUserSerializer(instance.user, data=user_data, partial=True)
+                user_serializer.is_valid(raise_exception=True)
+                user_serializer.save()
+        
+        # Update profile fields
+        print(f"Updating profile with data: {validated_data}")
         return super().update(instance, validated_data)
-
-class CustomUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'email', 'name', 'role', 'phone_number', 'picture', 'is_active']
-        read_only_fields = ['id', 'is_active']
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only=True)
-
-    class Meta:
-        model = UserProfile
-        fields = ['id', 'user', 'bio', 'location', 'date_of_birth', 'picture', 'country', 'apps_library']
-        read_only_fields = ['id', 'user']
+        
+    def to_representation(self, instance):
+        # Add phone_number to the output
+        representation = super().to_representation(instance)
+        if instance.user and hasattr(instance.user, 'phone_number'):
+            representation['phone_number'] = instance.user.phone_number
+        return representation

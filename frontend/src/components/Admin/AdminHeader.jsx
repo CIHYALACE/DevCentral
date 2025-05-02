@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import Button from "react-bootstrap/Button";
 
-export default function AdminHeader() {
+export default function AdminHeader({ onToggleSidebar }) {
   return (
     <Navbar
       expand="lg"
@@ -12,6 +13,13 @@ export default function AdminHeader() {
         backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
+      <Button 
+        variant="outline-secondary" 
+        className="d-md-none me-2" 
+        onClick={onToggleSidebar}
+      >
+        <i className="bi bi-list"></i>
+      </Button>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Brand href="\admin" className="font-weight-bold fs-md-3 fw-bold big-shoulders d-flex align-items-center flex-row gap-2 ">
         <img
@@ -21,7 +29,8 @@ export default function AdminHeader() {
           height="60"
           className="d-inline-block align-top"
         />{" "}
-        <span className="fw-bold fs-4 text-black share-tech-mono-regular">DevCentral Administration</span>
+        <span className="fw-bold fs-4 text-black share-tech-mono-regular d-none d-sm-inline">DevCentral Administration</span>
+        <span className="fw-bold fs-4 text-black share-tech-mono-regular d-inline d-sm-none">Admin</span>
       </Navbar.Brand>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-1 fw-bold share-tech-mono-regular gap-3 ms-auto">
