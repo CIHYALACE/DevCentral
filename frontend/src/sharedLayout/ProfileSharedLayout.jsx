@@ -7,6 +7,8 @@ import PaymentOptions from '../components/PaymentOptions';
 import Subscriptions from '../components/Subscriptions';
 import Devices from '../components/Devices';
 import OrderHistory from '../components/OrderHistory';
+import MyPrograms from '../pages/MyPrograms';
+import AddProgram from '../pages/AddProgram';
 
 export default function ProfileSharedLayout() {
     const [activeSection, setActiveSection] = useState("InfoSection");
@@ -21,6 +23,10 @@ export default function ProfileSharedLayout() {
                 return <Devices />;
             case "Order history":
                 return <OrderHistory />;
+            case "my programs":
+                return <MyPrograms />;    
+            case "Add new programs":
+                return <AddProgram />;    
             default:
                 return <InfoSection />;
         }

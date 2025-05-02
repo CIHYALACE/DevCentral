@@ -1,0 +1,73 @@
+.add-program-container {
+    max-width: 768px;
+    margin: 40px auto;
+    background-color: white;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-program-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1e40af;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .add-program-form {
+    display: grid;
+    gap: 20px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.2s;
+  }
+  
+  .input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  
+  .textarea {
+    height: 100px;
+    resize: vertical;
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .file-input {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    color: #6b7280;
+    background-color: #f0f9ff;
+    border: 1px solid #d1d5db;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .submit-button {
+    background-color: #2563eb;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #1e3a8a;
+  }
+  

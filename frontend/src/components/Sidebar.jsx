@@ -2,6 +2,8 @@ import React from "react";
 import "../style/UserProfile.css";
 import sideimg from "../assets/tiktok-profile-picture-template_742173-4482.avif";
 const menu = [
+  "my programs",
+  "Add new programs",
   "Your info",
   "Subscriptions",
   "Devices",

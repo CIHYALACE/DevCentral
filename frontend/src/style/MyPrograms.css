@@ -1,0 +1,45 @@
+.my-programs-container {
+    padding: 24px;
+  }
+  
+  .my-programs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .my-programs-header h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .add-button {
+    background-color: #16a34a;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .add-button:hover {
+    background-color: #15803d;
+  }
+  
+  .programs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  @media (min-width: 768px) {
+    .programs-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  

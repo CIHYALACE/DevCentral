@@ -29,6 +29,7 @@ export default function App() {
         <Route index element={<ProfilePage />} /> {/* Default child route */}
         <Route path="my-programs" element={<MyPrograms />} /> {/* Relative path */}
         <Route path="add-program" element={<AddProgram />} /> {/* Relative path */}
+
       </Route>
 
       <Route path="/" element={<SharedLayout />}>

@@ -1,16 +1,14 @@
-// pages/AddProgram.jsx
 import React, { useState } from 'react';
+import '../style/AddProgram.css';
 
 const AddProgram = () => {
   const [formData, setFormData] = useState({
     title: '',
-    slug: '',
     description: '',
     type: '',
     release_date: '',
     last_update_date: '',
     price: '',
-    download_count: '',
     download_url: '',
     is_published: false,
     category: '',
@@ -45,21 +43,18 @@ const AddProgram = () => {
       body: data,
     })
       .then((res) => {
-        if (!res.ok) throw new Error('فشل في الإضافة');
+        if (!res.ok) throw new Error('Failed to add program');
         return res.json();
       })
-      .then((data) => {
-        alert('تم إضافة التطبيق بنجاح!');
-        // reset form
+      .then(() => {
+        alert('Program added successfully!');
         setFormData({
           title: '',
-          slug: '',
           description: '',
           type: '',
           release_date: '',
           last_update_date: '',
           price: '',
-          download_count: '',
           download_url: '',
           is_published: false,
           category: '',
@@ -68,29 +63,31 @@ const AddProgram = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert('حدث خطأ أثناء الإضافة');
+        alert('An error occurred while adding the program');
       });
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">إضافة تطبيق جديد</h2>
-      <form onSubmit={handleSubmit} className="grid gap-4 max-w-md">
-        <input name="title" value={formData.title} onChange={handleChange} placeholder="العنوان" className="p-2 border rounded" required />
-        <input name="slug" value={formData.slug} onChange={handleChange} placeholder="Slug" className="p-2 border rounded" required />
-        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="الوصف" className="p-2 border rounded" />
-        <input name="type" value={formData.type} onChange={handleChange} placeholder="النوع (app/game/book)" className="p-2 border rounded" required />
-        <input type="date" name="release_date" value={formData.release_date} onChange={handleChange} className="p-2 border rounded" />
-        <input type="date" name="last_update_date" value={formData.last_update_date} onChange={handleChange} className="p-2 border rounded" />
-        <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="السعر" className="p-2 border rounded" />
-        <input type="number" name="download_count" value={formData.download_count} onChange={handleChange} placeholder="عدد التحميلات" className="p-2 border rounded" />
-        <input name="download_url" value={formData.download_url} onChange={handleChange} placeholder="رابط التحميل" className="p-2 border rounded" />
-        <input name="category" value={formData.category} onChange={handleChange} placeholder="معرف التصنيف (category id)" className="p-2 border rounded" />
-        <label>
-          <input type="checkbox" name="is_published" checked={formData.is_published} onChange={handleChange} /> نشر التطبيق
+    <div className="add-program-container">
+      <h2 className="add-program-title">🧩 Add New Program</h2>
+      <form onSubmit={handleSubmit} className="add-program-form">
+        <input name="title" value={formData.title} onChange={handleChange} placeholder="Program Title" className="input" required />
+        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description" className="input textarea" />
+        <input name="type" value={formData.type} onChange={handleChange} placeholder="Type (app/game/book)" className="input" required />
+        <input type="date" name="release_date" value={formData.release_date} onChange={handleChange} className="input" />
+        <input type="date" name="last_update_date" value={formData.last_update_date} onChange={handleChange} className="input" />
+        <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price" className="input" />
+        <input name="download_url" value={formData.download_url} onChange={handleChange} placeholder="Download URL" className="input" />
+        <input name="category" value={formData.category} onChange={handleChange} placeholder="Category ID" className="input" />
+
+        <label className="checkbox-label">
+          <input type="checkbox" name="is_published" checked={formData.is_published} onChange={handleChange} />
+          <span>Publish Program</span>
         </label>
-        <input type="file" name="icon" onChange={handleChange} className="p-2" accept="image/*" />
-        <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">أضف التطبيق</button>
+
+        <input type="file" name="icon" onChange={handleChange} className="file-input" accept="image/*" />
+
+        <button type="submit" className="submit-button">🚀 Submit</button>
       </form>
     </div>
   );

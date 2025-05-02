@@ -1,6 +1,8 @@
 // pages/MyPrograms.jsx
 import React, { useEffect, useState } from 'react';
 import ProgramCard from '../components/ProgramCard';
+import { Link } from 'react-router-dom';
+import '../style/MyPrograms.css'; // استدعاء ملف CSS
 
 const MyPrograms = () => {
   const [programs, setPrograms] = useState([]);
@@ -10,7 +12,7 @@ const MyPrograms = () => {
     fetch('http://127.0.0.1:8000/usingViewset/myprograms/?mine=true', {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('access')}`, // تأكد إنك مسجل دخول
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
       },
     })
       .then((res) => res.json())
@@ -25,14 +27,19 @@ const MyPrograms = () => {
   }, []);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">برامجي</h1>
+    <div className="my-programs-container">
+      <div className="my-programs-header">
+        <h1>My Programs</h1>
+        <Link to="/profile/add-program" className="add-button">+ Add New One</Link>
+
+      </div>
+
       {loading ? (
-        <p>جاري التحميل...</p>
+        <p>Loading.........</p>
       ) : programs.length === 0 ? (
-        <p>لا توجد برامج بعد.</p>
+        <p>Sorry you have no programs</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="programs-grid">
           {programs.map((program) => (
             <ProgramCard key={program.id} program={program} />
           ))}
