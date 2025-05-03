@@ -35,6 +35,7 @@ class Program(models.Model):
     last_update_date = models.DateField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    rating_count = models.PositiveIntegerField(default=0)
     download_count = models.PositiveIntegerField(default=0)
     icon = models.ImageField(upload_to='icons/')
     download_url = models.URLField()
@@ -69,17 +70,34 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
+        is_new = self.pk is None  # Check if this is a new review
         super().save(*args, **kwargs)
+        
+        # Update rating average
         avg = self.program.reviews.aggregate(Avg('score'))['score__avg'] or 0
         self.program.rating = avg
-        self.program.save(update_fields=['rating'])
+        
+        # Update rating count if this is a new review
+        if is_new:
+            self.program.rating_count += 1
+        
+        # Save the program with updated fields
+        self.program.save(update_fields=['rating', 'rating_count'])
 
     def delete(self, *args, **kwargs):
         program = self.program
         super().delete(*args, **kwargs)
+        
+        # Update rating average
         avg = program.reviews.aggregate(Avg('score'))['score__avg'] or 0
         program.rating = avg
-        program.save(update_fields=['rating'])
+        
+        # Decrease rating count
+        if program.rating_count > 0:
+            program.rating_count -= 1
+        
+        # Save the program with updated fields
+        program.save(update_fields=['rating', 'rating_count'])
 
 
 class DeveloperProfile(models.Model):
@@ -104,6 +122,24 @@ class Download(models.Model):
 
     def __str__(self):
         return f"{self.user.username} downloaded {self.program.title} on {self.downloaded_at.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None  # Check if this is a new download
+        super().save(*args, **kwargs)
+        
+        # Increment download count if this is a new download
+        if is_new:
+            self.program.download_count += 1
+            self.program.save(update_fields=['download_count'])
+    
+    def delete(self, *args, **kwargs):
+        program = self.program
+        super().delete(*args, **kwargs)
+        
+        # Decrease download count
+        if program.download_count > 0:
+            program.download_count -= 1
+            program.save(update_fields=['download_count'])
 
     class Meta:
         ordering = ['-downloaded_at']

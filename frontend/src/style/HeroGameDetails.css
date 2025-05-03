@@ -23,6 +23,32 @@
   background-color: rgba(0, 0, 0, 0.8); 
   pointer-events: none; 
 }
-  
 
+/* Slideshow indicators */
+.slideshow-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
 
+.slideshow-indicators .indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slideshow-indicators .indicator.active {
+  background-color: #fff;
+  transform: scale(1.2);
+}
+
+.slideshow-indicators .indicator:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}

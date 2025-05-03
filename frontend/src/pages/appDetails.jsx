@@ -10,7 +10,19 @@ import { Container } from 'react-bootstrap';
 import "../style/HeroGameDetails.css";
 import { useStore } from '@tanstack/react-store';
 import { programStore } from '../store';
-import { fetchProgramDetails } from '../store/programStore';
+import { authStore } from '../store/authStore';
+import { fetchProgramDetails, recordDownload } from '../store/programStore';
+
+// Function to format download count (e.g., 1000 -> 1K, 1000000 -> 1M)
+const formatDownloadCount = (count) => {
+  if (count >= 1000000) {
+    return `${(count / 1000000).toFixed(1)}M+`;
+  } else if (count >= 1000) {
+    return `${(count / 1000).toFixed(1)}K+`;
+  } else {
+    return count.toString();
+  }
+};
 
 
 const dummyData = {
@@ -299,10 +311,77 @@ const dummyData = {
 
 const ItemDetails = () => {
   const { type, slug } = useParams();
-  const appDetails = useStore(programStore, (state) => state.currentProgram)
+  const appDetails = useStore(programStore, (state) => state.currentProgram);
+  const { isAuthenticated } = useStore(authStore);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [slideshow, setSlideshow] = useState([]);
+  
   useEffect(() => {
-    fetchProgramDetails(slug)
+    fetchProgramDetails(slug);
   }, [type, slug]);
+  
+  // Prepare slideshow media when app details change
+  useEffect(() => {
+    if (appDetails && appDetails.media) {
+      // Organize media with exclusive priority: banners > screenshots > videos > app icon
+      let slideshowMedia = [];
+      
+      // Check for banners first
+      const banners = appDetails.media.filter(media => media.media_type === 'banner');
+      if (banners.length > 0) {
+        slideshowMedia = banners;
+      } else {
+        // If no banners, check for screenshots
+        const screenshots = appDetails.media.filter(media => media.media_type === 'screenshot');
+        if (screenshots.length > 0) {
+          slideshowMedia = screenshots;
+        } else {
+          // If no screenshots, check for videos
+          const videos = appDetails.media.filter(media => media.media_type === 'video');
+          if (videos.length > 0) {
+            slideshowMedia = videos;
+          } else if (appDetails.icon) {
+            // Last resort: use app icon
+            slideshowMedia = [{ file: appDetails.icon, media_type: 'icon' }];
+          }
+        }
+      }
+      
+      setSlideshow(slideshowMedia);
+      setCurrentSlideIndex(0); // Reset to first slide when app changes
+    }
+  }, [appDetails]);
+  
+  // Auto-advance slideshow every 5 seconds
+  useEffect(() => {
+    if (slideshow.length <= 1) return; // Don't set up interval if only one or no slides
+    
+    const interval = setInterval(() => {
+      setCurrentSlideIndex(prevIndex => (prevIndex + 1) % slideshow.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [slideshow.length]);
+  
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    setIsDownloading(true);
+    
+    try {
+      // Record the download in the backend
+      await recordDownload(appDetails.id);
+      
+      // After recording, proceed with the actual download
+      window.open(appDetails.download_url, '_blank');
+    } catch (error) {
+      console.error('Failed to record download:', error);
+      // Still allow the download even if recording fails
+      window.open(appDetails.download_url, '_blank');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (!appDetails || appDetails.slug != slug) {
     return <div className="loading">Loading...</div>;
@@ -311,12 +390,35 @@ const ItemDetails = () => {
   return (
     <div className='bg-light'>
       <div className="imgContainer">
-        <img
-          className="d-block w-100"
-          src={appDetails?.media.find((media) => media.media_type === 'screenshot')?.file}
-          alt={appDetails.title}
-          style={{ height: '600px', objectFit: 'cover' }}
-        />
+        {slideshow.length > 0 ? (
+          <>
+            <img
+              className="d-block w-100"
+              src={slideshow[currentSlideIndex].file}
+              alt={`${appDetails.title} - ${slideshow[currentSlideIndex].media_type}`}
+              style={{ height: '600px', objectFit: 'cover' }}
+            />
+            {/* Slideshow indicators */}
+            {slideshow.length > 1 && (
+              <div className="slideshow-indicators">
+                {slideshow.map((_, index) => (
+                  <span 
+                    key={index} 
+                    className={`indicator ${index === currentSlideIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentSlideIndex(index)}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="placeholder-banner" style={{ height: '600px', backgroundColor: '#f0f0f0' }}>
+            <div className="text-center pt-5">
+              <i className="fa-solid fa-image fa-4x text-muted"></i>
+              <p className="mt-3 text-muted">No media available</p>
+            </div>
+          </div>
+        )}
         <div className="overlay"></div>
       </div>
       <div className='hero-text'>
@@ -325,12 +427,23 @@ const ItemDetails = () => {
           <h2 className='hero-caption mx-3'>{appDetails.title}</h2>
         </div>
         <p className='mt-5'>{appDetails.description}</p>
-        <div className='d-flex  align-items-center mt-4 text-info'>
-          <p className='me-4'>{appDetails.rating}  <i className="fa-solid fa-star "></i> </p>
-          <p>280 ratings</p>
-          <p className='ms-4'>100M+ <i className="fa-solid fa-download"></i></p>
+        <div className='d-flex align-items-center mt-4 text-info'>
+          <p className='me-4'>{appDetails.rating}  <i className="fa-solid fa-star"></i> </p>
+          <p>{appDetails.rating_count || 0} ratings</p>
+          <p className='ms-4'>{formatDownloadCount(appDetails.download_count || 0)} <i className="fa-solid fa-download"></i></p>
         </div>
-        <button className='hero-btn btn btn-info w-50 mt-4'>Download Now</button>
+        <button 
+          onClick={handleDownload} 
+          disabled={isDownloading}
+          className='hero-btn btn btn-info w-50 mt-4'
+        >
+          {isDownloading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Recording download...
+            </>
+          ) : 'Download Now'}
+        </button>
         <p className='mt-3 '>Offers in-app purchases</p>
       </div>
 

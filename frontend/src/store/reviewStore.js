@@ -61,33 +61,4 @@ const fetchProgramReviews = async (programId, page = 1, pageSize = 5) => {
   }
 };
 
-const submitReview = async (programId, score, comment) => {
-  reviewStore.setState((state) => ({ ...state, loading: true, error: null }));
-  try {
-    const response = await axios.post(`${API_URL}/reviews/`, {
-      program: programId,
-      score,
-      comment
-    });
-    
-    // Update the reviews list with the new review
-    reviewStore.setState((state) => ({
-      ...state,
-      reviews: [...state.reviews, response.data],
-      programReviews: [...state.programReviews, response.data],
-      totalReviews: state.totalReviews + 1,
-      loading: false
-    }));
-    
-    return response.data;
-  } catch (error) {
-    reviewStore.setState((state) => ({
-      ...state,
-      error,
-      loading: false
-    }));
-    throw error;
-  }
-};
-
-export { reviewStore, fetchReviews, fetchProgramReviews, submitReview };
+export { reviewStore, fetchReviews, fetchProgramReviews };
