@@ -81,7 +81,11 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = [
+            'id', 'title', 'author_name', 'category_name', 'description',
+            'rating', 'cover_image', 'publish_date'
+        ]
+
 
 class BookCoverSerializer(serializers.ModelSerializer):
     book_title = serializers.CharField(source='book.title', read_only=True)

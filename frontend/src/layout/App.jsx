@@ -12,6 +12,7 @@ import ItemDetails from '../pages/appDetails'
 import GamesPage from '../pages/games'
 import AppsPage from '../pages/applications'
 import BooksPage from '../pages/BooksPage'
+import BookDetails from '../pages/BookDetails';
 import ActivateAccount from '../pages/ActivateAccount'
 // Profile Pages
 import ProfilePage from '../pages/ProfilePage'
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/games" element={<GamesPage />} />
         <Route path="/apps" element={<AppsPage />} /> {/* Assuming you want to show the same page for apps */}
         <Route path="/books" element={<BooksPage />} />
+        <Route path="/books/:slug" element={<BookDetails />} />
         <Route path="/details/:type/:slug" element={<ItemDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />

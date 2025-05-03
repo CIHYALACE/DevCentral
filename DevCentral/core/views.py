@@ -2,6 +2,9 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from django.http import FileResponse
 from .models import Category, Program, Media, Review, Download, Flag, Book, Author
 from .serializers import *
 from datetime import datetime, timedelta
@@ -219,3 +222,23 @@ class BookViewSet(viewsets.ModelViewSet):
         books = Book.objects.filter(category__name__iexact='Business')
         serializer = self.get_serializer(books, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def download(self, request, pk=None):
+        book = self.get_object()
+        pdf_path = f'media/pdfs/{book.slug}.pdf'  # Adjust the path as needed
+        try:
+            return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
+        except FileNotFoundError:
+            return Response({'error': 'PDF not found'}, status=404)
+
+class WishlistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        book_id = request.data.get('book_id')
+        if not book_id:
+            return Response({'error': 'Book ID is required'}, status=400)
+        book = Book.objects.get(id=book_id)
+        request.user.wishlist.books.add(book)
+        return Response({'message': 'Book added to wishlist'})
