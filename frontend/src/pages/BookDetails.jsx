@@ -4,17 +4,21 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import BookDescription from '../components/books/BookDescription';
 import BookReviews from '../components/books/BookReviews';
 import BookRating from '../components/books/BookRating';
+import SimilarBooks from '../components/books/SimilarBooks'; // Import SimilarBooks component
+import BooksByAuthor from '../components/books/BooksByAuthor'; // Import BooksByAuthor component
 import { fetchBookDetails } from '../store/bookStore';
-import { downloadBookPdf, addToWishlist } from '../store/bookActions'; // Import actions
+import { downloadBookPdf, addToWishlist } from '../store/bookActions';
+import { useStore } from '@tanstack/react-store';
+import { bookStore } from '../store/bookStore';
 
 export default function BookDetails() {
   const { slug } = useParams();
-  const [book, setBook] = useState(null);
+  const book = useStore(bookStore, (state) => state.currentBook);
 
   useEffect(() => {
-    fetchBookDetails(slug).then(setBook).catch(console.error);
+    fetchBookDetails(slug)
   }, [slug]);
-
+  console.log(book?.author_name)
   const handleDownloadPdf = () => {
     downloadBookPdf(book.id)
       .then(() => alert('PDF downloaded successfully!'))
@@ -30,6 +34,8 @@ export default function BookDetails() {
   if (!book) {
     return <div className="text-center mt-5">Loading...</div>;
   }
+
+  console.log('Book data:', book.category_name);
 
   return (
     <Container className="mt-5">
@@ -62,6 +68,16 @@ export default function BookDetails() {
       <Row className="mt-4">
         <Col>
           <BookReviews bookId={book.id} />
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col>
+          <SimilarBooks categoryName={book.category_name} />
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col>
+          <BooksByAuthor authorId={book.author_name} />
         </Col>
       </Row>
     </Container>

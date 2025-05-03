@@ -19,6 +19,7 @@ export default function BooksSlider({ books = [] }) {
         interval={5000} 
         indicators={false}
         className="px-5"
+        controls={false}
       >
         {bookChunks.map((chunk, index) => (
           <Carousel.Item key={index} className="py-3">

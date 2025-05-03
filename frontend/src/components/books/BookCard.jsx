@@ -4,7 +4,6 @@ import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 export default function BookCard({ book }) {
-  console.log(book.cover_image);
   return (
     <Link to={`/books/${book.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <Card 
