@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
 import AdminHeader from "../components/Admin/AdminHeader";
-import AdminSideBar from "../components/Admin/AdminSideBar";
+import AdminSideBar from "../components/Admin/AdminSidebar";
 
 export default function AdminSharedLayout() {
     const location = useLocation();

@@ -129,6 +129,11 @@ const refresh = async () => {
   }
 };
 
+axios.post('http://127.0.0.1:8000/auth/jwt/create/', {
+  email: 'user@example.com',
+  password: 'password123'
+});
+
 export { authStore, login, logout, refresh };
 
 
