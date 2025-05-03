@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { fetchSimilarBooks } from '../../store/bookStore';
-import { Alert } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { fetchSimilarBooks } from "../../store/bookStore";
+import { Alert, Row } from "react-bootstrap";
+import BookCard from "./BookCard";
+import Slider from "react-slick";
+import BooksSlider from "./BooksSlider";
 
 export default function SimilarBooks({ categoryName }) {
   const [similarBooks, setSimilarBooks] = useState([]);
   const [error, setError] = useState(null);
-
+  console.log(categoryName);
   useEffect(() => {
-    if (!categoryName) {
-      console.error('categoryName is undefined');
-      setError('Category name is required to fetch similar books.');
-      return;
-    }
+    // if (!categoryName) {
+    //   console.error('categoryName is undefined');
+    //   setError('Category name is required to fetch similar books.');
+    //   return;
+    // }
 
     fetchSimilarBooks(categoryName)
       .then((data) => {
-        console.log('Fetched similar books:', data); // Log the fetched data
+        console.log("Fetched similar books:", data); // Log the fetched data
         setSimilarBooks(data);
       })
       .catch((err) => {
-        console.error('Error fetching similar books:', err); // Log the error
+        console.error("Error fetching similar books:", err); // Log the error
         setError(err.message);
       });
   }, [categoryName]);
@@ -35,7 +38,7 @@ export default function SimilarBooks({ categoryName }) {
   return (
     <div>
       <h4>Similar Books</h4>
-      {/* Render similar books */}
+      <BooksSlider books={similarBooks}/>
     </div>
   );
 }
