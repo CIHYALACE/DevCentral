@@ -112,11 +112,38 @@ const fetchBusinessBooks = async () => {
   }
 };
 
+export async function fetchSimilarBooks(categoryName, excludeBookId = null) {
+  try {
+    const url = excludeBookId
+      ? `/api/books/similar?categoryName=${encodeURIComponent(categoryName)}&excludeBookId=${excludeBookId}`
+      : `/api/books/similar?categoryName=${encodeURIComponent(categoryName)}`;
+    console.log('Fetching similar books from:', url); // Log the API URL
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log('Similar books response:', data); // Log the API response
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch similar books:', error);
+    throw error;
+  }
+}
+
+export async function fetchBooksByAuthor(authorId) {
+  const response = await fetch(`/api/books/author?authorId=${authorId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch books by author');
+  }
+  return response.json();
+}
+
 export { 
   bookStore, 
   fetchBooks,
   fetchBookDetails,
   fetchNewReleases, 
   fetchSelfHelpBooks, 
-  fetchBusinessBooks 
+  fetchBusinessBooks
 };
