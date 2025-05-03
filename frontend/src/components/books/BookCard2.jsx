@@ -35,7 +35,7 @@ export default function HorizontalBookCard({ book }) {
               <h6 className="mb-1" style={{ fontSize: '0.9rem', wordWrap: 'break-word' }}>
                 {book.title}
               </h6>
-              <small className="text-muted text-truncate mb-1">{book.author.name}</small>
+              <small className="text-muted text-truncate mb-1">{book.author_name}</small>
               <div className="d-flex align-items-center gap-1">
                 <FaStar className="text-warning" size={12} />
                 <small className="text-muted" style={{ fontSize: '0.8rem' }}>

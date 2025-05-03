@@ -232,6 +232,32 @@ class BookViewSet(viewsets.ModelViewSet):
         except FileNotFoundError:
             return Response({'error': 'PDF not found'}, status=404)
 
+    @action(detail=False, methods=['get'])
+    def similar(self, request):
+        """Get books similar to the given category name."""
+        category_name = request.query_params.get('categoryName')
+        if not category_name:
+            return Response(
+                {"error": "categoryName query parameter is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Fetch books in the same category by name, excluding the current book if provided
+            exclude_book_id = request.query_params.get('excludeBookId')
+            similar_books = Book.objects.filter(category__name=category_name)
+            if exclude_book_id:
+                similar_books = similar_books.exclude(id=exclude_book_id)
+            
+            # Serialize the results
+            serializer = self.get_serializer(similar_books[:10], many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 class WishlistView(APIView):
     permission_classes = [IsAuthenticated]
 
