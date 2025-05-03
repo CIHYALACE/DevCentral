@@ -16,7 +16,6 @@ export default function BooksPage() {
 
   useEffect(() => {
     fetchNewReleases().then(() => {
-      console.log(bookStore.state.newReleases); // Log the data
     });
   }, []);
 

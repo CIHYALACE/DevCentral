@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Category, Program, Media, Review, Download, Flag, Book, Author
+from .models import Category, Program, Media, Review, Download, Flag, Book, Author, BookCover
 
 User = get_user_model()
 
@@ -75,9 +75,17 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
+    cover_image = serializers.ImageField()
     author_name = serializers.CharField(source='author.name', read_only=True)
     category_name = serializers.CharField(source='category.name', read_only=True)
 
     class Meta:
         model = Book
+        fields = '__all__'
+
+class BookCoverSerializer(serializers.ModelSerializer):
+    book_title = serializers.CharField(source='book.title', read_only=True)
+
+    class Meta:
+        model = BookCover
         fields = '__all__'

@@ -3,6 +3,7 @@ import { Card } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa';
 
 export default function BookCard ({ book }) {
+  console.log(book.cover_image);
   return (
     <Card 
       className="book-card h-100" 
@@ -16,7 +17,7 @@ export default function BookCard ({ book }) {
       }}>
         <Card.Img 
           variant="top" 
-          src={book.coverUrl || '/BookCover.webp'}  // Use a default cover if missing
+          src={book.cover_image ? book.cover_image : '/BookCover.webp'}  // Use a default cover if missing
           alt={book.title}
           style={{ 
             position: 'absolute',
