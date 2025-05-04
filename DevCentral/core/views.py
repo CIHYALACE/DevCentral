@@ -246,6 +246,7 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = 'slug'
+    permission_classes = [permissions.AllowAny]
 
     @action(detail=False, methods=['get'])
     def new_releases(self, request):

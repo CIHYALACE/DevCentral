@@ -63,10 +63,11 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'core.authentication.GracefulJWTAuthentication',  # Custom authentication class
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
+    'EXCEPTION_HANDLER': 'core.utils.custom_exception_handler',
 }
 
 ROOT_URLCONF = 'DevCentral.urls'
