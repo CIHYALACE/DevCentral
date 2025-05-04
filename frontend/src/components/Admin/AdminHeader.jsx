@@ -29,7 +29,7 @@ export default function AdminHeader({ onToggleSidebar }) {
           height="60"
           className="d-inline-block align-top"
         />{" "}
-        <span className="fw-bold fs-4 text-black share-tech-mono-regular d-none d-sm-inline">DevCentral Administration</span>
+        <span className="fw-bold fs-4 text-black share-tech-mono-regular d-none d-sm-inline"><span style={{color:"#a259ff"}}>Dev</span>Central Administration</span>
         <span className="fw-bold fs-4 text-black share-tech-mono-regular d-inline d-sm-none">Admin</span>
       </Navbar.Brand>
       <Navbar.Collapse id="basic-navbar-nav">
@@ -48,7 +48,8 @@ export default function AdminHeader({ onToggleSidebar }) {
           </NavLink>
           <NavLink
             to="/apps"
-            className="text-decoration-none text-black"
+            className="text-decoration-none text-black p-1 text-white px-3 rounded"
+            style={{backgroundColor:"#a259ff"}}
           >
             Log Out
           </NavLink>

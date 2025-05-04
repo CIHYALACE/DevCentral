@@ -6,7 +6,6 @@ export function Newsletter() {
   return (
     <section className="newsletter-container container py-5 mb-5">
       <div className="row align-items-center">
-        {/* Image - Hidden on small screens */}
         <div className="col-md-6 d-none d-md-flex justify-content-center">
           <img
             src={img}
@@ -15,7 +14,6 @@ export function Newsletter() {
           />
         </div>
 
-        {/* Text + Form */}
         <div className="col-md-6 col-12 text-center text-md-start">
           <h2 className="newsletter-title mb-3">Subscribe to our <br /> Newsletter</h2>
           <p className="text-muted mb-4">Stay up to date with the latest updates and exclusive offers.</p>

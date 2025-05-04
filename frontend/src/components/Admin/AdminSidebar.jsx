@@ -15,23 +15,30 @@ export default function AdminSideBar({ active, onItemClick }) {
     };
 
     return (
-        <aside className="sidebar p-0">
-            <div className="user p-3 border-bottom">
-                <div className="user-name fw-bold">Admin Panel</div>
+        <aside className="sidebar p-0 bg-light shadow-sm" style={{ minHeight: "100vh", width: "250px" }}>
+            <div className="user p-4 border-bottom bg-white">
+                <div className="user-name fw-bold" style={{ fontSize: "24px",color:"#a259ff"  }}>Admin Panel</div>
             </div>
-            <ul className="sidebar-menu list-unstyled p-0 m-0">
+            <ul className="sidebar-menu list-unstyled m-0">
                 {menuItems.map((item, i) => (
-                    <li 
-                        key={i} 
-                        className={`border-bottom ${active === item.name ? "active bg-primary" : ""}`}
+                    <li
+                        key={i}
+                        className={`border-bottom ${active === item.name ? "active" : ""}`}
+                        style={{  //
+                            backgroundColor: active === item.name ? "#d0b6f5" : "",
+                            transition: "background-color 0.3s",
+                        }}
                         onClick={handleClick}
                     >
-                        <Link 
-                            to={item.path} 
-                            className={`d-flex align-items-center p-3 text-decoration-none ${active === item.name ? "text-white" : "text-dark"}`}
+                        <Link
+                            to={item.path}
+                            className={`d-flex align-items-center px-4 py-3 text-decoration-none ${
+                                active === item.name ? "text-white" : "text-dark"
+                            }`}
+                            style={{ fontWeight: active === item.name ? "500" : "400" }}
                         >
-                            <i className={`bi ${item.icon} me-2`}></i>
-                            {item.name}
+                            <i className={`bi ${item.icon} me-3 fs-5`}></i>
+                            <span>{item.name}</span>
                         </Link>
                     </li>
                 ))}
