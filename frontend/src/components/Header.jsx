@@ -11,13 +11,13 @@ export default function Header({ onToggleSidebar }) {
   return (
     <Navbar
       expand="lg"
-      className="position-sticky top-0 z-3 shadow-sm px-4 p-0"
+      className="position-sticky top-0 z-4 shadow-sm px-4 p-0"
       style={{
         backdropFilter: "blur(10px)",
         backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
-      {isProfilePage && (
+      {/* {isProfilePage && (
         <Button 
           variant="outline-secondary" 
           className="d-md-none me-2" 
@@ -25,7 +25,7 @@ export default function Header({ onToggleSidebar }) {
         >
           <i className="bi bi-list"></i>
         </Button>
-      )}
+      )} */}
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Brand href="\" className="font-weight-bold fs-md-3 fw-bold big-shoulders d-flex align-items-center flex-row gap-2">
         <img

@@ -4,59 +4,23 @@ body {
     background: #f3f3f3;
   }
   
-  .user-profile-page {
-    display: flex;
+  /* Sidebar container styles */
+  .sidebar-container {
+    position: sticky;
+    top: 56px; /* Header height */
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    z-index: 100;
   }
   
-  .sidebar {
-    width: 250px;
-    background: white;
-    padding: 1rem;
-    border-right: 1px solid #ddd;
-    height: 100vh;
+  /* Active nav link styling */
+  .nav-link.active {
+    background-color: rgba(13, 110, 253, 0.1);
+    border-left: 3px solid #0d6efd;
   }
   
-  .user {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .avatar {
-    width: 60px;
-    border-radius: 50%;
-  }
-  
-  .user-name {
-    font-weight: bold;
-    margin-top: 0.5rem;
-  }
-  
-  .user-email {
-    font-size: 0.85rem;
-    color: #666;
-  }
-  
-  .sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin-top: 1rem;
-  }
-  .sidebar a.active {
-    background-color: #e6f0fb;
-    color: #0078d4;
-    font-weight: 600;
-  }
-  .sidebar-menu li {
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    color: #333;
-    border-radius: 4px;
-  }
-  
-  .sidebar-menu li.active,
-  .sidebar-menu li:hover {
-    background: #e5f1fb;
-    color: #0078d4;
+  .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
   }
   
   .profile-main {

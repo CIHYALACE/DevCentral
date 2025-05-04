@@ -1,4 +1,6 @@
 import React from 'react';
+import '../../style/ProfileCommon.css';
+import '../../style/Devices.css';
 
 export default function Devices() {
   // Add custom styles for wide screens

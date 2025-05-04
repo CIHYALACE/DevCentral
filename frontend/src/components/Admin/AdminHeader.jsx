@@ -13,13 +13,7 @@ export default function AdminHeader({ onToggleSidebar }) {
         backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
-      <Button 
-        variant="outline-secondary" 
-        className="d-md-none me-2" 
-        onClick={onToggleSidebar}
-      >
-        <i className="bi bi-list"></i>
-      </Button>
+
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Brand href="\admin" className="font-weight-bold fs-md-3 fw-bold big-shoulders d-flex align-items-center flex-row gap-2 ">
         <img

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { profileStore, fetchCurrentUserProfile } from '../../store/profileStore';
+import '../../style/ProfileCommon.css';
+import '../../style/Subscriptions.css';
 
 export default function Subscriptions() {
   const [loading, setLoading] = useState(true);

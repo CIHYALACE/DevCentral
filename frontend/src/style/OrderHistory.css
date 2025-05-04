@@ -1,51 +1,6 @@
-/* OrderHistory.css */
+/* OrderHistory.css - Component-specific styles */
+/* Common styles imported from ProfileCommon.css */
 
-.info-section {
-    flex: 1;
-    padding: 2rem;
-    background-color: #f9fafb;
-    border-radius: 12px;
-    margin-left: 2rem;
-    min-height: 400px;
-  }
-  
-  .section-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 0.5rem;
-  }
-  
-  .section-description {
-    color: #6b7280;
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .empty-state {
-    text-align: center;
-    padding: 2rem;
-    border: 1px dashed #d1d5db;
-    border-radius: 10px;
-    background-color: #ffffff;
-  }
-  
-  .manage-button {
-    margin-top: 1rem;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.95rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .manage-button:hover {
-    background-color: #1d4ed8;
-  }
-  
   .order-card {
     background-color: #ffffff;
     border: 1px solid #e5e7eb;

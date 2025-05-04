@@ -1,0 +1,113 @@
+/* ProfileCommon.css - Shared styles for profile-related components */
+
+/* Common profile layout */
+.user-profile {
+  display: flex;
+  padding: 40px 20px;
+  background-color: #f3f3f3;
+}
+
+/* Responsive sidebar styles */
+.sidebar-wrapper {
+  overflow-x: hidden;
+}
+
+/* Improve sidebar link styling */
+.sidebar-link-content {
+  width: 100%;
+  min-width: 0; /* Important for flexbox text truncation */
+}
+
+.sidebar-wrapper .text-truncate {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Ensure sidebar links never overflow */
+.sidebar-wrapper .nav-link {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Adjust font size for all screen sizes */
+.sidebar-wrapper .nav-link span {
+  font-size: 0.9rem;
+}
+
+/* Adjust sidebar for medium screens */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  /* Reduce padding in sidebar items */
+  .sidebar-wrapper .nav-link {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Ensure menu items wrap properly */
+  .sidebar-wrapper .sidebar-link-content {
+    width: 100%;
+  }
+  
+  .sidebar-wrapper .nav-link span {
+    font-size: 0.85rem;
+  }
+}
+
+/* Common section container */
+.info-section {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  
+  min-height: 400px;
+}
+
+/* Common section headings */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.section-description {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Common buttons */
+.manage-button {
+  margin-top: 1rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.manage-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Common card styles */
+.profile-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* Common empty state */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  border: 1px dashed #d1d5db;
+  border-radius: 10px;
+  background-color: #ffffff;
+}

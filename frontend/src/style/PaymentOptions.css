@@ -1,9 +1,6 @@
-.user-profile {
-    display: flex;
-    padding: 40px 20px;
-    background-color: #f3f3f3;
-  }
-  
+/* PaymentOptions.css - Component-specific styles */
+/* Common styles imported from ProfileCommon.css */
+
   /* Sidebar styling */
   .sidebar {
     width: 220px;

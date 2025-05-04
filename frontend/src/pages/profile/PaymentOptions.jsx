@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { profileStore, fetchCurrentUserProfile } from '../../store/profileStore';
+import '../../style/ProfileCommon.css';
+import '../../style/PaymentOptions.css';
 
 export default function PaymentOptions() {
   const [loading, setLoading] = useState(true);
