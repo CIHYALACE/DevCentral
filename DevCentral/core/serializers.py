@@ -5,6 +5,7 @@ from .models import Category, Program, Media, Review, Download, Flag, Book, Auth
 User = get_user_model()
 
 class CategorySerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Category
         fields = '__all__'
@@ -42,7 +43,16 @@ class ProgramSerializer(serializers.ModelSerializer):
     media = MediaSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
     rating = serializers.DecimalField(max_digits=3, decimal_places=2, read_only=True)
-
+    rating_count = serializers.IntegerField(read_only=True)
+    download_count = serializers.IntegerField(read_only=True)
+    developer = serializers.StringRelatedField(read_only=True)
+    developer_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), source='developer', write_only=True,
+        required=False
+    )
+    release_date = serializers.DateField(required=False)
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
     class Meta:
         model = Program
         fields = '__all__'
@@ -50,6 +60,9 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 class DownloadSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
+    program_id = serializers.PrimaryKeyRelatedField(
+        queryset=Program.objects.all(), source='program', write_only=True
+    )
     program = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -82,7 +95,7 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = [
-            'id', 'title', 'author_name', 'category_name', 'description',
+            'id', 'title', 'slug' , 'author_name', 'category_id', 'category_name', 'description',
             'rating', 'cover_image', 'publish_date'
         ]
 

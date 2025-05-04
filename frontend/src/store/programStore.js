@@ -131,6 +131,83 @@ const searchPrograms = async (searchTerm, page = 1, pageSize = 10) => {
   return await fetchPrograms(page, pageSize, null, searchTerm);
 };
 
+const recordDownload = async (programId) => {
+  programStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.post(`${API_URL}/downloads/`, {
+      program_id: programId
+    });
+    
+    // Update the current program's download count if it matches
+    programStore.setState((state) => {
+      const currentProgram = { ...state.currentProgram };
+      
+      // If this is the program being viewed, increment its download count
+      if (currentProgram.id === programId) {
+        currentProgram.download_count = (currentProgram.download_count || 0) + 1;
+      }
+      
+      return {
+        ...state,
+        currentProgram,
+        loading: false
+      };
+    });
+    
+    return response.data;
+  } catch (error) {
+    programStore.setState((state) => ({
+      ...state,
+      error,
+      loading: false
+    }));
+    throw error;
+  }
+};
+
+const submitReview = async (programId, score, comment) => {
+  programStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.post(`${API_URL}/reviews/`, {
+      program: programId,
+      score,
+      comment
+    });
+    
+    // Update the current program's rating data if it matches
+    programStore.setState((state) => {
+      const currentProgram = { ...state.currentProgram };
+      
+      // If this is the program being viewed, update its rating data
+      if (currentProgram.id === programId) {
+        // Increment rating count
+        currentProgram.rating_count = (currentProgram.rating_count || 0) + 1;
+        
+        // Recalculate average rating (simple approach)
+        // For a more accurate approach, we would need to fetch the updated rating from the backend
+        const totalRatingBefore = parseFloat(currentProgram.rating) * (currentProgram.rating_count - 1);
+        const newTotalRating = totalRatingBefore + score;
+        currentProgram.rating = (newTotalRating / currentProgram.rating_count).toFixed(2);
+      }
+      
+      return {
+        ...state,
+        currentProgram,
+        loading: false
+      };
+    });
+    
+    return response.data;
+  } catch (error) {
+    programStore.setState((state) => ({
+      ...state,
+      error,
+      loading: false
+    }));
+    throw error;
+  }
+};
+
 export { 
   programStore, 
   fetchPrograms, 
@@ -139,5 +216,7 @@ export {
   fetchProductivityApps,
   getProgramsByCategory,
   getProgramsByType,
-  searchPrograms
+  searchPrograms,
+  recordDownload,
+  submitReview
 };

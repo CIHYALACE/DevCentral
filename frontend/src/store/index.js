@@ -13,7 +13,9 @@ export {
   fetchTopCharts, 
   fetchProductivityApps,
   getProgramsByCategory,
-  getProgramsByType
+  getProgramsByType,
+  recordDownload,
+  submitReview
 } from "./programStore.js";
 
 // Category Store
@@ -27,8 +29,7 @@ export {
 export { 
   reviewStore, 
   fetchReviews, 
-  fetchProgramReviews, 
-  submitReview 
+  fetchProgramReviews 
 } from "./reviewStore.js";
 
 // Profile Store
@@ -44,8 +45,7 @@ export {
 export { 
   downloadStore, 
   fetchDownloads, 
-  fetchUserDownloads, 
-  recordDownload 
+  fetchUserDownloads,  
 } from "./downloadStore.js";
 
 // Flag Store

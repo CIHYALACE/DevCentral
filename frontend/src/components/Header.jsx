@@ -7,20 +7,21 @@ export default function Header({ onToggleSidebar }) {
   let token = "token";
   const location = useLocation();
   const isProfilePage = location.pathname.startsWith('/profile');
-  
+
   return (
     <Navbar
       expand="lg"
-      className="position-sticky top-0 z-3 shadow-sm px-4 p-0"
+      className="position-sticky top-0 z-3 shadow-sm px-4 p-2"
       style={{
-        backdropFilter: "blur(10px)",
+        backdropFilter: "blur(15px)",
+        // backgroundColor: "rgba(294, 246, 255, .7)"
         backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
       {isProfilePage && (
-        <Button 
-          variant="outline-secondary" 
-          className="d-md-none me-2" 
+        <Button
+          variant="outline-secondary"
+          className="d-md-none me-2"
           onClick={onToggleSidebar}
         >
           <i className="bi bi-list"></i>
@@ -33,48 +34,61 @@ export default function Header({ onToggleSidebar }) {
           src="/Dev_logo.jpg"
           width="60"
           height="60"
-          className="d-inline-block align-top"
+          className="d-inline-block align-top" 
         />{" "}
-        <span className="fw-bold fs-4 text-black share-tech-mono-regular d-none d-sm-inline">DevCentral</span>
+        <span className="fw-bold fs-3 text-black share-tech-mono-regular d-none d-sm-inline"><span style={{color: "#a259ff"}}>Dev</span>Central</span>
         <span className="fw-bold fs-4 text-black share-tech-mono-regular d-inline d-sm-none">DC</span>
       </Navbar.Brand>
       <NavLink to={token ? "/profile" : "/login"} className={"nav-link"}>
         <i className="fa-solid fa-user fs-5 d-inline d-lg-none px-2 text-black"></i>
       </NavLink>
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="me-1 fw-bold share-tech-mono-regular">
+        <Nav className="me-2 fw-bold share-tech-mono-regular">
           <NavLink
             to="/"
             className={({ isActive }) =>
-              isActive ? "nav-link active text-primary" : "nav-link"
+              isActive
+                ? "nav-link active"
+                : "nav-link"
             }
+            style={({ isActive }) => (isActive ? { color: "#a259ff" } : undefined)}
           >
             Home
           </NavLink>
           <NavLink
             to="/games"
             className={({ isActive }) =>
-              isActive ? "nav-link active text-primary" : "nav-link"
+              isActive
+                ? "nav-link active"
+                : "nav-link"
             }
+            style={({ isActive }) => (isActive ? { color: "#a259ff" } : undefined)}
           >
             Games
           </NavLink>
           <NavLink
             to="/apps"
             className={({ isActive }) =>
-              isActive ? "nav-link active text-primary" : "nav-link"
+              isActive
+                ? "nav-link active"
+                : "nav-link"
             }
+            style={({ isActive }) => (isActive ? { color: "#a259ff" } : undefined)}
           >
             Apps
           </NavLink>
           <NavLink
             to="/books"
             className={({ isActive }) =>
-              isActive ? "nav-link active text-primary" : "nav-link"
+              isActive
+                ? "nav-link active"
+                : "nav-link"
             }
+            style={({ isActive }) => (isActive ? { color: "#a259ff" } : undefined)}
           >
             Books
           </NavLink>
+
           <NavLink to="/admin" className="nav-link">Admin</NavLink>
         </Nav>
         <div className="d-flex ms-auto align-items-center">
@@ -83,13 +97,22 @@ export default function Header({ onToggleSidebar }) {
               type="text"
               className="form-control me-2"
               placeholder="Search..."
-              // value={searchQuery}
-              // onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ borderColor: "#a259ff", color: "#a259ff" }}
+            // value={searchQuery}
+            // onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="btn btn-black" type="submit">
+            <button
+              className="btn"
+              type="submit"
+              style={{
+                backgroundColor: "#a259ff",
+                color: "white",
+              }}
+            >
               <i className="fa-solid fa-search"></i>
             </button>
           </form>
+
           <NavLink to={token ? "/profile" : "/login"} className={"nav-link"}>
             <i className="fa-solid fa-user fs-5 px-2 text-black"></i>
           </NavLink>

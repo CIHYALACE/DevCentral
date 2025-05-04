@@ -1,20 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Spinner, Form, Button, Alert } from 'react-bootstrap';
 import { useStore } from '@tanstack/react-store';
 import { reviewStore, fetchProgramReviews } from '../store/reviewStore';
+import { submitReview } from '../store/programStore';
+import { authStore } from '../store/authStore';
 import { formatDate } from '../utils/uiHelpers';
 import Paginator from './common/Paginator';
 
 export function RatingSection({ programId }) {
   const { programReviews, loading, error, totalReviews } = useStore(reviewStore);
+  const { isAuthenticated } = useStore(authStore);
   const [currentPage, setCurrentPage] = useState(1);
   const [reviewsPerPage] = useState(5);
+  const [reviewForm, setReviewForm] = useState({
+    score: 5,
+    comment: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     if (programId) {
       fetchProgramReviews(programId, currentPage, reviewsPerPage);
     }
   }, [programId, currentPage, reviewsPerPage]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setReviewForm(prev => ({
+      ...prev,
+      [name]: name === 'score' ? parseInt(value, 10) : value
+    }));
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+    
+    try {
+      await submitReview(programId, reviewForm.score, reviewForm.comment);
+      setReviewForm({ score: 5, comment: '' });
+      setSubmitSuccess(true);
+      // Refresh reviews after submission
+      fetchProgramReviews(programId, currentPage, reviewsPerPage);
+    } catch (error) {
+      setSubmitError(error.response?.data?.detail || 'Failed to submit review. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   // Ensure programReviews is always an array
   const reviews = Array.isArray(programReviews) ? programReviews : [];
@@ -49,6 +86,70 @@ export function RatingSection({ programId }) {
                 </div>
               </div>
               <p className="text-muted">{reviews.length} {reviews.length === 1 ? 'rating' : 'ratings'}</p>
+
+              {/* Review Form */}
+              {isAuthenticated ? (
+                <div className="review-form mb-4 p-3 border rounded bg-light">
+                  <h5 className="mb-3">Write a Review</h5>
+                  {submitSuccess && (
+                    <Alert variant="success" onClose={() => setSubmitSuccess(false)} dismissible>
+                      Your review has been submitted successfully!
+                    </Alert>
+                  )}
+                  {submitError && (
+                    <Alert variant="danger" onClose={() => setSubmitError(null)} dismissible>
+                      {submitError}
+                    </Alert>
+                  )}
+                  <Form onSubmit={handleSubmitReview}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Rating</Form.Label>
+                      <div className="star-rating d-flex align-items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <i 
+                            key={star}
+                            className={`fa-${star <= reviewForm.score ? 'solid' : 'regular'} fa-star text-warning fs-3 me-2`}
+                            style={{ cursor: 'pointer' }}
+                            onMouseEnter={() => setReviewForm(prev => ({ ...prev, score: star }))}
+                            onClick={() => setReviewForm(prev => ({ ...prev, score: star }))}
+                          />
+                        ))}
+                        <span className="ms-2 text-muted">
+                          ({reviewForm.score} of 5)
+                        </span>
+                      </div>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Your Review</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        name="comment"
+                        value={reviewForm.comment}
+                        onChange={handleInputChange}
+                        placeholder="Share your experience with this app..."
+                        rows={3}
+                        required
+                      />
+                    </Form.Group>
+                    <Button 
+                      variant="primary" 
+                      type="submit" 
+                      disabled={submitting || !reviewForm.comment.trim()}
+                    >
+                      {submitting ? (
+                        <>
+                          <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                          <span className="ms-2">Submitting...</span>
+                        </>
+                      ) : 'Submit Review'}
+                    </Button>
+                  </Form>
+                </div>
+              ) : (
+                <Alert variant="info" className="mb-4">
+                  Please <a href="/login">log in</a> to write a review.
+                </Alert>
+              )}
 
               {reviews.length === 0 ? (
                 <div className="alert alert-info">

@@ -76,37 +76,8 @@ const fetchUserDownloads = async (page = 1, pageSize = 10) => {
   }
 };
 
-const recordDownload = async (programId) => {
-  downloadStore.setState((state) => ({ ...state, loading: true, error: null }));
-  try {
-    const response = await axios.post(`${API_URL}/downloads/`, {
-      program: programId
-    });
-    
-    // Update the downloads list with the new download
-    downloadStore.setState((state) => ({
-      ...state,
-      downloads: [...state.downloads, response.data],
-      userDownloads: [...state.userDownloads, response.data],
-      totalDownloads: state.totalDownloads + 1,
-      totalUserDownloads: state.totalUserDownloads + 1,
-      loading: false
-    }));
-    
-    return response.data;
-  } catch (error) {
-    downloadStore.setState((state) => ({
-      ...state,
-      error,
-      loading: false
-    }));
-    throw error;
-  }
-};
-
 export { 
   downloadStore, 
   fetchDownloads, 
-  fetchUserDownloads, 
-  recordDownload 
+  fetchUserDownloads
 };

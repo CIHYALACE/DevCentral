@@ -19,6 +19,7 @@ export default function BooksSlider({ books = [] }) {
         interval={5000} 
         indicators={false}
         className="px-5"
+        controls={false}
       >
         {bookChunks.map((chunk, index) => (
           <Carousel.Item key={index} className="py-3">
@@ -32,7 +33,7 @@ export default function BooksSlider({ books = [] }) {
           </Carousel.Item>
         ))}
       </Carousel>
-      <div className="position-absolute top-50 start-0 translate-middle-y w-100 carousel-controls">
+      <div className="position-absolute top-50 start-0 translate-middle-y w-100 carousel-controls ">
         <div className="d-flex justify-content-between">
           <a className="carousel-control-prev w-auto opacity-0" href="#" role="button" data-bs-slide="prev">
             <span className="carousel-control-prev-icon bg-secondary rounded-circle p-2" aria-hidden="true"></span>

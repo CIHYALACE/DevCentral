@@ -85,7 +85,7 @@ export function HeroGameDetails() {
                             <p>280 ratings</p>
                             <p className='ms-5'>100M+ <i className="fa-solid fa-download"></i></p>
                         </div>
-                        <button className='hero-btn btn btn-info w-50 mt-4'>Download Now</button>
+                        <button className='hero-btn w-50 mt-4' >Download Now</button>
                         <p className='mt-3'>Offers in-app purchases</p>
                     </div>
 

@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.http import FileResponse
+from django.utils.text import slugify
 from .models import Category, Program, Media, Review, Download, Flag, Book, Author
 from .serializers import *
 from datetime import datetime, timedelta
@@ -18,6 +19,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_queryset(self):
+        queryset = Category.objects.all()
+        return queryset.filter(related_type=self.request.query_params.get('related_type', 'app'))
 
 class ProgramViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all().order_by('-created_at')
@@ -70,10 +74,52 @@ class ProgramViewSet(viewsets.ModelViewSet):
         
         return super().list(request, *args, **kwargs)
 
+    def create(self, request, *args, **kwargs):
+        # Make request.data mutable if it's immutable
+        if hasattr(request.data, '_mutable'):
+            request.data._mutable = True
+        
+        # Set release_date to current date if not provided
+        if 'release_date' not in request.data or not request.data['release_date']:
+            request.data['release_date'] = datetime.now().date()
+        
+        # Handle empty slug
+        if 'slug' in request.data and request.data['slug'] == "":
+            slug = slugify(request.data['title'])
+            if Program.objects.filter(slug=slug).exists():
+                slug = slugify(request.data['title'] + str(request.user.id))
+            request.data['slug'] = slug
+        
+        return super().create(request, *args, **kwargs)
+        
+    def perform_create(self, serializer):
+        # This is the recommended way to set the developer in DRF
+        serializer.save(developer=self.request.user)
+        
+
 class MediaViewSet(viewsets.ModelViewSet):
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        queryset = Media.objects.all()
+        
+        # Filter by program
+        program_id = self.request.query_params.get('program', None)
+        if program_id:
+            queryset = queryset.filter(program__id=program_id)
+            
+        # Filter by media type
+        media_type = self.request.query_params.get('media_type', None)
+        if media_type:
+            queryset = queryset.filter(media_type=media_type)
+            
+        return queryset
+    
+    def perform_create(self, serializer):
+        # Save the media and associate it with the program
+        serializer.save()
 
 class ReviewPagination(PageNumberPagination):
     page_size = 5
@@ -231,6 +277,32 @@ class BookViewSet(viewsets.ModelViewSet):
             return FileResponse(open(pdf_path, 'rb'), content_type='application/pdf')
         except FileNotFoundError:
             return Response({'error': 'PDF not found'}, status=404)
+
+    @action(detail=False, methods=['get'])
+    def similar(self, request):
+        """Get books similar to the given category name."""
+        category_name = request.query_params.get('categoryName')
+        if not category_name:
+            return Response(
+                {"error": "categoryName query parameter is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Fetch books in the same category by name, excluding the current book if provided
+            exclude_book_id = request.query_params.get('excludeBookId')
+            similar_books = Book.objects.filter(category__name=category_name)
+            if exclude_book_id:
+                similar_books = similar_books.exclude(id=exclude_book_id)
+            
+            # Serialize the results
+            serializer = self.get_serializer(similar_books[:10], many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class WishlistView(APIView):
     permission_classes = [IsAuthenticated]

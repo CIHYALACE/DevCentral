@@ -82,10 +82,10 @@ export default function GameCardWide({ game }) {
                         <div className="mt-auto">
                             <div className="d-flex justify-content-between align-items-center">
                                 <div className="d-flex gap-2">
-                                    {categoryName && <span className="badge bg-secondary">{categoryName}</span>}
-                                    {game.type && <span className="badge bg-secondary">{game.type}</span>}
+                                    {categoryName && <span className="badge" >{categoryName}</span>}
+                                    {game.type && <span className="badge">{game.type}</span>}
                                 </div>
-                                <Link to={`/details/games/${game.slug}`} className="btn btn-primary">Play Now</Link>
+                                <Link to={`/details/games/${game.slug}`} className="btn btn-dark" style={{backgroundColor: '#a259ff', fontWeight: "bold", border: "none"}}  >Play Now</Link>
                             </div>
                         </div>
                     </div>

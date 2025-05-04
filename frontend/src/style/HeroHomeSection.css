@@ -1,0 +1,51 @@
+.heroHomeSection{
+    height: 75vh;
+    /* background-color: #2b2b2b; */
+   
+}
+.heroHomeSection h1{
+    font-size: 3rem;
+    font-weight: 900;
+    color: #333;
+    /* color: #fff; */
+}
+.heroHomeSection h3{
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #555;
+    /* color: #fff; */
+
+}
+.heroHomeSection button{
+    background-color: #a259ff;
+    color: #fff;
+    padding: 15px 40px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color  0.3s ease;
+}
+button:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+button:hover{
+    background-color: #8a3dff;
+}
+
+.heroHomeSection img{
+    width: 100%;
+   
+}
+@media (max-width: 767.98px) {
+    .heroHomeSection h1 {
+      font-size: 1.8rem;
+    }
+  
+    .heroHomeSection h3 {
+      font-size: 1rem;
+    }
+  }
+  
