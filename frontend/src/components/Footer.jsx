@@ -1,9 +1,12 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer
       id="contact-section"
       className="pt-5 border-top text-dark"
       // style={{ backgroundColor: "#f9f6ff" }}
+
       aria-label="Site footer"
     >
       <div className="container">
@@ -55,17 +58,19 @@ export default function Footer() {
                   borderRadius: "20px",
                 }}
               />
-              <button
-                type="submit"
-                className="btn btn-sm text-white px-4 "
-                style={{
-                  backgroundColor: "#a259ff",
-                  borderRadius: "20px",
-                  marginLeft: "-60px",
-                }}
-              >
-                Register
-              </button>
+              <Link to="/register" style={{ textDecoration: 'none' }}>
+                <button
+                  type="button"
+                  className="btn btn-sm text-white px-4 py-2"
+                  style={{
+                    backgroundColor: "#a259ff",
+                    borderRadius: "20px",
+                    marginLeft: "-60px",
+                  }}
+                >
+                  Register
+                </button>
+              </Link>
             </form>
           </div>
         </div>
