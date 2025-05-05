@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ProgramCard from './ProgramCard';
 import { useStore } from '@tanstack/react-store';
 import { programStore, fetchPrograms, getProgramsByType } from '../store';
+import { Container } from 'react-bootstrap';
 
 const RecommendedAppsSection = () => {
   const programs = useStore(programStore, (state) => state.programs);
@@ -64,16 +65,17 @@ const RecommendedAppsSection = () => {
   if (recommendedAppsData.length === 0) {
     return (
       <section className="recommended-apps">
-        <h2 className="section-title">Recommended Apps</h2>
+        <h2 className="section-title" >Recommended Apps</h2>
         <p>No recommended apps available at the moment. Check back later!</p>
       </section>
     );
   }
 
   return (
+    <Container>
     <section className="recommended-apps">
-      <h2 className="section-title">Recommended Apps</h2>
-      <div className="row g-3">
+      <h2 className="section-title mt-5" style={{ color:"#333" , textAlign:"center" }}>Recommended Apps</h2>
+      <div className="apps-grid">
         {recommendedAppsData.map((app) => (
           <div key={app.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
             <ProgramCard program={app} />
@@ -81,6 +83,7 @@ const RecommendedAppsSection = () => {
         ))}
       </div>
     </section>
+    </Container>
   );
 };
 

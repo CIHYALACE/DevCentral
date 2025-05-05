@@ -3,8 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 export default function BannerSection() {
     return (
-        <Container className="mt-5">
-            <Row className="gx-0 d-flex flex-column flex-md-row">
+        <Container className="mt-5 ">
+            <Row className="gx-0 d-flex flex-column flex-md-row ">
                 {/* Text Part */}
                 <Col xs={12} md={6} className="text-white p-4 p-md-5 rounded-start-4" style={{ backgroundColor: "#181818" }}>
                     <h1>Discover the magical world of the Magicabin</h1>

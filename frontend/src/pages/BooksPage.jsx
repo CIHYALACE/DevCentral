@@ -38,7 +38,7 @@ export default function BooksPage() {
   }
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="container mt-5 mb-5" >
       
       <section className="mb-5 mt-5">
         <h3 className="ms-5 mb-3">New Release Ebooks</h3>
