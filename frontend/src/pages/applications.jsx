@@ -1,6 +1,6 @@
 // AppsPage.jsx
 import React, { useState, useEffect } from 'react';
-import AppCard from '../components/AppCard';
+import ProgramCard from '../components/ProgramCard';
 import {AppSliderSection} from '../components/AppSliderSection';
 import { useStore } from '@tanstack/react-store';
 import { programStore, fetchPrograms } from '../store';
@@ -45,9 +45,11 @@ const AppsPage = () => {
           <p className="text-center py-3">No apps available at the moment. Check back later!</p>
         ) : (
           <>
-            <div className="apps-grid">
+            <div className="row g-3">
               {programs.map((app) => (
-                <AppCard app={app} key={app.id} />
+                <div key={app.id} className="col-12 mb-3 mb-md-0 col-md-6 col-lg-4">
+                  <ProgramCard program={app} />
+                </div>
               ))}
             </div>
             

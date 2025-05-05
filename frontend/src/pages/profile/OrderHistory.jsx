@@ -1,4 +1,6 @@
 import React from 'react';
+import '../../style/ProfileCommon.css';
+import '../../style/OrderHistory.css';
 
 export default function OrderHistory() {
   // Add custom styles for wide screens

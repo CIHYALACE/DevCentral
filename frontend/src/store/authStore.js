@@ -1,13 +1,113 @@
 import { Store } from "@tanstack/react-store";
 import axios from "axios";
 import { API_URL } from ".";
+import {jwtDecode} from "jwt-decode";
 
-// Set up axios with a default Authorization header
+// Check if token is expired
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  
+  try {
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    return decoded.exp < currentTime;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return true;
+  }
+};
+
+// Set up axios with a default Authorization header and interceptors
 const setupAxios = () => {
   const token = localStorage.getItem('token');
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
+  
+  // Add request interceptor to handle token expiration
+  axios.interceptors.request.use(
+    async (config) => {
+      // Don't check token for auth endpoints
+      if (config.url.includes('/auth/jwt/create/') || config.url.includes('/auth/jwt/refresh/')) {
+        return config;
+      }
+      
+      const token = localStorage.getItem('token');
+      
+      // If token exists but is expired, try to refresh it
+      if (token && isTokenExpired(token)) {
+        try {
+          const refreshToken = localStorage.getItem('refresh');
+          if (!refreshToken) {
+            // No refresh token, clear auth state
+            logout();
+            return config;
+          }
+          
+          // Try to refresh the token
+          const response = await axios.post(`${API_URL}/auth/jwt/refresh/`, { refresh: refreshToken });
+          const newToken = response.data.access;
+          
+          // Update token in localStorage and headers
+          localStorage.setItem('token', newToken);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+          
+          // Update auth store
+          authStore.setState((state) => ({
+            ...state,
+            user: { ...state.user, token: { ...state.user.token, access: newToken } },
+            isAuthenticated: true,
+          }));
+          
+          // Update the current request with the new token
+          config.headers['Authorization'] = `Bearer ${newToken}`;
+        } catch (error) {
+          // Refresh failed, clear auth state
+          console.error('Token refresh failed:', error);
+          logout();
+        }
+      }
+      
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+  
+  // Add response interceptor to handle 401/403 errors
+  axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      
+      // If error is 401/403 and not from auth endpoints and not already retried
+      if (
+        error.response && 
+        (error.response.status === 401 || error.response.status === 403) && 
+        !originalRequest._retry && 
+        !originalRequest.url.includes('/auth/jwt/create/') && 
+        !originalRequest.url.includes('/auth/jwt/refresh/')
+      ) {
+        originalRequest._retry = true;
+        
+        try {
+          // Try to refresh the token
+          await refresh();
+          
+          // Retry the original request with the new token
+          const token = localStorage.getItem('token');
+          originalRequest.headers['Authorization'] = `Bearer ${token}`;
+          return axios(originalRequest);
+        } catch (refreshError) {
+          // If refresh fails, log the user out
+          console.error('Token refresh failed in response interceptor:', refreshError);
+          logout();
+          return Promise.reject(error);
+        }
+      }
+      
+      return Promise.reject(error);
+    }
+  );
 };
 
 // Call this immediately to set up axios with any existing token
@@ -129,7 +229,24 @@ const refresh = async () => {
   }
 };
 
-export { authStore, login, logout, refresh };
+const fetchUserData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/auth/users/me/`);
+    authStore.setState((state) => ({
+      ...state,
+      user: { ...state.user, ...response.data },
+    }));
+    return response.data;
+  } catch (error) {
+    authStore.setState((state) => ({
+      ...state,
+      error,
+    }));
+    throw error;
+  }
+};
+
+export { authStore, login, logout, refresh, fetchUserData };
 
 
 

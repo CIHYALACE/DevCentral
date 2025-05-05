@@ -1,14 +1,14 @@
-import GameCard from "./GameCard";
-import GameCardWide from "./GameCardWide";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 import { gameStore, fetchGames } from "../store/gameStore";
 import { useStore } from "@tanstack/react-store";
+import ProgramCard from "./ProgramCard";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import GameCardWide from "./GameCardWide";
 
 export default function GamesSection() {
   // Get games directly from the gameStore
@@ -38,7 +38,7 @@ export default function GamesSection() {
   if (loading || storeLoading) {
     return (
       <div className="container py-5 z-0">
-        <h2 className="mb-4">Popular Games</h2>
+        <h2 className="mb-4" >Popular Games</h2>
         <div className="text-center">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -66,7 +66,7 @@ export default function GamesSection() {
 
   return (
     <div className="container py-5 z-0">
-      <h2 className="mb-4">Popular Games</h2>
+      <h2 className="mb-4" style={{}}>Popular Games</h2>
 
       <Swiper
         modules={[Autoplay, Pagination]}
@@ -84,11 +84,14 @@ export default function GamesSection() {
         ))}
       </Swiper>
       <hr />
-      <h2 className="mb-4">Featured Games</h2>
+      {/* style={{color: '#a259ff', fontWeight: "bold"}} */}
+      <h2 className="mb-4 mt-5" >Featured Games</h2>
       {games.length > 0 && <GameCardWide game={games[0]} />}
-      <div className="row">
+      <div className="row mt-5 mb-5 ">
         {topGames.map((game) => (
-          <GameCard key={game.id || Math.random()} game={game} />
+          <div key={game.id || Math.random()} className="col-12 col-md-6 col-lg-4 mb-3">
+            <ProgramCard program={game} />
+          </div>
         ))}
       </div>
     </div>

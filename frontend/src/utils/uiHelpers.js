@@ -120,6 +120,61 @@ const debounce = (func, wait) => {
   };
 };
 
+// Generate a thumbnail from a video URL
+const generateVideoThumbnail = (videoUrl) => {
+  return new Promise((resolve, reject) => {
+    // Create a video element
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.muted = true;
+    video.playsInline = true;
+    video.crossOrigin = 'anonymous'; // To avoid CORS issues when possible
+    
+    // Set up event handlers
+    video.onloadedmetadata = () => {
+      // Seek to 1 second or 25% of the video, whichever is less
+      const seekTime = Math.min(1, video.duration * 0.25);
+      video.currentTime = seekTime;
+    };
+    
+    video.onseeked = () => {
+      try {
+        // Create a canvas to capture the frame
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 360;
+        
+        // Draw the video frame to the canvas
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Get the data URL from the canvas
+        const thumbnailUrl = canvas.toDataURL('image/jpeg');
+        
+        // Clean up
+        URL.revokeObjectURL(video.src);
+        
+        // Resolve with the thumbnail URL
+        resolve(thumbnailUrl);
+      } catch (error) {
+        console.error('Error generating thumbnail:', error);
+        reject(error);
+      }
+    };
+    
+    // Handle errors
+    video.onerror = (error) => {
+      console.error('Error loading video:', error);
+      URL.revokeObjectURL(video.src);
+      reject(error);
+    };
+    
+    // Set the video source and start loading
+    video.src = videoUrl;
+    video.load();
+  });
+};
+
 export {
   formatDate,
   formatDateTime,
@@ -131,5 +186,6 @@ export {
   stringToColor,
   generateAvatar,
   formatErrorMessage,
-  debounce
+  debounce,
+  generateVideoThumbnail
 };

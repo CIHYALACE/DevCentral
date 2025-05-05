@@ -13,11 +13,14 @@ import GamesPage from '../pages/games'
 import AppsPage from '../pages/applications'
 import BooksPage from '../pages/BooksPage'
 import BookDetails from '../pages/BookDetails';
+import SearchResults from '../pages/SearchResults';
 import ActivateAccount from '../pages/ActivateAccount'
 // Profile Pages
 import ProfilePage from '../pages/ProfilePage'
 import MyPrograms from '../pages/MyPrograms'
+import PublishedPrograms from '../pages/PublishedPrograms'
 import AddProgram from '../pages/AddProgram'
+import EditProgram from '../pages/EditProgram'
 import InfoSection from '../pages/profile/InfoSection'
 import PaymentOptions from '../pages/profile/PaymentOptions'
 import Subscriptions from '../pages/profile/Subscriptions'
@@ -48,7 +51,9 @@ export default function App() {
       <Route path="/profile" element={<ProfileSharedLayout />}>
         <Route index element={<InfoSection />} />
         <Route path="my-programs" element={<MyPrograms />} />
+        <Route path="published-programs" element={<PublishedPrograms />} />
         <Route path="add-program" element={<AddProgram />} />
+        <Route path="edit-program/:slug" element={<EditProgram />} />
         <Route path="payment-options" element={<PaymentOptions />} />
         <Route path="subscriptions" element={<Subscriptions />} />
         <Route path="devices" element={<Devices />} />
@@ -62,6 +67,7 @@ export default function App() {
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/:slug" element={<BookDetails />} />
         <Route path="/details/:type/:slug" element={<ItemDetails />} />
+        <Route path="/search" element={<SearchResults />} />
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="/register" element={<Register />} />

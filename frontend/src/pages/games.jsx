@@ -5,6 +5,7 @@ import GameCard from '../components/GameCard';
 import { useStore } from "@tanstack/react-store";
 import { gameStore, fetchGames } from "../store/gameStore";
 import Paginator from '../components/common/Paginator';
+import ProgramCard from '../components/ProgramCard';
 const GamesPage = () => {
   const { games, loading, error, totalGames, currentPage } = useStore(gameStore);
   const [currentPageState, setCurrentPageState] = useState(1);
@@ -179,7 +180,9 @@ const GamesPage = () => {
               games
                 .filter((game) => game && game.id)
                 .map((game) => (
-                  <GameCard game={game} key={game.id} />
+                  <div key={game.id} className="col-12 mb-3 mb-md-0 col-md-6 col-lg-4">
+                    <ProgramCard program={game} />
+                  </div>
                 ))
               : 
               <div className="alert alert-warning col-12">

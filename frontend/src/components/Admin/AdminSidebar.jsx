@@ -1,41 +1,45 @@
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function AdminSideBar({ active, onItemClick }) {
     const menuItems = [
-        { name: "Dashboard", path: "/admin/dashboard", icon: "bi-speedometer2" },
-        { name: "Programs", path: "/admin/programs", icon: "bi-grid" },
-        { name: "Reviews", path: "/admin/reviews", icon: "bi-star" },
-        { name: "Media", path: "/admin/media", icon: "bi-images" },
-        { name: "User Tokens", path: "/admin/tokens", icon: "bi-person-badge" },
-        { name: "Categories", path: "/admin/categories", icon: "bi-folder" },
+        { name: "Dashboard", path: "/admin/dashboard", icon: "fa-solid fa-gauge-high" },
+        { name: "Programs", path: "/admin/programs", icon: "fa-solid fa-grip" },
+        { name: "Reviews", path: "/admin/reviews", icon: "fa-solid fa-star" },
+        { name: "Media", path: "/admin/media", icon: "fa-solid fa-images" },
+        { name: "User Tokens", path: "/admin/tokens", icon: "fa-solid fa-user-tag" },
+        { name: "Categories", path: "/admin/categories", icon: "fa-solid fa-folder" },
     ];
+
 
     const handleClick = () => {
         if (onItemClick) onItemClick();
     };
 
     return (
-        <aside className="sidebar p-0">
-            <div className="user p-3 border-bottom">
-                <div className="user-name fw-bold">Admin Panel</div>
+        <div className="bg-white h-100 border-end sidebar-wrapper">
+            <div className="text-center p-4 border-bottom bg-primary text-white">
+                <h4 className="mb-0 text-truncate">Admin Panel</h4>
+                <p className="small mb-0 mt-1 opacity-75 text-truncate">Manage Your Content</p>
             </div>
-            <ul className="sidebar-menu list-unstyled p-0 m-0">
-                {menuItems.map((item, i) => (
-                    <li 
-                        key={i} 
-                        className={`border-bottom ${active === item.name ? "active bg-primary" : ""}`}
-                        onClick={handleClick}
-                    >
-                        <Link 
-                            to={item.path} 
-                            className={`d-flex align-items-center p-3 text-decoration-none ${active === item.name ? "text-white" : "text-dark"}`}
-                        >
-                            <i className={`bi ${item.icon} me-2`}></i>
-                            {item.name}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        </aside>
+            
+            <nav className="mt-2">
+                <ul className="nav flex-column">
+                    {menuItems.map((item, index) => (
+                        <li key={index} className="nav-item" onClick={handleClick}>
+                            <Link 
+                                to={item.path}
+                                className={`nav-link py-2 px-3 d-flex align-items-center ${active === item.name ? 'active text-primary fw-bold' : 'text-dark'}`}
+                            >
+                                <div className="d-flex align-items-center sidebar-link-content">
+                                    <i className={`${item.icon} flex-shrink-0 me-2`}></i>
+                                    <span className="text-truncate">{item.name}</span>
+                                </div>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+        </div>
     );
 }

@@ -1,27 +1,6 @@
-/* Devices.css */
+/* Devices.css - Component-specific styles */
+/* Common styles imported from ProfileCommon.css */
 
-.info-section {
-    flex: 1;
-    padding: 2rem;
-    background-color: #f9fafb;
-    border-radius: 12px;
-    margin-left: 2rem;
-    min-height: 400px;
-  }
-  
-  .section-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 0.5rem;
-  }
-  
-  .section-description {
-    color: #6b7280;
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
   .device-list {
     display: flex;
     flex-direction: column;
@@ -29,26 +8,7 @@
   }
   
   .device-card {
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 1.5rem;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
   }
-  
-  .manage-button {
-    margin-top: 1rem;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.95rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .manage-button:hover {
-    background-color: #1e40af;
-  }
-  
