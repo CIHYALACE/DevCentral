@@ -325,7 +325,6 @@ const ItemDetails = () => {
   
   useEffect(() => {
     fetchProgramDetails(slug);
-    fetchProgramDetails(slug);
   }, [type, slug]);
   
   // Process media and generate thumbnails for videos
@@ -458,35 +457,6 @@ const ItemDetails = () => {
             </div>
           </div>
         )}
-        {slideshow.length > 0 ? (
-          <>
-            <img
-              className="d-block w-100"
-              src={slideshow[currentSlideIndex].file}
-              alt={`${appDetails.title} - ${slideshow[currentSlideIndex].media_type}`}
-              style={{ height: '600px', objectFit: 'cover' }}
-            />
-            {/* Slideshow indicators */}
-            {slideshow.length > 1 && (
-              <div className="slideshow-indicators">
-                {slideshow.map((_, index) => (
-                  <span 
-                    key={index} 
-                    className={`indicator ${index === currentSlideIndex ? 'active' : ''}`}
-                    onClick={() => setCurrentSlideIndex(index)}
-                  />
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="placeholder-banner" style={{ height: '600px', backgroundColor: '#f0f0f0' }}>
-            <div className="text-center pt-5">
-              <i className="fa-solid fa-image fa-4x text-muted"></i>
-              <p className="mt-3 text-muted">No media available</p>
-            </div>
-          </div>
-        )}
         <div className="overlay"></div>
       </div>
       <div className='hero-text'>
@@ -499,23 +469,7 @@ const ItemDetails = () => {
           <p className='me-4'>{appDetails.rating}  <i className="fa-solid fa-star"></i> </p>
           <p>{appDetails.rating_count || 0} ratings</p>
           <p className='ms-4'>{formatDownloadCount(appDetails.download_count || 0)} <i className="fa-solid fa-download"></i></p>
-        <div className='d-flex align-items-center mt-4 text-info'>
-          <p className='me-4'>{appDetails.rating}  <i className="fa-solid fa-star"></i> </p>
-          <p>{appDetails.rating_count || 0} ratings</p>
-          <p className='ms-4'>{formatDownloadCount(appDetails.download_count || 0)} <i className="fa-solid fa-download"></i></p>
         </div>
-        <button 
-          onClick={handleDownload} 
-          disabled={isDownloading}
-          className='hero-btn btn btn-info w-50 mt-4'
-        >
-          {isDownloading ? (
-            <>
-              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              Recording download...
-            </>
-          ) : 'Download Now'}
-        </button>
         <button 
           onClick={handleDownload} 
           disabled={isDownloading}

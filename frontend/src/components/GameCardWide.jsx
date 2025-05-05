@@ -71,9 +71,9 @@ export default function GameCardWide({ game }) {
                                 </p>
                                 <div className="d-flex align-items-center">
                                     <div className="text-warning me-2 flex-shrink-0">
-                                        {Array.from({ length: Math.floor(game.rating) }).map((_, i) => (
-                                            <i key={i} className="fa-solid fa-star"></i>
-                                        ))}
+                                        
+                                            <i className="fa-solid fa-star"></i>
+                                 
                                         {game.rating % 1 >= 0.5 && <i className="fa-solid fa-star-half-alt"></i>}
                                     </div>
                                     <span className="text-muted text-truncate">
