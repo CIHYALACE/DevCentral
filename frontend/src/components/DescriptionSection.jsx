@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
-import SimilarAppsSection from './Similar apps Section'
+import SimilarAppsSection from './SimilarAppsSection'
 
 // Dummy data
 // const description = [

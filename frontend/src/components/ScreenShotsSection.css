@@ -1,0 +1,131 @@
+/* ScreenShotsSection.css */
+
+/* Carousel styling */
+.media-carousel {
+  height: 400px !important;
+  overflow: hidden;
+}
+
+.media-carousel .carousel-inner,
+.media-carousel .carousel-item {
+  height: 100%;
+}
+
+.media-carousel .carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+}
+
+/* Media preview containers */
+.media-preview-container {
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.media-preview-container:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Image preview specific styling */
+.image-preview {
+  background-color: #f0f0f0;
+}
+
+.image-preview img.hover-zoom {
+  object-position: center;
+}
+
+.image-preview img.hover-zoom:hover {
+  transform: scale(1.05);
+}
+
+/* Media overlay for hover effect */
+.media-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s ease;
+  border-radius: 0.25rem;
+}
+
+.media-preview-container:hover .media-overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Video preview specific styling */
+.video-preview .play-button-overlay {
+  transform: scale(1);
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+.video-preview:hover .play-button-overlay {
+  transform: scale(1.1);
+}
+
+/* Ensure the carousel controls are visible against any background */
+.media-carousel .carousel-control-prev,
+.media-carousel .carousel-control-next {
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 5%;
+  border-radius: 0 5px 5px 0;
+  z-index: 10;
+}
+
+.media-carousel .carousel-control-next {
+  border-radius: 5px 0 0 5px;
+}
+
+/* Ensure indicators are visible */
+.media-carousel .carousel-indicators {
+  margin-bottom: 0;
+  position: absolute;
+  bottom: 10px;
+  z-index: 10;
+}
+
+/* Modal styling */
+.video-modal .modal-content,
+.image-modal .modal-content {
+  background-color: #000;
+  border: none;
+}
+
+.video-modal .modal-header,
+.image-modal .modal-header {
+  border-bottom: 1px solid #333;
+  background-color: #222;
+  color: white;
+}
+
+.video-modal .modal-header .btn-close,
+.image-modal .modal-header .btn-close {
+  color: white;
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Image modal container */
+.image-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  min-height: 300px;
+  padding: 20px;
+}
+
+/* Loading spinner */
+.generating-thumbnail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}

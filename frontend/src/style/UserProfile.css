@@ -10,7 +10,7 @@ body {
     top: 56px; /* Header height */
     height: calc(100vh - 56px);
     overflow-y: auto;
-    z-index: 100;
+    
   }
   
   /* Active nav link styling */

@@ -1,17 +1,21 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
+import { searchPrograms } from "../store/programStore";
 
 export default function Header({ onToggleSidebar }) {
   let token = "token";
   const location = useLocation();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
   const isProfilePage = location.pathname.startsWith('/profile');
   
   return (
     <Navbar
       expand="lg"
-      className="position-sticky top-0 z-4 shadow-sm px-4 p-0"
+      className="position-sticky top-0 z-3 shadow-sm px-4 p-0"
       style={{
         backdropFilter: "blur(10px)",
         backgroundColor: "rgba(255, 255, 255, 0.7)",
@@ -78,15 +82,28 @@ export default function Header({ onToggleSidebar }) {
           <NavLink to="/admin" className="nav-link">Admin</NavLink>
         </Nav>
         <div className="d-flex ms-auto align-items-center">
-          <form className="d-flex me-3 share-tech-mono-regular">
+          <form 
+            className="d-flex me-3 share-tech-mono-regular"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (searchQuery.trim()) {
+                navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+              }
+            }}
+          >
             <input
               type="text"
               className="form-control me-2"
               placeholder="Search..."
-              // value={searchQuery}
-              // onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search programs"
             />
-            <button className="btn btn-black" type="submit">
+            <button 
+              className="btn btn-black" 
+              type="submit"
+              disabled={!searchQuery.trim()}
+            >
               <i className="fa-solid fa-search"></i>
             </button>
           </form>

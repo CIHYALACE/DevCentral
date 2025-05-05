@@ -28,11 +28,22 @@
 .slideshow-indicators {
   position: absolute;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   display: flex;
+  justify-content: center;
   gap: 10px;
-  z-index: 3;
+  z-index: 10;
+}
+
+.video-indicator::after {
+  content: '\25B6';
+  font-size: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
 }
 
 .slideshow-indicators .indicator {

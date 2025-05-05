@@ -1,6 +1,6 @@
 // src/components/RecommendedAppsSection.jsx
 import React, { useState, useEffect } from 'react';
-import AppCard from './AppCard';
+import ProgramCard from './ProgramCard';
 import { useStore } from '@tanstack/react-store';
 import { programStore, fetchPrograms, getProgramsByType } from '../store';
 
@@ -73,9 +73,11 @@ const RecommendedAppsSection = () => {
   return (
     <section className="recommended-apps">
       <h2 className="section-title">Recommended Apps</h2>
-      <div className="apps-grid">
+      <div className="row g-3">
         {recommendedAppsData.map((app) => (
-          <AppCard app={app} key={app.id} />
+          <div key={app.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+            <ProgramCard program={app} />
+          </div>
         ))}
       </div>
     </section>

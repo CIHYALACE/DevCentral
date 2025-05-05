@@ -8,10 +8,15 @@ const categoryStore = new Store({
   error: null
 });
 
-const fetchCategories = async () => {
+const fetchCategories = async (type = null) => {
   categoryStore.setState((state) => ({ ...state, loading: true, error: null }));
   try {
-    const response = await axios.get(`${API_URL}/categories/`);
+    let url = `${API_URL}/categories/`;
+    if (type) {
+      url += `?related_type=${type}`;
+    }
+    
+    const response = await axios.get(url);
     categoryStore.setState((state) => ({
       ...state,
       categories: response.data,

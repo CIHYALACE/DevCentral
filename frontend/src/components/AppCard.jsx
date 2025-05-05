@@ -43,7 +43,11 @@ const AppCard = ({ app }) => {
 
         <div className="app-meta">
           <div className="ratingOf-app">
-            {formatRating(app.rating)}<span className="star-icon">★</span>
+            {formatRating(app.rating)}
+            {app.rating_count !== undefined && (
+              <span className="rating-count"> ({app.rating_count})</span>
+            )}
+            <span className="star-icon">★</span>
           </div>
           <div className={`price-badge ${isPaid ? 'paid' : 'free'}`}>
             {priceDisplay}

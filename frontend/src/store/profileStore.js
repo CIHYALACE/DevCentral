@@ -115,15 +115,35 @@ const fetchUserApps = async () => {
   try {
     console.log('Fetching user apps...');
     // Use the correct endpoint path with the router prefix
-    const response = await axios.get(`${API_URL}/profiles/me/apps_library/`);
+    const response = await axios.get(`${API_URL}/users/profiles/me/apps_library/`);
     console.log('User apps response:', response.data);
+    
+    // Process the data to convert relative media paths to absolute paths
+    const processedData = response.data.map(program => {
+      // Process program icon if it exists and is relative
+      if (program.icon && !program.icon.startsWith('http')) {
+        program.icon = `${API_URL}${program.icon}`;
+      }
+      
+      // Process media items if they exist
+      if (program.media && Array.isArray(program.media)) {
+        program.media = program.media.map(mediaItem => {
+          if (mediaItem.file && !mediaItem.file.startsWith('http')) {
+            return { ...mediaItem, file: `${API_URL}${mediaItem.file}` };
+          }
+          return mediaItem;
+        });
+      }
+      
+      return program;
+    });
     
     profileStore.setState((state) => ({
       ...state,
-      userApps: response.data,
+      userApps: processedData,
       loading: false
     }));
-    return response.data;
+    return processedData;
   } catch (error) {
     console.error('Error fetching user apps:', error.response?.data || error.message);
     // Return empty array instead of throwing error for better UX

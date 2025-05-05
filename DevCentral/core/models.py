@@ -129,8 +129,18 @@ class Download(models.Model):
         
         # Increment download count if this is a new download
         if is_new:
+            # Update download count
             self.program.download_count += 1
             self.program.save(update_fields=['download_count'])
+            
+            # Add to user's app library if not already there
+            try:
+                user_profile = self.user.profile
+                if not user_profile.apps_library.filter(id=self.program.id).exists():
+                    user_profile.apps_library.add(self.program)
+            except Exception as e:
+                # Log the error but don't prevent the download from being recorded
+                print(f"Error adding program to user library: {e}")
     
     def delete(self, *args, **kwargs):
         program = self.program

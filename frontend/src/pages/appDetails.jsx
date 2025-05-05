@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import "../style/ItemDetails.css";
-import SimilarAppsSection from '../components/Similar apps Section';
+import SimilarAppsSection from '../components/SimilarAppsSection';
 import { ScreenShotsSection } from '../components/ScreenShotsSection';
 import { DescriptionSection } from '../components/DescriptionSection';
 import { RatingSection } from '../components/RatingSection';
 import { Feature } from '../components/Feature';
-import { Container } from 'react-bootstrap';
+import { Container, Modal } from 'react-bootstrap';
 import "../style/HeroGameDetails.css";
 import { useStore } from '@tanstack/react-store';
 import { programStore } from '../store';
 import { authStore } from '../store/authStore';
 import { fetchProgramDetails, recordDownload } from '../store/programStore';
+import { generateVideoThumbnail } from '../utils/uiHelpers';
+import { FaPlay } from 'react-icons/fa';
 
 // Function to format download count (e.g., 1000 -> 1K, 1000000 -> 1M)
 const formatDownloadCount = (count) => {
@@ -316,32 +318,68 @@ const ItemDetails = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [slideshow, setSlideshow] = useState([]);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [currentVideo, setCurrentVideo] = useState(null);
+  const slideshowIntervalRef = useRef(null);
+  const [processedMedia, setProcessedMedia] = useState([]);
   
   useEffect(() => {
     fetchProgramDetails(slug);
   }, [type, slug]);
   
-  // Prepare slideshow media when app details change
+  // Process media and generate thumbnails for videos
   useEffect(() => {
-    if (appDetails && appDetails.media) {
+    const processMedia = async () => {
+      if (!appDetails || !appDetails.media) return;
+      
+      // Create a copy of the media array to work with
+      const mediaWithThumbnails = [...appDetails.media];
+      
+      // Filter videos that don't have thumbnails
+      const videos = mediaWithThumbnails.filter(item => item.media_type === 'video');
+      
+      // Generate thumbnails for each video
+      for (const video of videos) {
+        try {
+          // Generate thumbnail for the video
+          const thumbnailUrl = await generateVideoThumbnail(video.file);
+          // Find the video in the processed media and add the thumbnail
+          const index = mediaWithThumbnails.findIndex(item => item.id === video.id);
+          if (index !== -1) {
+            mediaWithThumbnails[index] = { ...mediaWithThumbnails[index], thumbnail: thumbnailUrl };
+          }
+        } catch (error) {
+          console.error(`Failed to generate thumbnail for video ${video.id}:`, error);
+        }
+      }
+      
+      setProcessedMedia(mediaWithThumbnails);
+    };
+    
+    processMedia();
+  }, [appDetails]);
+  
+  // Prepare slideshow media when processed media changes
+  useEffect(() => {
+    if (processedMedia.length > 0) {
       // Organize media with exclusive priority: banners > screenshots > videos > app icon
       let slideshowMedia = [];
       
       // Check for banners first
-      const banners = appDetails.media.filter(media => media.media_type === 'banner');
+      const banners = processedMedia.filter(media => media.media_type === 'banner');
       if (banners.length > 0) {
         slideshowMedia = banners;
       } else {
         // If no banners, check for screenshots
-        const screenshots = appDetails.media.filter(media => media.media_type === 'screenshot');
+        const screenshots = processedMedia.filter(media => media.media_type === 'screenshot');
         if (screenshots.length > 0) {
           slideshowMedia = screenshots;
         } else {
           // If no screenshots, check for videos
-          const videos = appDetails.media.filter(media => media.media_type === 'video');
+          const videos = processedMedia.filter(media => media.media_type === 'video');
           if (videos.length > 0) {
             slideshowMedia = videos;
-          } else if (appDetails.icon) {
+          } else if (appDetails?.icon) {
             // Last resort: use app icon
             slideshowMedia = [{ file: appDetails.icon, media_type: 'icon' }];
           }
@@ -351,7 +389,7 @@ const ItemDetails = () => {
       setSlideshow(slideshowMedia);
       setCurrentSlideIndex(0); // Reset to first slide when app changes
     }
-  }, [appDetails]);
+  }, [processedMedia, appDetails]);
   
   // Auto-advance slideshow every 5 seconds
   useEffect(() => {
@@ -458,7 +496,7 @@ const ItemDetails = () => {
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-4 border shadow-sm p-4 mt-5">
-              <h3>you might also like : </h3>
+              <h3>You might also like:</h3>
               <hr />
               <SimilarAppsSection />
             </div>

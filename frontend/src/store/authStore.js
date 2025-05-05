@@ -229,7 +229,24 @@ const refresh = async () => {
   }
 };
 
-export { authStore, login, logout, refresh };
+const fetchUserData = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/auth/users/me/`);
+    authStore.setState((state) => ({
+      ...state,
+      user: { ...state.user, ...response.data },
+    }));
+    return response.data;
+  } catch (error) {
+    authStore.setState((state) => ({
+      ...state,
+      error,
+    }));
+    throw error;
+  }
+};
+
+export { authStore, login, logout, refresh, fetchUserData };
 
 
 

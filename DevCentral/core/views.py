@@ -30,6 +30,14 @@ class ProgramViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'slug'
     
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def published(self, request):
+        """Get programs published by the current user"""
+        # Get programs where the current user is the developer
+        queryset = Program.objects.filter(developer=request.user).order_by('-created_at')
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
     def get_queryset(self):
         queryset = Program.objects.all().order_by('-created_at')
         
@@ -45,7 +53,7 @@ class ProgramViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(category__name=category)
             
         if search:
-            queryset = queryset.filter(name__icontains=search)
+            queryset = queryset.filter(title__icontains=search)
             
         if program_type:
             queryset = queryset.filter(type=program_type)

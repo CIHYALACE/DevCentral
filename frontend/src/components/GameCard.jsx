@@ -51,7 +51,9 @@ export default function GameCard({ game }) {
             </Link>
             <div className="flex-grow-1">
               <h5 className="card-title game-title fs-6 mb-1">{game.title}</h5>
-              <p className="card-text text-muted small mb-2">{game.developer}</p>
+              <p className="card-text text-muted small mb-2">
+                {game.developer}
+              </p>
               <div className="d-flex align-items-center">
                 <div className="text-warning me-1">
                   {Array.from({ length: Math.floor(game.rating) }).map((_, i) => (
@@ -59,8 +61,23 @@ export default function GameCard({ game }) {
                   ))}
                   {game.rating % 1 >= 0.5 && <i className="fa-solid fa-star-half-alt"></i>}
                 </div>
-                <small className="text-muted">{formatRating(game.rating)}</small>
+                <small className="text-muted">
+                  {formatRating(game.rating)}
+                  {game.rating_count !== undefined && (
+                    <span> ({game.rating_count})</span>
+                  )}
+                </small>
               </div>
+              {game.download_count !== undefined && (
+                <div className="mt-1 small text-muted">
+                  <i className="fa-solid fa-download me-1"></i>
+                  {game.download_count > 1000000 
+                    ? `${Math.floor(game.download_count / 1000000)}M+` 
+                    : game.download_count > 1000 
+                      ? `${Math.floor(game.download_count / 1000)}K+` 
+                      : `${game.download_count}`} downloads
+                </div>
+              )}
             </div>
           </div>
         </div>

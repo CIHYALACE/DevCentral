@@ -52,7 +52,7 @@ export default function ProfileSharedLayout() {
             <div className="container-fluid flex-grow-1">
                 <div className="row">
                     {/* Fixed-width sidebar */}
-                    <div className="col-md-3 col-lg-2 d-md-block d-none sidebar-container">
+                    <div className="col-md-3 col-lg-2 d-md-block d-none p-0 sidebar-container">
                         <Sidebar active={activeSection} />
                     </div>
                     

@@ -1,14 +1,14 @@
-import GameCard from "./GameCard";
-import GameCardWide from "./GameCardWide";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
 import { gameStore, fetchGames } from "../store/gameStore";
 import { useStore } from "@tanstack/react-store";
+import ProgramCard from "./ProgramCard";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import GameCardWide from "./GameCardWide";
 
 export default function GamesSection() {
   // Get games directly from the gameStore
@@ -88,7 +88,9 @@ export default function GamesSection() {
       {games.length > 0 && <GameCardWide game={games[0]} />}
       <div className="row">
         {topGames.map((game) => (
-          <GameCard key={game.id || Math.random()} game={game} />
+          <div key={game.id || Math.random()} className="col-12 col-md-6 col-lg-4 mb-3">
+            <ProgramCard program={game} />
+          </div>
         ))}
       </div>
     </div>
