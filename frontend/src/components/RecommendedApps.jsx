@@ -77,9 +77,9 @@ const RecommendedAppsSection = () => {
       <h2 className="section-title mt-5" style={{ color:"#333" , textAlign:"center" }}>Recommended Apps</h2>
       <div className="apps-grid">
         {recommendedAppsData.map((app) => (
-          <div key={app.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+          // <div key={app.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
             <ProgramCard program={app} />
-          </div>
+          // </div>
         ))}
       </div>
     </section>
