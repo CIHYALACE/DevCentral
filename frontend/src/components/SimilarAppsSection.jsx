@@ -47,7 +47,6 @@ const SimilarAppsSection = () => {
   // Main component render with ternary expressions
   return (
     <section className="similar-apps col-lg-12">
-      <h3 className="section-title mb-3">Similar Programs</h3>
       {loading ? (
         <div className="d-flex flex-column gap-3">
           {[...Array(3)].map((_, index) => (
