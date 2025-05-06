@@ -1,9 +1,14 @@
 import { NavLink } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import Button from "react-bootstrap/Button";
 
 export default function AdminHeader({ onToggleSidebar }) {
+
+  const LogOut = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
+
   return (
     <Navbar
       expand="lg"
@@ -35,15 +40,9 @@ export default function AdminHeader({ onToggleSidebar }) {
             View Site
           </NavLink>
           <NavLink
-            to="#"
-            className="text-decoration-none text-black"
-          >
-            Change Password
-          </NavLink>
-          <NavLink
-            to="/apps"
             className="text-decoration-none text-black p-1 text-white px-3 rounded"
             style={{backgroundColor:"#a259ff"}}
+            onClick={LogOut}
           >
             Log Out
           </NavLink>

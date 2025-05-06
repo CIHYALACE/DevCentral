@@ -17,8 +17,8 @@ export default function HomePage() {
       <BannerSection />
       {/* <HeroSlider /> */}
       <RecommendedAppsSection />
-      <SpecialOffer />
-      <HealthFitness />
+      {/* <SpecialOffer /> */}
+      {/* <HealthFitness /> */}
       <Newsletter />
       {/* <EducationalAppsSection /> */}
     </>

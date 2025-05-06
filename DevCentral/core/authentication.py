@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import jwt
 
 class GracefulJWTAuthentication(JWTAuthentication):
@@ -33,3 +34,11 @@ class GracefulJWTAuthentication(JWTAuthentication):
                 return None
             # For write methods, re-raise the exception
             raise
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claims
+        token['role'] = user.role
+        return token

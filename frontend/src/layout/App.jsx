@@ -33,19 +33,20 @@ import AdminReviews from '../pages/admin/AdminReviews'
 import AdminMedia from '../pages/admin/AdminMedia'
 import AdminTokens from '../pages/admin/AdminTokens'
 import AdminCategories from '../pages/admin/AdminCategories'
+import AdminRoute from '../components/Admin/AdminRoute'
+
 
 export default function App() {
   return (
     <Routes>
-
-      <Route path="/admin" element={<AdminSharedLayout />}>
-        <Route index element={<Navigate to="/admin/dashboard" />} />
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="programs" element={<AdminPrograms />} />
-        <Route path="reviews" element={<AdminReviews />} />
-        <Route path="media" element={<AdminMedia />} />
-        <Route path="tokens" element={<AdminTokens />} />
-        <Route path="categories" element={<AdminCategories />} />
+      <Route path="/admin/*" element={<AdminSharedLayout />}>
+        <Route index element={<AdminRoute element={<Navigate to="/admin/dashboard" />} />} />
+        <Route path="dashboard" element={<AdminRoute element={<AdminDashboard />} />} />
+        <Route path="programs" element={<AdminRoute element={<AdminPrograms />} />} />
+        <Route path="reviews" element={<AdminRoute element={<AdminReviews />} />} />
+        <Route path="media" element={<AdminRoute element={<AdminMedia />} />} />
+        <Route path="tokens" element={<AdminRoute element={<AdminTokens />} />} />
+        <Route path="categories" element={<AdminRoute element={<AdminCategories />} />} />
       </Route>
 
       <Route path="/profile" element={<ProfileSharedLayout />}>
@@ -63,7 +64,7 @@ export default function App() {
       <Route path="/" element={<SharedLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/games" element={<GamesPage />} />
-        <Route path="/apps" element={<AppsPage />} /> {/* Assuming you want to show the same page for apps */}
+        <Route path="/apps" element={<AppsPage />} />
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/:slug" element={<BookDetails />} />
         <Route path="/details/:type/:slug" element={<ItemDetails />} />
@@ -71,8 +72,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/profile" element={<UserProfile />} /> */}
       </Route>
     </Routes>
-  )
+  );
 }
