@@ -66,3 +66,23 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     apps_library = models.ManyToManyField('core.Program', blank=True, related_name='users')
+
+
+request_states = [
+    ('pending', 'Pending'),
+    ('approved', 'Approved'),
+    ('rejected', 'Rejected'),
+]
+class NewDeveloperRequest(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='developer_request')
+    comment = models.TextField(null=True, blank=True)
+    state = models.CharField(max_length=10, choices=request_states, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        # If this is a new object (no ID yet), always set state to pending
+        if not self.pk:
+            self.state = 'pending'
+        super().save(*args, **kwargs)
+    

@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { profileStore, fetchCurrentUserProfile, updateUserProfile } from '../../store/profileStore';
 import { logout } from '../../store';
+import { requestDeveloperRole } from '../../store/authStore';
 
 export default function InfoSection() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDeveloperRequestModal, setShowDeveloperRequestModal] = useState(false);
+  const [developerComment, setDeveloperComment] = useState('');
+  const [requestingDeveloper, setRequestingDeveloper] = useState(false);
+  const [developerRequestError, setDeveloperRequestError] = useState(null);
+  const [developerRequestSuccess, setDeveloperRequestSuccess] = useState(false);
   const [userData, setUserData] = useState({
     name: '',
     email: '',
     phone: '',
     country: '',
     location: '',
-    bio: ''
+    bio: '',
+    role: 'user'
   });
   
   // Fetch user profile data when component mounts
@@ -30,7 +37,8 @@ export default function InfoSection() {
             phone: profile.phone_number || '',
             country: profile.country || '',
             location: profile.location || '',
-            bio: profile.bio || ''
+            bio: profile.bio || '',
+            role: profile.user?.role || 'user'
           });
         }
       } catch (err) {
@@ -214,6 +222,33 @@ export default function InfoSection() {
         </div>
       </div>
       
+      {/* Developer Request Section */}
+      {userData.role === 'user' && (
+        <div className="mt-4 w-100">
+          <h3>Developer Status</h3>
+          <div className="card w-100" style={containerStyle}>
+            <div className="card-body">
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 className="mb-0">Request Developer Role</h5>
+                  <p className="text-muted mb-0">Become a developer and publish your own applications</p>
+                </div>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => {
+                    setShowDeveloperRequestModal(true);
+                    setDeveloperRequestError(null);
+                    setDeveloperRequestSuccess(false);
+                  }}
+                >
+                  Request Developer Role
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="mt-4 w-100">
         <h3>Account Security</h3>
         <div className="card w-100" style={containerStyle}>
@@ -236,13 +271,102 @@ export default function InfoSection() {
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <h5 className="mb-0">Log out</h5>
-              
               </div>
               <button className="btn btn-outline-primary" onClick={logout}>Log out</button>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Developer Request Modal */}
+      {showDeveloperRequestModal && (
+        <div className="modal fade show" id="developerRequestModal" tabIndex="-1" aria-labelledby="developerRequestModalLabel" aria-hidden="true" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="developerRequestModalLabel">Request Developer Role</h5>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={() => setShowDeveloperRequestModal(false)}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                {developerRequestError && (
+                  <div className="alert alert-danger">{developerRequestError}</div>
+                )}
+                
+                {developerRequestSuccess && (
+                  <div className="alert alert-success">
+                    Your request has been submitted successfully! We'll review it shortly.
+                  </div>
+                )}
+                
+                <div className="mb-3">
+                  <label htmlFor="developerComment" className="form-label">Comment (Optional)</label>
+                  <textarea 
+                    className="form-control" 
+                    id="developerComment"
+                    rows="3"
+                    placeholder="Tell us why you want to be a developer..."
+                    value={developerComment} 
+                    onChange={(e) => setDeveloperComment(e.target.value)}
+                    disabled={developerRequestSuccess}
+                  ></textarea>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={() => setShowDeveloperRequestModal(false)}
+                  disabled={requestingDeveloper}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-primary"
+                  onClick={async () => {
+                    try {
+                      setRequestingDeveloper(true);
+                      setDeveloperRequestError(null);
+                      await requestDeveloperRole(developerComment);
+                      setDeveloperRequestSuccess(true);
+                      
+                      // Close modal after a short delay
+                      setTimeout(() => {
+                        setShowDeveloperRequestModal(false);
+                        setDeveloperRequestSuccess(false);
+                        setDeveloperComment('');
+                      }, 2000);
+                    } catch (err) {
+                      console.error("Error submitting developer request:", err);
+                      setDeveloperRequestError(
+                        err.response?.data?.error || 
+                        "Failed to submit request. Please try again."
+                      );
+                    } finally {
+                      setRequestingDeveloper(false);
+                    }
+                  }}
+                  disabled={requestingDeveloper || developerRequestSuccess}
+                >
+                  {requestingDeveloper ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span className="ms-2">Submitting...</span>
+                    </>
+                  ) : (
+                    'Submit Request'
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

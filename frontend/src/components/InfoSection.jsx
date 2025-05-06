@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { profileStore, fetchCurrentUserProfile, updateUserProfile } from "../store";
-import { authStore } from "../store/authStore";
+import { authStore, requestDeveloperRole } from "../store/authStore";
 import ProfileHeader from "./ProfileHeader";
 import { Form, Button, Spinner, Alert, Modal } from "react-bootstrap";
 
@@ -15,6 +15,11 @@ export default function InfoSection() {
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showDeveloperRequestModal, setShowDeveloperRequestModal] = useState(false);
+  const [developerComment, setDeveloperComment] = useState('');
+  const [requestingDeveloper, setRequestingDeveloper] = useState(false);
+  const [developerRequestError, setDeveloperRequestError] = useState(null);
+  const [developerRequestSuccess, setDeveloperRequestSuccess] = useState(false);
 
   // Fetch user profile data
   useEffect(() => {
@@ -237,6 +242,107 @@ export default function InfoSection() {
         <p className="mb-1">{user?.email || '—'}</p>
         <small className="text-muted d-block mb-2">Email cannot be changed directly. Contact support for assistance.</small>
       </div>
+
+      {/* Developer Request Section */}
+      {user?.role === 'user' && (
+        <div className="field mt-4">
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <strong className="d-block mb-1">Developer Status</strong>
+              <p className="mb-1">Request to become a developer and publish your own applications</p>
+            </div>
+            <Button 
+              variant="primary" 
+              onClick={() => {
+                setShowDeveloperRequestModal(true);
+                setDeveloperRequestError(null);
+                setDeveloperRequestSuccess(false);
+              }}
+            >
+              Request Developer Role
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Developer Request Modal */}
+      <Modal show={showDeveloperRequestModal} onHide={() => setShowDeveloperRequestModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Request Developer Role</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {developerRequestError && (
+            <Alert variant="danger" className="mb-3">
+              {developerRequestError}
+            </Alert>
+          )}
+          
+          {developerRequestSuccess && (
+            <Alert variant="success" className="mb-3">
+              Your request has been submitted successfully! We'll review it shortly.
+            </Alert>
+          )}
+          
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Comment (Optional)</Form.Label>
+              <Form.Control 
+                as="textarea" 
+                rows={3}
+                placeholder="Tell us why you want to be a developer..."
+                value={developerComment} 
+                onChange={(e) => setDeveloperComment(e.target.value)}
+                disabled={developerRequestSuccess}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="secondary" 
+            onClick={() => setShowDeveloperRequestModal(false)} 
+            disabled={requestingDeveloper}
+          >
+            Cancel
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={async () => {
+              try {
+                setRequestingDeveloper(true);
+                setDeveloperRequestError(null);
+                await requestDeveloperRole(developerComment);
+                setDeveloperRequestSuccess(true);
+                
+                // Close modal after a short delay
+                setTimeout(() => {
+                  setShowDeveloperRequestModal(false);
+                  setDeveloperRequestSuccess(false);
+                  setDeveloperComment('');
+                }, 2000);
+              } catch (err) {
+                console.error("Error submitting developer request:", err);
+                setDeveloperRequestError(
+                  err.response?.data?.error || 
+                  "Failed to submit request. Please try again."
+                );
+              } finally {
+                setRequestingDeveloper(false);
+              }
+            }} 
+            disabled={requestingDeveloper || developerRequestSuccess}
+          >
+            {requestingDeveloper ? (
+              <>
+                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                <span className="ms-2">Submitting...</span>
+              </>
+            ) : (
+              'Submit Request'
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>

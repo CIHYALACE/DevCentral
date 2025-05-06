@@ -9,6 +9,7 @@ export default function AdminSideBar({ active, onItemClick }) {
         { name: "Media", path: "/admin/media", icon: "fa-solid fa-images" },
         { name: "User Tokens", path: "/admin/tokens", icon: "fa-solid fa-user-tag" },
         { name: "Categories", path: "/admin/categories", icon: "fa-solid fa-folder" },
+        { name: "Requests", path: "/admin/requests", icon: "fa-solid fa-user-plus" },
     ];
 
 

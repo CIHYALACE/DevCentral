@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { Alert } from "react-bootstrap";
 import "../style/AddProgram.css";
-import { useParams } from "react-router-dom";
-import { fetchCategories } from "../store";
+import { useNavigate, useParams } from "react-router-dom";
+import { authStore, fetchCategories } from "../store";
+import { useStore } from "@tanstack/react-store";
 const ProgramForm = ({
   formTitle,
   formData,
@@ -23,12 +24,16 @@ const ProgramForm = ({
 }) => {
   const { slug } = useParams();
   const editing = slug;
-
+  const navigate = useNavigate()
+  const user = useStore(authStore, (state) => state.user);
   useEffect(() => {
     fetchCategories();
     delete formData.icon
     if(formData.category&& !formData.category_id){
       formData.category_id = formData.category
+    }
+    if(user.role === 'user'){
+      navigate('/profile')
     }
     console.log(formData);
   }, []);

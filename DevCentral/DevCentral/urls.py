@@ -34,6 +34,7 @@ router.register(r'flags', FlagViewSet)
 router.register(r'myprograms', ProgramViewSet, basename='myprograms')
 router.register(r'users', CustomUserViewSet, basename='customuser')
 router.register(r'profiles', UserProfileViewSet, basename='userprofile')
+router.register(r'requests', DeveloperRequestViewSet, basename='developer-request') 
 
 
 

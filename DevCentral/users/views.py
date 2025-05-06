@@ -8,14 +8,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.decorators import action, api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from djoser.views import UserViewSet
 
-from .models import CustomUser, UserProfile
-from .serializers import CustomUserSerializer, UserProfileSerializer
+from .models import CustomUser, NewDeveloperRequest, UserProfile
+from .serializers import CustomUserSerializer, DeveloperRequestSerializer, UserProfileSerializer
 
 
 class CustomUserViewSet(UserViewSet, viewsets.ModelViewSet):
@@ -147,15 +147,69 @@ def activate_user(request, uid, token):
     else:
         raise Http404("Invalid token")
 
+class DeveloperRequestViewSet(viewsets.ModelViewSet):
+    queryset = NewDeveloperRequest.objects.all()
+    serializer_class = DeveloperRequestSerializer
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
+    authentication_classes = [JWTAuthentication, SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
-@api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
-def auth_test(request):
-    """Test endpoint to verify authentication is working"""
-    return Response({
-        'message': 'Authentication successful',
-        'user_id': request.user.id,
-        'email': request.user.email,
-        'auth_type': str(type(request.auth))
-    })
+    def get_permissions(self):
+        """Set custom permissions for different actions"""
+        if self.action in ['list', 'change_state', 'destroy']:
+            self.permission_classes = [IsAdminUser]
+        return super().get_permissions()
+
+    def create(self, request, *args, **kwargs):
+        """Create a new developer request for the authenticated user"""
+        user = request.user
+        
+        # Check if the user already has a pending request
+        if NewDeveloperRequest.objects.filter(user=user).exists():
+            return Response(
+                {"error": "You have already requested to be a developer."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Create a new serializer with the request data
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['post'])
+    def change_state(self, request):
+        """Change the state of a developer request (admin only)"""
+        user_id = request.data.get('user_id')
+        new_state = request.data.get('state')
+        
+        if not user_id or not new_state:
+            return Response(
+                {"error": "Both user_id and state are required."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            developer_request = NewDeveloperRequest.objects.get(user_id=user_id)
+            developer_request.state = new_state
+            developer_request.save()
+            # change the user role if the request is approved
+            if new_state == 'approved':
+                user = CustomUser.objects.get(id=user_id)
+                user.role = 'developer'
+                user.save()
+            # revert if the request is rejected
+            elif new_state == 'rejected':
+                user = CustomUser.objects.get(id=user_id)
+                user.role = 'user'
+                user.save()
+            # Return the updated developer request
+            serializer = self.get_serializer(developer_request)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+            
+        except NewDeveloperRequest.DoesNotExist:
+            return Response(
+                {"error": "Developer request not found."}, 
+                status=status.HTTP_404_NOT_FOUND
+            )

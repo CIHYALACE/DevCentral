@@ -74,11 +74,18 @@ const setupAxios = () => {
     (error) => Promise.reject(error)
   );
   
-  // Add response interceptor to handle 401/403 errors
+  // Add response interceptor to handle 401/403/500 errors
   axios.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
+      
+      // Handle 500 server errors
+      // if (error.response && error.response.status === 500) {
+      //   console.error('Server error (500):', error);
+      //   logout();
+      //   return Promise.reject(error);
+      // }
       
       // If error is 401/403 and not from auth endpoints and not already retried
       if (
@@ -276,7 +283,15 @@ const fetchUserData = async () => {
   }
 };
 
-export { authStore, login, logout, refresh, fetchUserData, register };
+const requestDeveloperRole = async (comment = '') => {
+  try {
+    
+    const response = await axios.post(`${API_URL}/requests/`, { comment });
+    return response.data;
+  } catch (error) {
+    console.error('Developer request error:', error.response?.data || error.message);
+    throw error;
+  }
+};
 
-
-
+export { authStore, login, logout, refresh, fetchUserData, register, requestDeveloperRole };

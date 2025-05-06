@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, UserProfile
+from .models import CustomUser, NewDeveloperRequest, UserProfile
 from django.db import models
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -108,3 +108,35 @@ class UserProfileSerializer(serializers.ModelSerializer):
         if instance.user and hasattr(instance.user, 'phone_number'):
             representation['phone_number'] = instance.user.phone_number
         return representation
+
+class DeveloperRequestSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+    
+    class Meta:
+        model = NewDeveloperRequest
+        fields = ['id', 'user', 'comment', 'state', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        
+        # Make state read-only for non-admin users
+        if request and not request.user.is_staff:
+            self.fields['state'].read_only = True
+    
+    def create(self, validated_data):
+        # Get the user from the context provided by the view
+        user = self.context.get('request').user
+        
+        # Remove state from validated_data if present (will be set to 'pending' by model)
+        if 'state' in validated_data:
+            validated_data.pop('state')
+        
+        # Create the developer request with the authenticated user
+        developer_request = NewDeveloperRequest.objects.create(
+            user=user,
+            comment=validated_data.get('comment', '')
+        )
+        
+        return developer_request
