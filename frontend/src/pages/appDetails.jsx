@@ -262,7 +262,7 @@ const ItemDetails = () => {
             < ScreenShotsSection media={appDetails.media}/>
             <DescriptionSection description={appDetails.description} />
             <RatingSection programId={appDetails.id} />
-            <Feature />
+            
           </div>
           <div className="col-lg-4">
             <div className="bg-white rounded-4 border shadow-sm p-4 mt-5">
