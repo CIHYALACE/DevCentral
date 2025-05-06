@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import "../style/ItemDetails.css";
 import SimilarAppsSection from '../components/SimilarAppsSection';
 import { ScreenShotsSection } from '../components/ScreenShotsSection';
@@ -11,6 +11,7 @@ import "../style/HeroGameDetails.css";
 import { useStore } from '@tanstack/react-store';
 import { programStore } from '../store';
 import { authStore } from '../store/authStore';
+import { profileStore, fetchUserApps } from '../store/profileStore';
 import { fetchProgramDetails, recordDownload } from '../store/programStore';
 import { generateVideoThumbnail } from '../utils/uiHelpers';
 import { FaPlay } from 'react-icons/fa';
@@ -28,8 +29,11 @@ const formatDownloadCount = (count) => {
 
 const ItemDetails = () => {
   const { type, slug } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const appDetails = useStore(programStore, (state) => state.currentProgram);
   const { isAuthenticated } = useStore(authStore);
+  const userApps = useStore(profileStore, (state) => state.userApps);
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [slideshow, setSlideshow] = useState([]);
@@ -37,10 +41,31 @@ const ItemDetails = () => {
   const [currentVideo, setCurrentVideo] = useState(null);
   const slideshowIntervalRef = useRef(null);
   const [processedMedia, setProcessedMedia] = useState([]);
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
+  const [isAppOwned, setIsAppOwned] = useState(false);
   
   useEffect(() => {
     fetchProgramDetails(slug);
-  }, [type, slug]);
+    
+    // Check if returning from checkout with completed payment
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('payment') === 'completed') {
+      setPaymentCompleted(true);
+    }
+    
+    // Fetch user's app library if authenticated
+    if (isAuthenticated) {
+      fetchUserApps();
+    }
+  }, [type, slug, location.search, isAuthenticated]);
+  
+  // Check if the current app is in the user's library
+  useEffect(() => {
+    if (userApps.length > 0 && appDetails && appDetails.id) {
+      const owned = userApps.some(app => app.id === appDetails.id);
+      setIsAppOwned(owned);
+    }
+  }, [userApps, appDetails]);
   
   // Process media and generate thumbnails for videos
   useEffect(() => {
@@ -119,6 +144,16 @@ const ItemDetails = () => {
   
   const handleDownload = async (e) => {
     e.preventDefault();
+    
+    // Check if app is free, owned, or payment has been completed
+    const appPrice = parseFloat(appDetails.price || '0.00');
+    
+    if (appPrice > 0 && !isAppOwned && !paymentCompleted) {
+      // Redirect to checkout page for paid apps that are not owned
+      navigate(`/checkout/${slug}`);
+      return;
+    }
+    
     setIsDownloading(true);
     
     try {
@@ -127,6 +162,11 @@ const ItemDetails = () => {
       
       // After recording, proceed with the actual download
       window.open(appDetails.download_url, '_blank');
+      
+      // Reset payment completed state after download
+      if (paymentCompleted) {
+        setPaymentCompleted(false);
+      }
     } catch (error) {
       console.error('Failed to record download:', error);
       // Still allow the download even if recording fails
@@ -205,7 +245,12 @@ const ItemDetails = () => {
               <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
               Recording download...
             </>
-          ) : 'Download Now'}
+          ) : isAppOwned ? (
+            <>
+              <i className="fa-solid fa-check me-2"></i>
+              Download Again
+            </>
+          ) : paymentCompleted ? 'Download Now' : parseFloat(appDetails.price || '0.00') > 0 ? `Buy Now ($${parseFloat(appDetails.price).toFixed(2)})` : 'Download Now'}
         </button>
         <p className='mt-3 '>Offers in-app purchases</p>
       </div>

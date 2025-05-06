@@ -14,7 +14,8 @@ import AppsPage from '../pages/applications'
 import BooksPage from '../pages/BooksPage'
 import BookDetails from '../pages/BookDetails';
 import SearchResults from '../pages/SearchResults';
-import ActivateAccount from '../pages/ActivateAccount'
+import ActivateAccount from '../pages/ActivateAccount';
+import Checkout from '../pages/Checkout'
 // Profile Pages
 import ProfilePage from '../pages/ProfilePage'
 import MyPrograms from '../pages/MyPrograms'
@@ -68,6 +69,7 @@ export default function App() {
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/:slug" element={<BookDetails />} />
         <Route path="/details/:type/:slug" element={<ItemDetails />} />
+        <Route path="/checkout/:slug" element={<Checkout />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
