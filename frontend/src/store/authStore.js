@@ -195,7 +195,7 @@ const logout = () => {
     user: { ...state.user, token: null },
     isAuthenticated: false,
   }));
-  Navigate("/login");
+  window.location.assign("/login");
 };
 
 const refresh = async () => {
