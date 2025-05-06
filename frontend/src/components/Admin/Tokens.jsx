@@ -108,7 +108,7 @@ export default function TokensManagement() {
             <Table striped bordered hover responsive>
                 <thead>
                     <tr>
-                        <th>ID</th>
+
                         <th>Name</th>
                         <th>Token</th>
                         <th>Status</th>
@@ -121,7 +121,7 @@ export default function TokensManagement() {
                     {tokens.length > 0 ? (
                         tokens.map((token) => (
                             <tr key={token.id}>
-                                <td>{token.id}</td>
+
                                 <td>{token.name}</td>
                                 <td>
                                     <div className="d-flex align-items-center">

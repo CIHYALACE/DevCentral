@@ -54,7 +54,7 @@ const fetchDashboardStats = async () => {
     // Add a small delay to ensure the API has time to respond
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    const response = await axios.get(`${API_URL}/admin/dashboard/stats/`);
+    const response = await axios.get(`${API_URL}/api/admin/dashboard/stats/`);
     
     // Make sure we have valid data before updating the store
     const stats = response.data || initialState.stats;
@@ -86,26 +86,45 @@ const fetchDashboardStats = async () => {
   }
 };
 
-// Fetch all programs for admin
-const fetchAdminPrograms = async () => {
+// Fetch all programs for admin with pagination support
+const fetchAdminPrograms = async (page = 1, pageSize = 10) => {
   adminStore.setState(state => ({ 
     ...state, 
     programs: { ...state.programs, loading: true, error: null } 
   }));
   
   try {
-    const response = await axios.get(`${API_URL}/programs/`);
+    // Build query parameters for pagination
+    const url = `${API_URL}/programs/?page=${page}&page_size=${pageSize}`;
+    
+    // First get the total count
+    const countResponse = await axios.get(`${API_URL}/programs/?count_only=true`);
+    const totalPrograms = countResponse.data.count || 0;
+    
+    // Then get the paginated data
+    const response = await axios.get(url);
+    
+    // Handle both paginated and non-paginated responses
+    const programs = response.data.results ? response.data.results : response.data;
     
     adminStore.setState(state => ({
       ...state,
       programs: {
-        data: response.data.results || [],
+        data: programs,
+        totalItems: totalPrograms,
+        currentPage: page,
+        pageSize: pageSize,
         loading: false,
         error: null
       }
     }));
     
-    return response.data;
+    return {
+      results: programs,
+      count: totalPrograms,
+      page: page,
+      pageSize: pageSize
+    };
   } catch (error) {
     console.error('Error fetching programs:', error);
     
@@ -119,30 +138,49 @@ const fetchAdminPrograms = async () => {
     }));
     
     // Return empty results instead of throwing the error
-    return { results: [] };
+    return { results: [], count: 0, page: page, pageSize: pageSize };
   }
 };
 
-// Fetch all reviews for admin
-const fetchAdminReviews = async () => {
+// Fetch all reviews for admin with pagination support
+const fetchAdminReviews = async (page = 1, pageSize = 10) => {
   adminStore.setState(state => ({ 
     ...state, 
     reviews: { ...state.reviews, loading: true, error: null } 
   }));
   
   try {
-    const response = await axios.get(`${API_URL}/reviews/`);
+    // Build query parameters for pagination
+    const url = `${API_URL}/reviews/?page=${page}&page_size=${pageSize}`;
+    
+    // First get the total count
+    const countResponse = await axios.get(`${API_URL}/reviews/?count_only=true`);
+    const totalReviews = countResponse.data.count || 0;
+    
+    // Then get the paginated data
+    const response = await axios.get(url);
+    
+    // Handle both paginated and non-paginated responses
+    const reviews = response.data.results ? response.data.results : response.data;
     
     adminStore.setState(state => ({
       ...state,
       reviews: {
-        data: response.data.results || [],
+        data: reviews,
+        totalItems: totalReviews,
+        currentPage: page,
+        pageSize: pageSize,
         loading: false,
         error: null
       }
     }));
     
-    return response.data;
+    return {
+      results: reviews,
+      count: totalReviews,
+      page: page,
+      pageSize: pageSize
+    };
   } catch (error) {
     console.error('Error fetching reviews:', error);
     
@@ -156,30 +194,49 @@ const fetchAdminReviews = async () => {
     }));
     
     // Return empty results instead of throwing the error
-    return { results: [] };
+    return { results: [], count: 0, page: page, pageSize: pageSize };
   }
 };
 
-// Fetch all media for admin
-const fetchAdminMedia = async () => {
+// Fetch all media for admin with pagination support
+const fetchAdminMedia = async (page = 1, pageSize = 10) => {
   adminStore.setState(state => ({ 
     ...state, 
     media: { ...state.media, loading: true, error: null } 
   }));
   
   try {
-    const response = await axios.get(`${API_URL}/media/`);
+    // Build query parameters for pagination
+    const url = `${API_URL}/media/?page=${page}&page_size=${pageSize}`;
+    
+    // First get the total count
+    const countResponse = await axios.get(`${API_URL}/media/?count_only=true`);
+    const totalMedia = countResponse.data.count || 0;
+    
+    // Then get the paginated data
+    const response = await axios.get(url);
+    
+    // Handle both paginated and non-paginated responses
+    const media = response.data.results ? response.data.results : response.data;
     
     adminStore.setState(state => ({
       ...state,
       media: {
-        data: response.data.results || [],
+        data: media,
+        totalItems: totalMedia,
+        currentPage: page,
+        pageSize: pageSize,
         loading: false,
         error: null
       }
     }));
     
-    return response.data;
+    return {
+      results: media,
+      count: totalMedia,
+      page: page,
+      pageSize: pageSize
+    };
   } catch (error) {
     console.error('Error fetching media:', error);
     
@@ -193,7 +250,7 @@ const fetchAdminMedia = async () => {
     }));
     
     // Return empty results instead of throwing the error
-    return { results: [] };
+    return { results: [], count: 0, page: page, pageSize: pageSize };
   }
 };
 
@@ -234,26 +291,45 @@ const fetchAdminUsers = async () => {
   }
 };
 
-// Fetch all categories for admin
-const fetchAdminCategories = async () => {
+// Fetch all categories for admin with pagination support
+const fetchAdminCategories = async (page = 1, pageSize = 10) => {
   adminStore.setState(state => ({ 
     ...state, 
     categories: { ...state.categories, loading: true, error: null } 
   }));
   
   try {
-    const response = await axios.get(`${API_URL}/categories/`);
+    // Build query parameters for pagination
+    const url = `${API_URL}/categories/?page=${page}&page_size=${pageSize}`;
+    
+    // First get the total count
+    const countResponse = await axios.get(`${API_URL}/categories/?count_only=true`);
+    const totalCategories = countResponse.data.count || 0;
+    
+    // Then get the paginated data
+    const response = await axios.get(url);
+    
+    // Handle both paginated and non-paginated responses
+    const categories = response.data.results ? response.data.results : response.data;
     
     adminStore.setState(state => ({
       ...state,
       categories: {
-        data: response.data || [],
+        data: categories,
+        totalItems: totalCategories,
+        currentPage: page,
+        pageSize: pageSize,
         loading: false,
         error: null
       }
     }));
     
-    return response.data;
+    return {
+      results: categories,
+      count: totalCategories,
+      page: page,
+      pageSize: pageSize
+    };
   } catch (error) {
     console.error('Error fetching categories:', error);
     
@@ -267,7 +343,7 @@ const fetchAdminCategories = async () => {
     }));
     
     // Return empty results instead of throwing the error
-    return { results: [] };
+    return { results: [], count: 0, page: page, pageSize: pageSize };
   }
 };
 

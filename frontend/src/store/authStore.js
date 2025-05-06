@@ -2,6 +2,7 @@ import { Store } from "@tanstack/react-store";
 import axios from "axios";
 import { API_URL } from ".";
 import {jwtDecode} from "jwt-decode";
+import { Navigate } from "react-router-dom";
 
 // Check if token is expired
 const isTokenExpired = (token) => {
@@ -194,6 +195,7 @@ const logout = () => {
     user: { ...state.user, token: null },
     isAuthenticated: false,
   }));
+  Navigate("/login");
 };
 
 const refresh = async () => {
@@ -229,6 +231,34 @@ const refresh = async () => {
   }
 };
 
+const register = async (formData)=>{
+  try {
+    console.log('Registration data being sent:', formData); // Debug log
+    const payload = {
+      email: formData.email,
+      password: formData.password,
+      name: formData.name,
+      phone_number: formData.phone_number,
+      
+    };
+    
+    console.log('Payload being sent to server:', payload); // Debug log
+    
+    const response = await axios.post(`${API_URL}/auth/users/`, payload);
+    authStore.setState((state) => ({
+      ...state,
+      user: { ...state.user, ...response.data },
+    }));
+    return response.data;
+  } catch (error) {
+    console.error('Registration error:', error.response?.data || error.message);
+    authStore.setState((state) => ({
+      ...state,
+      error,
+    }));
+    throw error;
+  }
+}
 const fetchUserData = async () => {
   try {
     const response = await axios.get(`${API_URL}/auth/users/me/`);
@@ -246,7 +276,7 @@ const fetchUserData = async () => {
   }
 };
 
-export { authStore, login, logout, refresh, fetchUserData };
+export { authStore, login, logout, refresh, fetchUserData, register };
 
 
 

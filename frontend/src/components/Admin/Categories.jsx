@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Spinner, Alert } from 'react-bootstrap';
 import CategoriesForm from './forms/CategoriesForm';
+import { useStore } from '@tanstack/react-store';
 import { adminStore, fetchAdminCategories } from '../../store/adminStore';
+import { addCategory, editCategory, deleteCategory } from '../../store';
+import { Paginator } from '../common/Paginator';
 
 export default function CategoriesManagement() {
-    // State for categories data from the store
-    const [categoriesData, setCategoriesData] = useState({
-        data: [],
-        loading: true,
-        error: null
-    });
+    // Use the store hook to access categories data directly
+    const categoriesData = useStore(adminStore, (state) => state.categories);
+    const isLoading = useStore(adminStore, (state) => state.loading);
+    
+    // State for pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
 
-    const [showModal, setShowModal] = useState(false);
+    // Modals state
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    
+    // Category data state
     const [newCategory, setNewCategory] = useState({
         name: '',
-        relatedType: ''
+        related_type: ''
     });
+    const [currentCategory, setCurrentCategory] = useState(null);
 
     // Type choices from Django backend
     const TYPE_CHOICES = [
@@ -24,60 +34,99 @@ export default function CategoriesManagement() {
         { value: 'book', label: 'Book' }
     ];
 
-    // Subscribe to admin store and fetch categories data
+    // Fetch categories data when component mounts or page changes
     useEffect(() => {
-        const unsubscribe = adminStore.subscribe(state => {
-            // Make sure categories exists in the state before updating local state
-            if (state && state.categories) {
-                setCategoriesData(state.categories);
-            }
-        });
-        
-        // Fetch categories data when component mounts
         const loadCategories = async () => {
             try {
-                await fetchAdminCategories();
+                await fetchAdminCategories(currentPage, itemsPerPage);
             } catch (error) {
                 console.error('Error loading categories:', error);
-                // Update state with error even if the store update fails
-                setCategoriesData(prev => ({
-                    ...prev,
-                    loading: false,
-                    error: { detail: error.message || 'Failed to load categories' }
-                }));
             }
         };
         
         loadCategories();
-        
-        // Cleanup subscription on unmount
-        return () => unsubscribe();
-    }, []);
-
-    const handleAddCategory = () => {
-        // Add category logic
-        console.log('Adding category:', newCategory);
-        setShowModal(false);
-    };
-
-    const handleEditCategory = (id) => {
-        // Edit category logic
-        console.log(`Edit category ${id}`);
-    };
-
-    const handleDeleteCategory = (id) => {
-        // Delete category logic
-        console.log(`Delete category ${id}`);
-    };
-
-    // Safely check loading state
-    const isLoading = categoriesData?.loading === true;
+    }, [currentPage, itemsPerPage]);
     
-    // Safely check error state
-    const hasError = categoriesData?.error != null;
+    // Handle page change
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handleAddCategory = async () => {
+        try {
+            // Call the store function to add the category
+            await addCategory(newCategory);
+            
+            // Reset form and close modal
+            setNewCategory({
+                name: '',
+                related_type: ''
+            });
+            setShowAddModal(false);
+            
+            // Refresh the categories list
+            await fetchAdminCategories(currentPage, itemsPerPage);
+        } catch (error) {
+            console.error('Error adding category:', error);
+        }
+    };
+
+    const handleEditCategory = (category) => {
+        // Set the current category and open the edit modal
+        setCurrentCategory(category);
+        setNewCategory({
+            name: category.name,
+            related_type: category.related_type
+        });
+        setShowEditModal(true);
+    };
     
-    // Safely get data
+    const submitEditCategory = async () => {
+        try {
+            // Call the store function to update the category
+            await editCategory(currentCategory.id, newCategory);
+            
+            // Reset form and close modal
+            setCurrentCategory(null);
+            setNewCategory({
+                name: '',
+                related_type: ''
+            });
+            setShowEditModal(false);
+            
+            // Refresh the categories list
+            await fetchAdminCategories(currentPage, itemsPerPage);
+        } catch (error) {
+            console.error(`Error editing category ${currentCategory?.id}:`, error);
+        }
+    };
+
+    const handleDeleteCategory = (category) => {
+        // Set the current category and open the delete confirmation modal
+        setCurrentCategory(category);
+        setShowDeleteModal(true);
+    };
+    
+    const confirmDeleteCategory = async () => {
+        try {
+            // Call the store function to delete the category
+            await deleteCategory(currentCategory.id);
+            
+            // Reset and close modal
+            setCurrentCategory(null);
+            setShowDeleteModal(false);
+            
+            // Refresh the categories list
+            await fetchAdminCategories(currentPage, itemsPerPage);
+        } catch (error) {
+            console.error(`Error deleting category ${currentCategory?.id}:`, error);
+        }
+    };
+
+    // Get data from store
     const categories = categoriesData?.data || [];
+    const totalItems = categoriesData?.totalItems || 0;
+    const hasError = categoriesData?.error != null;
 
     // Loading state
     if (isLoading) {
@@ -105,7 +154,7 @@ export default function CategoriesManagement() {
         <div>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 {/* <h2>Categories Management</h2> */}
-                <Button variant="primary" onClick={() => setShowModal(true)}>
+                <Button variant="primary" onClick={() => setShowAddModal(true)}>
                     Add New Category
                 </Button>
             </div>
@@ -113,7 +162,7 @@ export default function CategoriesManagement() {
             <Table striped bordered hover responsive>
                 <thead>
                     <tr>
-                        <th>ID</th>
+
                         <th>Name</th>
                         <th>Type</th>
                         <th>Programs</th>
@@ -124,7 +173,7 @@ export default function CategoriesManagement() {
                     {categories.length > 0 ? (
                         categories.map(category => (
                             <tr key={category.id}>
-                                <td>{category.id}</td>
+
                                 <td>{category.name}</td>
                                 <td>{category.related_type}</td>
                                 <td>{category.program_count || 0}</td>
@@ -133,14 +182,14 @@ export default function CategoriesManagement() {
                                         variant="info" 
                                         size="sm" 
                                         className="me-2"
-                                        onClick={() => handleEditCategory(category.id)}
+                                        onClick={() => handleEditCategory(category)}
                                     >
                                         Edit
                                     </Button>
                                     <Button 
                                         variant="danger" 
                                         size="sm"
-                                        onClick={() => handleDeleteCategory(category.id)}
+                                        onClick={() => handleDeleteCategory(category)}
                                     >
                                         Delete
                                     </Button>
@@ -155,7 +204,17 @@ export default function CategoriesManagement() {
                 </tbody>
             </Table>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            {/* Pagination */}
+            <Paginator
+                currentPage={currentPage}
+                totalItems={totalItems}
+                itemsPerPage={itemsPerPage}
+                onPageChange={handlePageChange}
+                maxPageButtons={5}
+            />
+
+            {/* Add Category Modal */}
+            <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add New Category</Modal.Title>
                 </Modal.Header>
@@ -167,15 +226,67 @@ export default function CategoriesManagement() {
                     />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Cancel
                     </Button>
                     <Button 
                         variant="primary" 
                         onClick={handleAddCategory}
-                        disabled={!newCategory.name || !newCategory.relatedType}
+                        disabled={!newCategory.name || !newCategory.related_type}
                     >
                         Add Category
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Edit Category Modal */}
+            <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Category</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <CategoriesForm 
+                        newCategory={newCategory} 
+                        setNewCategory={setNewCategory} 
+                        typeChoices={TYPE_CHOICES}
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button 
+                        variant="primary" 
+                        onClick={submitEditCategory}
+                        disabled={!newCategory.name || !newCategory.related_type}
+                    >
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Delete Confirmation Modal */}
+            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Are you sure you want to delete the category <strong>{currentCategory?.name}</strong>?</p>
+                    {currentCategory?.program_count > 0 && (
+                        <Alert variant="warning">
+                            This category is used by {currentCategory.program_count} program(s). Deleting it may affect those programs.
+                        </Alert>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button 
+                        variant="danger" 
+                        onClick={confirmDeleteCategory}
+                    >
+                        Delete
                     </Button>
                 </Modal.Footer>
             </Modal>

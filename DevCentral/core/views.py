@@ -19,10 +19,17 @@ class StandardPagination(PageNumberPagination):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    pagination_class = StandardPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_queryset(self):
         queryset = Category.objects.all()
-        return queryset.filter(related_type=self.request.query_params.get('related_type', 'app'))
+        # sort by created_at
+        queryset = queryset.order_by('-id')
+        if self.request.query_params.get('related_type'):
+            # used in program forms 
+            return queryset.filter(related_type=self.request.query_params.get('related_type','app'))
+        # used in admin dashborad
+        return queryset
 
 class ProgramViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all().order_by('-created_at')
@@ -109,11 +116,13 @@ class ProgramViewSet(viewsets.ModelViewSet):
 class MediaViewSet(viewsets.ModelViewSet):
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
+    pagination_class = StandardPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    
+    pagination_class.page_size = 1000
     def get_queryset(self):
         queryset = Media.objects.all()
-        
+        # sort by uploaded_at
+        queryset = queryset.order_by('-uploaded_at')
         # Filter by program
         program_id = self.request.query_params.get('program', None)
         if program_id:
@@ -128,6 +137,9 @@ class MediaViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         # Save the media and associate it with the program
+        program_id = self.request.query_params.get('program', None)
+        if program_id:
+            serializer.save(program_id=program_id)
         serializer.save()
 
 class ReviewPagination(PageNumberPagination):

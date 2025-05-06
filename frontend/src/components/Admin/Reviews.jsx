@@ -1,68 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Badge, Spinner, Alert } from 'react-bootstrap';
 import { adminStore, fetchAdminReviews } from '../../store/adminStore';
+import { useStore } from '@tanstack/react-store';
+import { Paginator } from '../common/Paginator';
+import { Link } from 'react-router-dom';
 
 export default function ReviewsManagement() {
-  // State for reviews data from the store
-  const [reviewsData, setReviewsData] = useState({
-    data: [],
-    loading: true,
-    error: null
-  });
-
-  // Subscribe to admin store and fetch reviews data
+  // Use the store hook to access reviews data directly
+  const reviewsData = useStore(adminStore, (state) => state.reviews);
+  const isLoading = useStore(adminStore, (state) => state.loading);
+  
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  
+  // Fetch reviews data when component mounts or page changes
   useEffect(() => {
-    const unsubscribe = adminStore.subscribe(state => {
-      // Make sure reviews exists in the state before updating local state
-      if (state && state.reviews) {
-        setReviewsData(state.reviews);
-      }
-    });
-    
-    // Fetch reviews data when component mounts
     const loadReviews = async () => {
       try {
-        await fetchAdminReviews();
+        await fetchAdminReviews(currentPage, itemsPerPage);
       } catch (error) {
         console.error('Error loading reviews:', error);
-        // Update state with error even if the store update fails
-        setReviewsData(prev => ({
-          ...prev,
-          loading: false,
-          error: { detail: error.message || 'Failed to load reviews' }
-        }));
       }
     };
     
     loadReviews();
-    
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+  }, [currentPage, itemsPerPage]);
+  
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-  const handleApprove = (id) => {
+  const handleApprove = async (id) => {
     // Approve review logic
     console.log(`Approve review ${id}`);
+    // Refresh the reviews list after approval
+    await fetchAdminReviews(currentPage, itemsPerPage);
   };
 
-  const handleReject = (id) => {
+  const handleReject = async (id) => {
     // Reject review logic
     console.log(`Reject review ${id}`);
+    // Refresh the reviews list after rejection
+    await fetchAdminReviews(currentPage, itemsPerPage);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     // Delete review logic
     console.log(`Delete review ${id}`);
+    // Refresh the reviews list after deletion
+    await fetchAdminReviews(currentPage, itemsPerPage);
   };
 
-  // Safely check loading state
-  const isLoading = reviewsData?.loading === true;
-  
-  // Safely check error state
-  const hasError = reviewsData?.error != null;
-  
-  // Safely get data
+  // Get data from store
   const reviews = reviewsData?.data || [];
+  const totalItems = reviewsData?.totalItems || 0;
+  const hasError = reviewsData?.error != null;
 
   // Loading state
   if (isLoading) {
@@ -93,7 +87,7 @@ export default function ReviewsManagement() {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>ID</th>
+
             <th>Program</th>
             <th>User</th>
             <th>Rating</th>
@@ -106,14 +100,18 @@ export default function ReviewsManagement() {
           {reviews.length > 0 ? (
             reviews.map(review => (
               <tr key={review.id}>
-                <td>{review.id}</td>
-                <td>{review.program?.name || 'Unknown Program'}</td>
-                <td>{review.user?.name || 'Anonymous'}</td>
+
+                <td>
+                  <Link to={`/details/_/${review.program_slug}`}>
+                  {review.program || 'Unknown Program'}
+                  </Link>
+                  </td>
+                <td>{review.user_name || 'Anonymous'}</td>
                 <td>{review.score} / 5</td>
                 <td>{review.comment}</td>
                 <td>{review.created_at ? new Date(review.created_at).toLocaleDateString() : 'Unknown'}</td>
                 <td>
-                  <Button 
+                  {/* <Button 
                     variant="success" 
                     size="sm" 
                     className="me-1"
@@ -128,7 +126,7 @@ export default function ReviewsManagement() {
                     onClick={() => handleReject(review.id)}
                   >
                     Reject
-                  </Button>
+                  </Button> */}
                   <Button 
                     variant="danger" 
                     size="sm"
@@ -146,6 +144,15 @@ export default function ReviewsManagement() {
           )}
         </tbody>
       </Table>
+      
+      {/* Pagination */}
+      <Paginator
+        currentPage={currentPage}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        onPageChange={handlePageChange}
+        maxPageButtons={5}
+      />
     </div>
   );
 }

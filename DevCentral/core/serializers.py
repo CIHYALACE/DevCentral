@@ -12,6 +12,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class MediaSerializer(serializers.ModelSerializer):
+    program_id = serializers.PrimaryKeyRelatedField(
+        queryset=Program.objects.all(), source='program', write_only=True
+    )
+    program = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Media
         fields = '__all__'
@@ -20,6 +24,11 @@ class MediaSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
     user_name = serializers.SerializerMethodField(read_only=True)
+    program_id = serializers.PrimaryKeyRelatedField(
+        queryset=Program.objects.all(), source='program', write_only=True
+    )
+    program = serializers.StringRelatedField(read_only=True)
+    program_slug = serializers.CharField(source='program.slug', read_only=True)
 
     class Meta:
         model = Review

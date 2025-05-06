@@ -1,6 +1,7 @@
 import { Form } from "react-bootstrap";
 
-export default function CategoriesForm({ newCategory, setNewCategory, TYPE_CHOICES }) {
+export default function CategoriesForm({ newCategory, setNewCategory, typeChoices }) {
+  
   return (
     <>
       <Form>
@@ -17,13 +18,13 @@ export default function CategoriesForm({ newCategory, setNewCategory, TYPE_CHOIC
         <Form.Group className="mb-3">
           <Form.Label>Related Type</Form.Label>
           <Form.Select
-            value={newCategory.relatedType}
+            value={newCategory.related_type}
             onChange={(e) =>
-              setNewCategory({ ...newCategory, relatedType: e.target.value })
+              setNewCategory({ ...newCategory, related_type: e.target.value })
             }
           >
             <option value="">Select a type...</option>
-            {TYPE_CHOICES.map((type) => (
+            {typeChoices.map((type) => (
               <option key={type.value} value={type.value}>
                 {type.label}
               </option>
