@@ -1,13 +1,81 @@
-import React from 'react';
-import { Card, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Card, Row, Col, Spinner } from 'react-bootstrap';
+import { adminStore, fetchDashboardStats } from '../../store/adminStore';
 
 export default function DashboardOverview() {
-  const stats = [
-    { title: 'Total Programs', count: 156, icon: 'fa-solid fa-desktop' },
-    { title: 'Active Users', count: 2489, icon: 'fa-solid fa-users' },
-    { title: 'Total Reviews', count: 1205, icon: 'fa-solid fa-star' },
-    { title: 'Categories', count: 12, icon: 'fa-solid fa-folder' }
-  ];
+  const [stats, setStats] = useState([
+    { title: 'Total Programs', count: 0, icon: 'fa-solid fa-desktop' },
+    { title: 'Active Users', count: 0, icon: 'fa-solid fa-users' },
+    { title: 'Total Reviews', count: 0, icon: 'fa-solid fa-star' },
+    { title: 'Categories', count: 0, icon: 'fa-solid fa-folder' }
+  ]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Subscribe to admin store changes
+    const unsubscribe = adminStore.subscribe(
+      state => {
+        if (!state.loading) {
+          // Check if stats exists and has the required properties
+          if (state.stats && typeof state.stats === 'object') {
+            const { 
+              totalPrograms = 0, 
+              activeUsers = 0, 
+              totalReviews = 0, 
+              categories = 0 
+            } = state.stats;
+            
+            setStats([
+              { title: 'Total Programs', count: totalPrograms, icon: 'fa-solid fa-desktop' },
+              { title: 'Active Users', count: activeUsers, icon: 'fa-solid fa-users' },
+              { title: 'Total Reviews', count: totalReviews, icon: 'fa-solid fa-star' },
+              { title: 'Categories', count: categories, icon: 'fa-solid fa-folder' }
+            ]);
+          }
+          
+          setLoading(state.loading);
+          setError(state.error);
+        }
+      }
+    );
+
+    // Fetch dashboard stats when component mounts
+    const loadDashboardStats = async () => {
+      try {
+        await fetchDashboardStats();
+      } catch (err) {
+        console.error('Failed to load dashboard stats:', err);
+        setError({ detail: err.message || 'Failed to load dashboard data' });
+        setLoading(false);
+      }
+    };
+    
+    loadDashboardStats();
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="text-center my-5">
+        <Spinner animation="border" role="status" variant="primary">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        <p className="mt-2">Loading dashboard data...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        <h4 className="alert-heading">Error Loading Dashboard</h4>
+        <p>{error.detail || 'An unexpected error occurred'}</p>
+      </div>
+    );
+  }
 
   return (
     <div>

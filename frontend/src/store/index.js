@@ -25,3 +25,6 @@ export * from "./flagStore.js";
 
 // Book Store
 export * from "./bookStore.js";
+
+// Admin Store
+export * from "./adminStore.js";

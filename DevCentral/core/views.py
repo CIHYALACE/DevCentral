@@ -3,12 +3,13 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.http import FileResponse
 from django.utils.text import slugify
 from .models import Category, Program, Media, Review, Download, Flag, Book, Author
 from .serializers import *
 from datetime import datetime, timedelta
+from django.contrib.auth import get_user_model
 
 class StandardPagination(PageNumberPagination):
     page_size = 10
@@ -323,3 +324,35 @@ class WishlistView(APIView):
         book = Book.objects.get(id=book_id)
         request.user.wishlist.books.add(book)
         return Response({'message': 'Book added to wishlist'})
+
+class AdminDashboardView(APIView):
+    """
+    API endpoint for admin dashboard statistics.
+    Only accessible to admin users.
+    """
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    
+    def get(self, request):
+        # Get counts for dashboard statistics
+        User = get_user_model()
+        
+        # Count total programs
+        total_programs = Program.objects.count()
+        
+        # Count active users (users who have logged in within the last 30 days)
+        thirty_days_ago = datetime.now() - timedelta(days=30)
+        active_users = User.objects.filter(last_login__gte=thirty_days_ago).count()
+        
+        # Count total reviews
+        total_reviews = Review.objects.count()
+        
+        # Count categories
+        categories_count = Category.objects.count()
+        
+        # Return the statistics
+        return Response({
+            'totalPrograms': total_programs,
+            'activeUsers': active_users,
+            'totalReviews': total_reviews,
+            'categories': categories_count
+        })
