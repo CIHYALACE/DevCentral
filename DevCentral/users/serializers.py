@@ -5,19 +5,35 @@ from django.db import models
 class CustomUserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     password = serializers.CharField(write_only=True, required=False)
+    email = serializers.EmailField(required=True)  # Make email explicitly required
 
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'name', 'role', 'phone_number', 'picture', 'is_active', 'password']
-        read_only_fields = ['id', 'is_active', 'email']
+        read_only_fields = ['id', 'is_active']  # Removed email from read_only_fields for registration
 
     def create(self, validated_data):
+        # Print received data for debugging
+        print(f"Creating user with data: {validated_data}")
+        
+        # Check if email is present
+        if 'email' not in validated_data:
+            raise serializers.ValidationError({"email": "Email field is required"})
+        
+        # Create user with validated data
         user = CustomUser(
             email=validated_data['email'],
-            name=validated_data['name'],
-            phone_number=validated_data.get('phone_number')
+            name=validated_data.get('name', ''),
+            role=validated_data.get('role', 'user'),
+            phone_number=validated_data.get('phone_number', '')
         )
-        user.set_password(validated_data['password'])
+        
+        # Set password if provided
+        if 'password' in validated_data:
+            user.set_password(validated_data['password'])
+        else:
+            raise serializers.ValidationError({"password": "Password field is required"})
+            
         user.is_active = False
         user.save()
         return user

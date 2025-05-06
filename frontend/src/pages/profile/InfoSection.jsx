@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { profileStore, fetchCurrentUserProfile, updateUserProfile } from '../../store/profileStore';
+import { logout } from '../../store';
 
 export default function InfoSection() {
   const [isEditing, setIsEditing] = useState(false);
@@ -225,12 +226,19 @@ export default function InfoSection() {
               <button className="btn btn-outline-primary">Change Password</button>
             </div>
             
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h5 className="mb-0">Two-Factor Authentication</h5>
                 <p className="text-muted mb-0">Enhance your account security</p>
               </div>
               <button className="btn btn-outline-primary">Enable</button>
+            </div>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h5 className="mb-0">Log out</h5>
+              
+              </div>
+              <button className="btn btn-outline-primary" onClick={logout}>Log out</button>
             </div>
           </div>
         </div>

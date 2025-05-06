@@ -206,7 +206,7 @@ const submitReview = async (programId, score, comment) => {
   programStore.setState((state) => ({ ...state, loading: true, error: null }));
   try {
     const response = await axios.post(`${API_URL}/reviews/`, {
-      program: programId,
+      program_id: programId,
       score,
       comment
     });
@@ -334,7 +334,7 @@ const uploadProgramMedia = async (programId, mediaFiles) => {
   if (mediaFiles.screenshots && mediaFiles.screenshots.length > 0) {
     mediaFiles.screenshots.forEach(file => {
       const mediaData = new FormData();
-      mediaData.append('program', programId);
+      mediaData.append('program_id', programId);
       mediaData.append('media_type', 'screenshot');
       mediaData.append('file', file);
       
@@ -352,7 +352,7 @@ const uploadProgramMedia = async (programId, mediaFiles) => {
   if (mediaFiles.videos && mediaFiles.videos.length > 0) {
     mediaFiles.videos.forEach(file => {
       const mediaData = new FormData();
-      mediaData.append('program', programId);
+      mediaData.append('program_id', programId);
       mediaData.append('media_type', 'video');
       mediaData.append('file', file);
       
@@ -370,7 +370,7 @@ const uploadProgramMedia = async (programId, mediaFiles) => {
   if (mediaFiles.banners && mediaFiles.banners.length > 0) {
     mediaFiles.banners.forEach(file => {
       const mediaData = new FormData();
-      mediaData.append('program', programId);
+      mediaData.append('program_id', programId);
       mediaData.append('media_type', 'banner');
       mediaData.append('file', file);
       

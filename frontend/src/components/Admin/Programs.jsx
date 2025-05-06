@@ -1,78 +1,299 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Spinner, Alert } from "react-bootstrap";
-import ProgramsForm from "./forms/ProgramsForm";
+import { useStore } from "@tanstack/react-store";
 import { adminStore, fetchAdminPrograms } from "../../store/adminStore";
+import { programStore, addProgram, updateProgram, fetchProgramDetails } from "../../store/programStore";
+import { categoryStore, fetchCategories } from "../../store/categoryStore";
+import { Paginator } from "../common/Paginator";
+import ProgramForm from "../../components/ProgramForm";
+import { Link } from "react-router-dom";
 
 export default function ProgramsManagement() {
-  // State for programs data from the store
-  const [programsData, setProgramsData] = useState({
-    data: [],
-    loading: true,
-    error: null
-  });
+  // Use the store hook to access programs data directly
+  const programsData = useStore(adminStore, (state) => state.programs);
+  const isLoading = useStore(programStore, (state) => state.loading);
+  const categories = useStore(categoryStore, (state) => state.categories);
+  
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
   
   // State for modal and form
   const [showModal, setShowModal] = useState(false);
-  const [newProgram, setNewProgram] = useState({
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [formTitle, setFormTitle] = useState('Add New Program');
+  const [submitButtonText, setSubmitButtonText] = useState('Add Program');
+  const [submitError, setSubmitError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  
+  // State for program form data
+  const [formData, setFormData] = useState({
     title: "",
     slug: "",
     description: "",
-    type: "",
+    type: "app", // Default to app
     category: "",
-    developerId: "",
+    developer_id: "",
     price: 0,
-    releaseDate: "",
-    lastUpdateDate: "",
+    release_date: "",
+    last_update_date: "",
     rating: 0,
-    downloadCount: 0,
+    download_count: 0,
     icon: null,
-    downloadUrl: "",
-    isPublished: false,
+    download_url: "",
+    is_published: false,
   });
-
-  // Subscribe to admin store and fetch programs data
+  
+  // State for media files
+  const [mediaFiles, setMediaFiles] = useState({
+    screenshots: [],
+    videos: [],
+    banners: []
+  });
+  
+  // State for video thumbnails
+  const [videoThumbnails, setVideoThumbnails] = useState([]);
+  
+  // State for existing media
+  const [existingMedia, setExistingMedia] = useState({
+    screenshots: [],
+    videos: [],
+    banners: []
+  });
+  
+  // State for media to delete
+  const [mediaToDelete, setMediaToDelete] = useState([]);
+  
+  // Fetch programs data when component mounts or page changes
   useEffect(() => {
-    const unsubscribe = adminStore.subscribe(state => {
-      // Make sure programs exists in the state before updating local state
-      if (state && state.programs) {
-        setProgramsData(state.programs);
-      }
-    });
-    
-    // Fetch programs data when component mounts
     const loadPrograms = async () => {
       try {
-        await fetchAdminPrograms();
+        await fetchAdminPrograms(currentPage, itemsPerPage);
       } catch (error) {
         console.error('Error loading programs:', error);
-        // Update state with error even if the store update fails
-        setProgramsData(prev => ({
-          ...prev,
-          loading: false,
-          error: { detail: error.message || 'Failed to load programs' }
-        }));
       }
     };
     
     loadPrograms();
+  }, [currentPage, itemsPerPage]);
+  
+  // Fetch categories when component mounts
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        await fetchCategories();
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    };
     
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
+    loadCategories();
   }, []);
-
-  const handleAddProgram = () => {
-    // Add program logic
-    setShowModal(false);
+  
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
-  // Safely check loading state
-  const isLoading = programsData?.loading === true;
+  // Handle opening the modal for adding a new program
+  const handleAddProgramClick = () => {
+    // Reset form data
+    setFormData({
+      title: "",
+      slug: "",
+      description: "",
+      type: "app", // Default to app
+      category: "",
+      developer_id: "",
+      price: 0,
+      release_date: "",
+      last_update_date: "",
+      rating: 0,
+      download_count: 0,
+      icon: null,
+      download_url: "",
+      is_published: false,
+    });
+    
+    // Reset media files
+    setMediaFiles({
+      screenshots: [],
+      videos: [],
+      banners: []
+    });
+    
+    // Reset video thumbnails
+    setVideoThumbnails([]);
+    
+    // Reset existing media
+    setExistingMedia({
+      screenshots: [],
+      videos: [],
+      banners: []
+    });
+    
+    // Reset media to delete
+    setMediaToDelete([]);
+    
+    // Set modal title and button text
+    setFormTitle('Add New Program');
+    setSubmitButtonText('Add Program');
+    
+    // Reset error and success states
+    setSubmitError(null);
+    setSubmitSuccess(false);
+    
+    // Set edit mode to false
+    setIsEditMode(false);
+    
+    // Show the modal
+    setShowModal(true);
+  };
   
-  // Safely check error state
-  const hasError = programsData?.error != null;
+  // Handle opening the modal for editing a program
+  const handleEditProgramClick = async (programId) => {
+    try {
+      // Set loading state
+      programStore.setState((state) => ({ ...state, loading: true }));
+      
+      // Fetch program details
+      const program = await fetchProgramDetails(programId);
+      
+      // Format the program data for the form
+      setFormData({
+        id: program.id,
+        title: program.title || "",
+        slug: program.slug || "",
+        description: program.description || "",
+        type: program.type || "app",
+        category: program.category?.id || "",
+        developer_id: program.developer_id || "",
+        price: program.price || 0,
+        release_date: program.release_date || "",
+        last_update_date: program.last_update_date || "",
+        rating: program.rating || 0,
+        download_count: program.download_count || 0,
+        icon: program.icon || null,
+        download_url: program.download_url || "",
+        is_published: program.is_published || false,
+      });
+      
+      // Set existing media
+      const screenshots = program.media?.filter(m => m.media_type === 'screenshot') || [];
+      const videos = program.media?.filter(m => m.media_type === 'video') || [];
+      const banners = program.media?.filter(m => m.media_type === 'banner') || [];
+      
+      setExistingMedia({
+        screenshots: screenshots.map(s => ({ id: s.id, file: s.file })),
+        videos: videos.map(v => ({ id: v.id, file: v.file })),
+        banners: banners.map(b => ({ id: b.id, file: b.file }))
+      });
+      
+      // Reset media files
+      setMediaFiles({
+        screenshots: [],
+        videos: [],
+        banners: []
+      });
+      
+      // Reset video thumbnails
+      setVideoThumbnails([]);
+      
+      // Reset media to delete
+      setMediaToDelete([]);
+      
+      // Set modal title and button text
+      setFormTitle('Edit Program');
+      setSubmitButtonText('Update Program');
+      
+      // Reset error and success states
+      setSubmitError(null);
+      setSubmitSuccess(false);
+      
+      // Set edit mode to true
+      setIsEditMode(true);
+      
+      // Show the modal
+      setShowModal(true);
+    } catch (error) {
+      console.error('Error fetching program details:', error);
+    } finally {
+      // Reset loading state
+      programStore.setState((state) => ({ ...state, loading: false }));
+    }
+  };
   
-  // Safely get data
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Reset error and success states
+    setSubmitError(null);
+    setSubmitSuccess(false);
+    
+    try {
+      // Create FormData object to handle file uploads
+      const programFormData = new FormData();
+      
+      // Add all program data to FormData
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && key !== 'id') {
+          programFormData.append(key, value);
+        }
+      });
+      
+      let response;
+      
+      if (isEditMode) {
+        // Update existing program
+        response = await updateProgram(formData.slug, programFormData, mediaFiles, mediaToDelete);
+      } else {
+        // Add new program
+        response = await addProgram(programFormData, mediaFiles);
+      }
+      
+      // Set success state
+      setSubmitSuccess(true);
+      
+      // Close modal after a short delay
+      setTimeout(() => {
+        setShowModal(false);
+        
+        // Refresh the programs list
+        fetchAdminPrograms(currentPage, itemsPerPage);
+      }, 1500);
+      
+      return response;
+    } catch (error) {
+      console.error('Error submitting program:', error);
+      setSubmitError(error.response?.data?.detail || 'An error occurred while submitting the program');
+      return null;
+    }
+  };
+  
+  // Handle removing existing media
+  const handleRemoveExistingMedia = (mediaType, index) => {
+    // Get the media item to remove
+    const mediaItem = existingMedia[mediaType][index];
+    
+    // Add the media ID to the list of media to delete
+    if (mediaItem && mediaItem.id) {
+      setMediaToDelete(prev => [...prev, mediaItem.id]);
+    }
+    
+    // Remove the media item from the existing media list
+    setExistingMedia(prev => {
+      const updatedMedia = { ...prev };
+      updatedMedia[mediaType] = [...prev[mediaType]];
+      updatedMedia[mediaType].splice(index, 1);
+      return updatedMedia;
+    });
+  };
+
+  // Get data from store
   const programs = programsData?.data || [];
+  const totalItems = programsData?.totalItems || 0;
+  const hasError = programsData?.error != null;
 
   // Loading state
   if (isLoading) {
@@ -100,7 +321,7 @@ export default function ProgramsManagement() {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         {/* <h2>Programs Management</h2> */}
-        <Button variant="primary" onClick={() => setShowModal(true)}>
+        <Button variant="primary" onClick={handleAddProgramClick}>
           Add New Program
         </Button>
       </div>
@@ -108,7 +329,7 @@ export default function ProgramsManagement() {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>ID</th>
+
             <th>Name</th>
             <th>Type</th>
             <th>Developer</th>
@@ -121,18 +342,26 @@ export default function ProgramsManagement() {
           {programs.length > 0 ? (
             programs.map((program) => (
               <tr key={program.id}>
-                <td>{program.id}</td>
-                <td>{program.name}</td>
+                <td>
+                <Link to={`/details/_/${program.slug}`}>
+                  {program.title}
+                </Link>
+                  </td>
                 <td>{program.type}</td>
-                <td>{program.developer?.name || 'Unknown'}</td>
+                <td>{program.developer || 'Unknown'}</td>
                 <td>{program.created_at ? new Date(program.created_at).toLocaleDateString() : 'Unknown'}</td>
                 <td>
-                  <span className={`badge bg-${program.is_active ? 'success' : 'danger'}`}>
-                    {program.is_active ? 'Active' : 'Inactive'}
+                  <span className={`badge bg-${program.is_published ? 'success' : 'danger'}`}>
+                    {program.is_published ? 'Published' : 'Not Published'}
                   </span>
                 </td>
                 <td>
-                  <Button variant="info" size="sm" className="me-2">
+                  <Button 
+                    variant="info" 
+                    size="sm" 
+                    className="me-2"
+                    onClick={() => handleEditProgramClick(program.slug)}
+                  >
                     Edit
                   </Button>
                   <Button variant="danger" size="sm">
@@ -149,37 +378,44 @@ export default function ProgramsManagement() {
         </tbody>
       </Table>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/* Pagination */}
+      <Paginator
+        currentPage={currentPage}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        onPageChange={handlePageChange}
+        maxPageButtons={5}
+      />
+
+      <Modal 
+        show={showModal} 
+        onHide={() => setShowModal(false)}
+        size="lg"
+        backdrop="static"
+        keyboard={false}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Add New Program</Modal.Title>
+          <Modal.Title>{formTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ProgramsForm newProgram={newProgram} setNewProgram={setNewProgram} />
+          <ProgramForm
+            formTitle=""
+            formData={formData}
+            setFormData={setFormData}
+            mediaFiles={mediaFiles}
+            setMediaFiles={setMediaFiles}
+            videoThumbnails={videoThumbnails}
+            setVideoThumbnails={setVideoThumbnails}
+            existingMedia={existingMedia}
+            removeExistingMedia={handleRemoveExistingMedia}
+            categories={categories}
+            handleSubmit={handleSubmit}
+            submitLoading={isLoading}
+            submitError={submitError}
+            submitSuccess={submitSuccess}
+            submitButtonText={submitButtonText}
+          />
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleAddProgram}
-            disabled={
-              !newProgram.title ||
-              !newProgram.slug ||
-              !newProgram.category ||
-              !newProgram.type ||
-              !newProgram.developerId ||
-              !newProgram.description ||
-              !newProgram.price ||
-              !newProgram.releaseDate ||
-              !newProgram.lastUpdateDate ||
-              !newProgram.downloadUrl ||
-              !newProgram.icon
-            }
-          >
-            Add Program
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );

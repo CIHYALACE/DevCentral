@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import { Alert } from 'react-bootstrap';
-import '../style/oldAddProgram.css';
-
+import '../style/AddProgram.css';
+import { useParams } from 'react-router-dom';
 const ProgramForm = ({
   formTitle,
   formData,
@@ -20,7 +20,8 @@ const ProgramForm = ({
   submitSuccess = false,
   submitButtonText = 'Submit'
 }) => {
-  
+  const {slug}= useParams();
+  const editing = slug;
   // Handle form input changes
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -104,7 +105,7 @@ const ProgramForm = ({
   
   return (
     <div className="add-program-container">
-      <h1 className="add-program-title">{formTitle}</h1>
+      {formTitle && <h1 className="add-program-title">{formTitle}</h1>}
       
       {submitSuccess && (
         <Alert variant="success" className="mb-3">
@@ -144,6 +145,8 @@ const ProgramForm = ({
               name="slug"
               value={formData.slug}
               onChange={handleChange}
+              readOnly={editing}
+              disabled={editing}
               className="input"
               placeholder="Leave blank to generate from title"
             />
@@ -269,9 +272,10 @@ const ProgramForm = ({
               className="file-input"
             />
             {formData.icon && (
+              
               <div className="mt-2">
                 <img 
-                  src={URL.createObjectURL(formData.icon)} 
+                  src={formData.icon} 
                   alt="Icon Preview" 
                   style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', marginTop: '8px' }} 
                 />
