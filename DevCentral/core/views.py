@@ -27,7 +27,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         queryset = queryset.order_by('-id')
         if self.request.query_params.get('related_type'):
             # used in program forms 
-            return queryset.filter(related_type=self.request.query_params.get('related_type','app'))
+            return queryset.filter(related_type=self.request.query_params.get('related_type'))
         # used in admin dashborad
         return queryset
 
