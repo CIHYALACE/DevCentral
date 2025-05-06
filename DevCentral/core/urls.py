@@ -23,6 +23,7 @@ urlpatterns = [
     path('wishlist/', WishlistView.as_view(), name='wishlist'),
     # Admin endpoints
     path('admin/dashboard/stats/', AdminDashboardView.as_view(), name='admin-dashboard-stats'),
+    path('books/<int:pk>/reviews/', BookViewSet.as_view({'get': 'reviews', 'post': 'add_review'})),
 ]
 
 # GET /api/books/ - List all books

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_URL } from '../store';
 
 export default function ActivateAccount() {
   const { uid, token } = useParams();
@@ -9,8 +10,7 @@ export default function ActivateAccount() {
   useEffect(() => {
     const activateAccount = async () => {
       try {
-        // Match the URL structure from CustomActivationEmail
-        const response = await fetch(`http://127.0.0.1:8000/api/users/activation/`, {
+        const response = await fetch(`${API_URL}/auth/users/activation/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ export default function ActivateAccount() {
           setTimeout(() => navigate('/login'), 3000);
         } else {
           const data = await response.json();
-          setStatus('Activation failed. Please try again.');
+          setStatus(data.detail || 'Activation failed. Please try again.');
         }
       } catch (error) {
         console.error('Error:', error);

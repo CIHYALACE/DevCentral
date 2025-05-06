@@ -205,6 +205,7 @@ class Book(models.Model):
     is_published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    pdf_link = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.title
