@@ -314,6 +314,33 @@ class BookViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @action(detail=True, methods=['get'])
+    def reviews(self, request, slug=None):
+        """Get reviews for a specific book."""
+        book = self.get_object()
+        reviews = Review.objects.filter(book=book)
+        page = self.paginate_queryset(reviews)
+        if page is not None:
+            serializer = ReviewSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def add_review(self, request, slug=None):
+        """Add a review to a specific book."""
+        book = self.get_object()
+        serializer = ReviewSerializer(data={
+            'book': book.id,
+            'user': request.user.id,
+            'score': request.data.get('score'),
+            'comment': request.data.get('comment')
+        })
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class WishlistView(APIView):
     permission_classes = [IsAuthenticated]
 
