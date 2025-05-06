@@ -1,16 +1,59 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import { searchPrograms } from "../store/programStore";
+import { authStore } from "../store/authStore";
+import { useStore } from "@tanstack/react-store";
+import axios from "axios";
+import { API_URL } from "../store";
 
 export default function Header({ onToggleSidebar }) {
-  let token = "token";
+  let token = localStorage.getItem('token');
   const location = useLocation();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const isProfilePage = location.pathname.startsWith('/profile');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const user = useStore(authStore, state => state.user);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        // Get user details from the backend
+        const response = await axios.get(`${API_URL}/auth/users/me/`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        const userData = response.data;
+        console.log("User data from API:", userData);
+        
+        // Check if user has admin role
+        setIsAdmin(userData.role === "admin");
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setIsAdmin(false);
+        setLoading(false);
+      }
+    };
+    
+    checkAdminStatus();
+    
+    // Re-run this effect when the location changes
+  }, [location.pathname]);
 
   return (
     <Navbar
@@ -18,7 +61,6 @@ export default function Header({ onToggleSidebar }) {
       className="position-sticky top-0 z-3 shadow-sm px-4 p-2"
       style={{
         backdropFilter: "blur(15px)",
-        // backgroundColor: "rgba(294, 246, 255, .7)"
         backgroundColor: "rgba(255, 255, 255, 0.7)",
       }}
     >
@@ -93,7 +135,9 @@ export default function Header({ onToggleSidebar }) {
             Books
           </NavLink>
 
-          <NavLink to="/admin" className="nav-link">Admin</NavLink>
+          {isAdmin && (
+            <NavLink to="/admin" className="nav-link">Admin</NavLink>
+          )}
         </Nav>
         <div className="d-flex ms-auto align-items-center">
           <form 
