@@ -37,8 +37,36 @@ const slideData = [
 
 export const AppSliderSection = () => {
   return (
-    <Container  className="py-4">
-      <Carousel fade data-bs-theme="dark" interval={4000}>
+    <Container className="py-4">
+      <Carousel
+        fade
+        data-bs-theme="dark"
+        interval={4000}
+        nextIcon={
+          <span
+            aria-hidden="true"
+            className="carousel-control-next-icon"
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              borderRadius: '50%',
+              padding: '10px',
+              fontSize: '20px',
+            }}
+          />
+        }
+        prevIcon={
+          <span
+            aria-hidden="true"
+            className="carousel-control-prev-icon"
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              borderRadius: '50%',
+              padding: '10px',
+              fontSize: '20px',
+            }}
+          />
+        }
+      >
         {slideData.map((slide, index) => (
           <Carousel.Item key={index}>
             <img
@@ -46,9 +74,32 @@ export const AppSliderSection = () => {
               src={slide.img}
               alt={slide.alt}
             />
-            <Carousel.Caption>
-              <h5>{slide.title}</h5>
-              <p>{slide.description}</p>
+            <Carousel.Caption
+              style={{
+                backdropFilter: 'blur(3px)',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderRadius: '10px',
+                padding: '10px',
+              }}
+            >
+              <h5
+                style={{
+                  color: 'white',
+                  textShadow: '0px 0px 12px rgba(0, 0, 0, 0.8)',
+                  fontSize: '29px',
+                }}
+              >
+                {slide.title}
+              </h5>
+              <p
+                style={{
+                  color: 'white',
+                  textShadow: '0px 0px 12px rgba(0, 0, 0, 0.8)',
+                  fontSize: '29px',
+                }}
+              >
+                {slide.description}
+              </p>
             </Carousel.Caption>
           </Carousel.Item>
         ))}
