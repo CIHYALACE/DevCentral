@@ -10,14 +10,10 @@ const AddProgram = () => {
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
-    slug: '',
     description: '',
     type: 'app', // Default value from TYPE_CHOICES
     category_id: '',
-    type: 'app', // Default value from TYPE_CHOICES
-    category_id: '',
     release_date: '',
-    price: '0.00',
     price: '0.00',
     download_url: '',
     is_published: false,

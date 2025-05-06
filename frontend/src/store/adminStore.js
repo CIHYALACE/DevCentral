@@ -81,7 +81,8 @@ const fetchDashboardStats = async () => {
       error: error.response?.data || { detail: 'Failed to fetch dashboard statistics' }
     }));
     
-    throw error;
+    // Return empty data instead of throwing the error
+    return { totalPrograms: 0, activeUsers: 0, totalReviews: 0, categories: 0 };
   }
 };
 
@@ -117,7 +118,8 @@ const fetchAdminPrograms = async () => {
       }
     }));
     
-    throw error;
+    // Return empty results instead of throwing the error
+    return { results: [] };
   }
 };
 
@@ -153,7 +155,8 @@ const fetchAdminReviews = async () => {
       }
     }));
     
-    throw error;
+    // Return empty results instead of throwing the error
+    return { results: [] };
   }
 };
 
@@ -189,7 +192,8 @@ const fetchAdminMedia = async () => {
       }
     }));
     
-    throw error;
+    // Return empty results instead of throwing the error
+    return { results: [] };
   }
 };
 
@@ -225,7 +229,8 @@ const fetchAdminUsers = async () => {
       }
     }));
     
-    throw error;
+    // Return empty results instead of throwing the error
+    return { results: [] };
   }
 };
 
@@ -261,7 +266,8 @@ const fetchAdminCategories = async () => {
       }
     }));
     
-    throw error;
+    // Return empty results instead of throwing the error
+    return { results: [] };
   }
 };
 
@@ -303,7 +309,8 @@ const fetchAdminTokens = async () => {
       }
     }));
     
-    throw error;
+    // Return empty results instead of throwing the error
+    return { results: [] };
   }
 };
 
@@ -361,7 +368,8 @@ const createToken = async (tokenData) => {
       }
     }));
     
-    throw error;
+    // Return empty token instead of throwing the error
+    return {};
   }
 };
 
@@ -411,7 +419,8 @@ const revokeToken = async (tokenId) => {
       }
     }));
     
-    throw error;
+    // Return false instead of throwing the error
+    return false;
   }
 };
 
