@@ -144,11 +144,16 @@ const ItemDetails = () => {
   
   const handleDownload = async (e) => {
     e.preventDefault();
+    if(!localStorage.getItem("token")){
+      navigate(`/login`);
+      return;
+    }
     
     // Check if app is free, owned, or payment has been completed
     const appPrice = parseFloat(appDetails.price || '0.00');
     
     if (appPrice > 0 && !isAppOwned && !paymentCompleted) {
+      // not logged in
       // Redirect to checkout page for paid apps that are not owned
       navigate(`/checkout/${slug}`);
       return;

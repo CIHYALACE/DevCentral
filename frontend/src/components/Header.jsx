@@ -80,7 +80,7 @@ export default function Header({ onToggleSidebar }) {
           src="/Dev_logo.jpg"
           width="60"
           height="60"
-          className="d-inline-block align-top" 
+          className="d-inline-block align-top rounded-circle" 
         />{" "}
         <span className="fw-bold fs-3 text-black share-tech-mono-regular d-none d-sm-inline"><span style={{color: "#a259ff"}}>Dev</span>Central</span>
         <span className="fw-bold fs-4 text-black share-tech-mono-regular d-inline d-sm-none">DC</span>
@@ -133,6 +133,17 @@ export default function Header({ onToggleSidebar }) {
             style={({ isActive }) => (isActive ? { color: "#a259ff" } : undefined)}
           >
             Books
+          </NavLink>
+          <NavLink
+            to="/chat"
+            className={({ isActive }) =>
+              isActive
+                ? "nav-link active"
+                : "nav-link"
+            }
+            style={({ isActive }) => (isActive ? { color: "#a259ff" } : undefined)}
+          >
+            Chat
           </NavLink>
 
           {isAdmin && (

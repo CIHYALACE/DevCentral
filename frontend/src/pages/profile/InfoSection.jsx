@@ -253,7 +253,7 @@ export default function InfoSection() {
         <h3>Account Security</h3>
         <div className="card w-100" style={containerStyle}>
           <div className="card-body">
-            <div className="d-flex justify-content-between align-items-center mb-3">
+            {/* <div className="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h5 className="mb-0">Password</h5>
                 <p className="text-muted mb-0">Secure your account with a strong password</p>
@@ -267,7 +267,7 @@ export default function InfoSection() {
                 <p className="text-muted mb-0">Enhance your account security</p>
               </div>
               <button className="btn btn-outline-primary">Enable</button>
-            </div>
+            </div> */}
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <h5 className="mb-0">Log out</h5>

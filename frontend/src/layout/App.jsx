@@ -35,6 +35,7 @@ import AdminTokens from '../pages/admin/AdminTokens'
 import AdminCategories from '../pages/admin/AdminCategories'
 import AdminRequests from '../pages/admin/AdminRequests'
 import AdminRoute from '../components/Admin/AdminRoute'
+import Chat from '../pages/Chat'
 
 
 export default function App() {
@@ -75,6 +76,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/chat" element={<Chat />} />
       </Route>
     </Routes>
   );
