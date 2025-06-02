@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Badge, Spinner, Alert } from 'react-bootstrap';
+import { Table, Button, Badge, Spinner, Alert, Modal } from 'react-bootstrap';
 import { adminStore, fetchAdminReviews } from '../../store/adminStore';
 import { useStore } from '@tanstack/react-store';
 import { Paginator } from '../common/Paginator';
 import { Link } from 'react-router-dom';
+import { deleteReview } from '../../store';
 
 export default function ReviewsManagement() {
   // Use the store hook to access reviews data directly
@@ -13,6 +14,10 @@ export default function ReviewsManagement() {
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  
+  // State for delete confirmation modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState(null);
   
   // Fetch reviews data when component mounts or page changes
   useEffect(() => {
@@ -47,8 +52,18 @@ export default function ReviewsManagement() {
   };
 
   const handleDelete = async (id) => {
+    // Set the review to delete and show the confirmation modal
+    const reviewToDelete = reviews.find(review => review.id === id);
+    setReviewToDelete(reviewToDelete);
+    setShowDeleteModal(true);
+  };
+  
+  const confirmDelete = async () => {
     // Delete review logic
-    console.log(`Delete review ${id}`);
+    console.log(`Delete review ${reviewToDelete?.id}`);
+    await deleteReview(reviewToDelete.id)
+    // Close the modal
+    setShowDeleteModal(false);
     // Refresh the reviews list after deletion
     await fetchAdminReviews(currentPage, itemsPerPage);
   };
@@ -153,6 +168,39 @@ export default function ReviewsManagement() {
         onPageChange={handlePageChange}
         maxPageButtons={5}
       />
+      
+      {/* Delete Confirmation Modal */}
+      <Modal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this review? This action cannot be undone.
+          <div className="mt-3 p-3 border rounded bg-light">
+            <p><strong>Program:</strong> {reviewToDelete?.program}</p>
+            <p><strong>User:</strong> {reviewToDelete?.user_name || 'Anonymous'}</p>
+            <p><strong>Rating:</strong> {reviewToDelete?.score} / 5</p>
+            <p><strong>Comment:</strong> {reviewToDelete?.comment}</p>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={confirmDelete}
+          >
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

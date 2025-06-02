@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Spinner, Alert } from "react-bootstrap";
 import { useStore } from "@tanstack/react-store";
 import { adminStore, fetchAdminPrograms } from "../../store/adminStore";
-import { programStore, addProgram, updateProgram, fetchProgramDetails } from "../../store/programStore";
+import { programStore, addProgram, updateProgram, fetchProgramDetails, deleteProgram } from "../../store/programStore";
 import { categoryStore, fetchCategories } from "../../store/categoryStore";
 import { Paginator } from "../common/Paginator";
 import ProgramForm from "../../components/ProgramForm";
@@ -25,6 +25,10 @@ export default function ProgramsManagement() {
   const [submitButtonText, setSubmitButtonText] = useState('Add Program');
   const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  
+  // State for delete confirmation modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [programToDelete, setProgramToDelete] = useState(null);
   
   // State for program form data
   const [formData, setFormData] = useState({
@@ -364,7 +368,14 @@ export default function ProgramsManagement() {
                   >
                     Edit
                   </Button>
-                  <Button variant="danger" size="sm">
+                  <Button 
+                    variant="danger" 
+                    size="sm"
+                    onClick={() => {
+                      setProgramToDelete(program);
+                      setShowDeleteModal(true);
+                    }}
+                  >
                     Delete
                   </Button>
                 </td>
@@ -416,6 +427,41 @@ export default function ProgramsManagement() {
             submitButtonText={submitButtonText}
           />
         </Modal.Body>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the program "{programToDelete?.title}"? This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={async () => {
+              // Delete program logic would go here
+              console.log(`Delete program ${programToDelete?.slug}`);
+              await deleteProgram(programToDelete?.slug);
+              // Close the modal
+              setShowDeleteModal(false);
+              // Refresh the programs list
+              fetchAdminPrograms(currentPage, itemsPerPage);
+            }}
+          >
+            Delete
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

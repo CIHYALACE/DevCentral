@@ -4,7 +4,7 @@ import '../style/Newsletter.css';
 
 export function Newsletter() {
   return (
-    <section className="newsletter-container container py-5 mb-5">
+    <section className="newsletter-container container py-5 my-5">
       <div className="row align-items-center">
         <div className="col-md-6 d-none d-md-flex justify-content-center">
           <img

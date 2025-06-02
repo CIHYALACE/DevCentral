@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GEEPEETEE</title>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title-bar">
+        <h1>Geepeetee</h1>
+        <h1>ADD YOUR CUSTOM STYLING AND TITLE</h1>
+    </div>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+    </div>
+    <div class="input-container">
+        <input type="text" class="input-box" id="userInput" placeholder="Send a message..." autofocus>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const messagesDiv = $('#messages');
+            const userInput = $('#userInput');
+
+            function addLoadingIndicator() {
+                return $('<div class="loading"><div class="loading-dots"><span></span><span></span><span></span></div></div>').appendTo(messagesDiv);
+            }
+
+            function addMessage(content, isUser) {
+                const messageDiv = $('<div>')
+                    .addClass('message')
+                    .addClass(isUser ? 'user-message' : 'bot-message')
+                    .css('opacity', '0');
+                
+                // Use marked for Markdown parsing if it's a bot message
+                if (isUser) {
+                    messageDiv.text(content);
+                } else {
+                    messageDiv.html(marked.parse(content));
+                }
+                
+                messagesDiv.append(messageDiv);
+                $('.chat-container').animate({
+                    scrollTop: $('.chat-container')[0].scrollHeight
+                }, 200);
+                
+                // Trigger animation after a small delay
+                setTimeout(() => {
+                    messageDiv.css('opacity', '1');
+                }, 10);
+            }
+
+            userInput.keypress(function(e) {
+                if (e.which == 13 && userInput.val().trim() !== '') {
+                    const message = userInput.val();
+                    addMessage(message, true);
+                    userInput.val('').prop('disabled', true);
+
+                    const loadingIndicator = addLoadingIndicator();
+
+                    $.ajax({
+                        url: '/chat/generate/',
+                        method: 'POST',
+                        data: {
+                            'message': message,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function(response) {
+                            loadingIndicator.remove();
+                            addMessage(response.response.choices[0].message.content, false);
+                            userInput.prop('disabled', false).focus();
+                        },
+                        error: function() {
+                            loadingIndicator.remove();
+                            addMessage('Sorry, an error occurred.', false);
+                            userInput.prop('disabled', false).focus();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

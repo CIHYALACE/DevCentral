@@ -165,7 +165,7 @@ export default function CategoriesManagement() {
 
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Programs</th>
+                        {/* <th>Programs</th> */}
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -176,7 +176,7 @@ export default function CategoriesManagement() {
 
                                 <td>{category.name}</td>
                                 <td>{category.related_type}</td>
-                                <td>{category.program_count || 0}</td>
+                                {/* <td>{category.program_count || 0}</td> */}
                                 <td>
                                     <Button 
                                         variant="info" 

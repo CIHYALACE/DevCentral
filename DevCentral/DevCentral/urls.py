@@ -34,12 +34,14 @@ router.register(r'flags', FlagViewSet)
 router.register(r'myprograms', ProgramViewSet, basename='myprograms')
 router.register(r'users', CustomUserViewSet, basename='customuser')
 router.register(r'profiles', UserProfileViewSet, basename='userprofile')
+router.register(r'requests', DeveloperRequestViewSet, basename='developer-request') 
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('chat/', include('chatgptwo.urls')),
     path('api/', include('core.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),

@@ -17,7 +17,6 @@ import SearchResults from '../pages/SearchResults';
 import ActivateAccount from '../pages/ActivateAccount';
 import Checkout from '../pages/Checkout'
 // Profile Pages
-import ProfilePage from '../pages/ProfilePage'
 import MyPrograms from '../pages/MyPrograms'
 import PublishedPrograms from '../pages/PublishedPrograms'
 import AddProgram from '../pages/AddProgram'
@@ -34,7 +33,9 @@ import AdminReviews from '../pages/admin/AdminReviews'
 import AdminMedia from '../pages/admin/AdminMedia'
 import AdminTokens from '../pages/admin/AdminTokens'
 import AdminCategories from '../pages/admin/AdminCategories'
+import AdminRequests from '../pages/admin/AdminRequests'
 import AdminRoute from '../components/Admin/AdminRoute'
+import Chat from '../pages/Chat'
 
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="media" element={<AdminRoute element={<AdminMedia />} />} />
         <Route path="tokens" element={<AdminRoute element={<AdminTokens />} />} />
         <Route path="categories" element={<AdminRoute element={<AdminCategories />} />} />
+        <Route path="requests" element={<AdminRoute element={<AdminRequests />} />} />
       </Route>
 
       <Route path="/profile" element={<ProfileSharedLayout />}>
@@ -74,6 +76,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/users/activate/:uid/:token" element={<ActivateAccount />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/chat" element={<Chat />} />
       </Route>
     </Routes>
   );

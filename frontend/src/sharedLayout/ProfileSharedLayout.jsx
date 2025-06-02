@@ -33,9 +33,13 @@ export default function ProfileSharedLayout() {
             'payment-options': 'Payment options',
             'subscriptions': 'Subscriptions',
             'devices': 'Devices',
-            'order-history': 'Order history'
+            'order-history': 'Order history',
+            'published-programs': 'Published programs'
         };
+        
+        
         return pathToSection[path] || 'Your info';
+        
     };
     
     const activeSection = getActiveSectionFromPath(currentPath);

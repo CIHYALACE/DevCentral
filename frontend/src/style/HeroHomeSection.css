@@ -50,10 +50,3 @@ button:hover{
   }
   
 
-  .heroHomeSection {
-    border: 2px solid #000; /* Adjust the color and width as needed */
-    padding: 20px; /* Optional: Add padding for spacing inside the border */
-    margin: 20px; /* Optional: Add margin for spacing outside the border */
-    border-radius: 8px; /* Optional: Add rounded corners */
-  }
-  

@@ -9,15 +9,15 @@ import { authStore, fetchUserData } from "../store";
 const baseMenuItems = [
   { name: "Your info", path: "/profile", icon: "fa-solid fa-user" },
   { name: "my programs", path: "/profile/my-programs", icon: "fa-solid fa-grip" },
-  { name: "Add new programs", path: "/profile/add-program", icon: "fa-solid fa-circle-plus" },
-  { name: "Payment options", path: "/profile/payment-options", icon: "fa-solid fa-credit-card" },
-  { name: "Subscriptions", path: "/profile/subscriptions", icon: "fa-solid fa-bolt" },
-  { name: "Devices", path: "/profile/devices", icon: "fa-solid fa-mobile-screen" },
-  { name: "Order history", path: "/profile/order-history", icon: "fa-solid fa-clock-rotate-left" },
+  // { name: "Payment options", path: "/profile/payment-options", icon: "fa-solid fa-credit-card" },
+  // { name: "Subscriptions", path: "/profile/subscriptions", icon: "fa-solid fa-bolt" },
+  // { name: "Devices", path: "/profile/devices", icon: "fa-solid fa-mobile-screen" },
+  // { name: "Order history", path: "/profile/order-history", icon: "fa-solid fa-clock-rotate-left" },
 ];
 
 // Additional menu items for developers and admins
 const developerMenuItems = [
+  { name: "Add new program", path: "/profile/add-program", icon: "fa-solid fa-circle-plus" },
   { name: "Published Programs", path: "/profile/published-programs", icon: "fa-solid fa-upload" },
 ];
 

@@ -5,6 +5,7 @@ import { adminStore, fetchAdminMedia } from "../../store/adminStore";
 import { useStore } from "@tanstack/react-store";
 import { Paginator } from "../common/Paginator";
 import { generateVideoThumbnail, formatDate } from "../../utils/uiHelpers";
+import { deleteMedia, uploadProgramMedia } from "../../store";
 
 export default function MediaManagement() {
   // Use the store hook to access media data directly
@@ -25,6 +26,10 @@ export default function MediaManagement() {
     program: "",
     file: null,
   });
+  
+  // State for delete confirmation modal
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [mediaToDelete, setMediaToDelete] = useState(null);
 
   // Fetch media data when component mounts or page changes
   useEffect(() => {
@@ -84,6 +89,7 @@ export default function MediaManagement() {
       
       // TODO: Implement actual API call to add media
       console.log("Adding media:", newMedia);
+      await uploadProgramMedia(newMedia.program, formData);
       setShowModal(false);
       
       // Reset form
@@ -101,14 +107,24 @@ export default function MediaManagement() {
   };
 
   const handleDeleteMedia = async (id) => {
+    // Find the media item to delete
+    const mediaItem = media.find(item => item.id === id);
+    setMediaToDelete(mediaItem);
+    setShowDeleteModal(true);
+  };
+  
+  const confirmDeleteMedia = async () => {
     try {
       // Delete media logic
-      console.log(`Delete media ${id}`);
+      console.log(`Delete media ${mediaToDelete?.id}`);
+    await deleteMedia(mediaToDelete?.id);
+      // Close the modal
+      setShowDeleteModal(false);
       
       // Refresh the media list after deletion
       await fetchAdminMedia(currentPage, itemsPerPage);
     } catch (error) {
-      console.error(`Error deleting media ${id}:`, error);
+      console.error(`Error deleting media ${mediaToDelete?.id}:`, error);
     }
   };
 
@@ -326,6 +342,79 @@ export default function MediaManagement() {
             rel="noopener noreferrer"
           >
             Open Original
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      {/* Delete Confirmation Modal */}
+      <Modal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete this media? This action cannot be undone.</p>
+          
+          {mediaToDelete && (
+            <Card className="mt-3">
+              <Card.Body className="d-flex align-items-center">
+                {mediaToDelete.file && (
+                  <div className="me-3">
+                    {mediaToDelete.media_type === 'video' ? (
+                      <div className="position-relative" style={{ width: 100, height: 100 }}>
+                        {thumbnails[mediaToDelete.id] ? (
+                          <Image 
+                            src={thumbnails[mediaToDelete.id]} 
+                            alt="Video thumbnail" 
+                            width={100} 
+                            height={100} 
+                            style={{ objectFit: 'cover' }} 
+                            thumbnail 
+                          />
+                        ) : (
+                          <div className="bg-light d-flex align-items-center justify-content-center" style={{ width: 100, height: 100 }}>
+                            <span className="text-muted">Video</span>
+                          </div>
+                        )}
+                        <div className="position-absolute top-50 start-50 translate-middle">
+                          <i className="bi bi-play-circle-fill text-white" style={{ fontSize: '2rem' }}></i>
+                        </div>
+                      </div>
+                    ) : (
+                      <Image 
+                        src={mediaToDelete.file} 
+                        alt={`${mediaToDelete.media_type} preview`} 
+                        width={100} 
+                        height={100} 
+                        style={{ objectFit: 'cover' }} 
+                        thumbnail 
+                      />
+                    )}
+                  </div>
+                )}
+                <div>
+                  <p className="mb-1"><strong>Type:</strong> {getMediaTypeLabel(mediaToDelete.media_type)}</p>
+                  <p className="mb-1"><strong>Program:</strong> {mediaToDelete.program || 'Unknown'}</p>
+                  <p className="mb-0"><strong>Uploaded:</strong> {mediaToDelete.uploaded_at ? formatDate(mediaToDelete.uploaded_at) : 'Unknown'}</p>
+                </div>
+              </Card.Body>
+            </Card>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={confirmDeleteMedia}
+          >
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>

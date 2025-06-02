@@ -7,6 +7,12 @@ from django.utils.text import slugify
 from core.models import Category, Program, Media, Review, Book, Author
 from django.conf import settings
 
+media = os.listdir("./media/media")
+media.remove("video.mp4")
+icons = os.listdir("./media/icons")
+book_covers = os.listdir("./media/book_covers")
+
+
 User = get_user_model()
 
 class Command(BaseCommand):
@@ -100,7 +106,8 @@ class Command(BaseCommand):
                 'is_active': True,
                 'is_staff': True,
                 'is_superuser': True,
-            }
+                'role': 'admin',
+            },
         )
         
         if created:
@@ -135,13 +142,14 @@ class Command(BaseCommand):
                 defaults={
                     'name': f'{name} Developer',
                     'is_active': True,
+                    'role': 'developer',
                 }
             )
             
             if created:
-                user.set_password(f'dev{i+1}pass')
+                user.set_password(f'password')
                 user.save()
-                self.stdout.write(f'  Created developer user: {email} (password: dev{i+1}pass)')
+                self.stdout.write(f'  Created developer user: {email} (password: password)')
             
             self.developers.append(user)
         
@@ -154,14 +162,15 @@ class Command(BaseCommand):
                     defaults={
                         'name': f'User {i}',
                         'is_active': True,
+                        'role':'user'
                     }
                 )
                 
                 if created:
-                    user.set_password(f'user{i}pass')
+                    user.set_password(f'password')
                     user.save()
                     self.users.append(user)
-                    self.stdout.write(f'  Created user: user{i}@example.com (password: user{i}pass)')
+                    self.stdout.write(f'  Created user: user{i}@example.com (password: password)')
     
     def create_programs(self):
         self.stdout.write('Creating programs (apps and games)...')
@@ -361,7 +370,8 @@ class Command(BaseCommand):
         # Create games
         for game_data in games_data:
             self._create_program(game_data, 'game')
-    
+
+
     def _create_program(self, data, program_type):
         title = data['title']
         slug = slugify(title)
@@ -391,7 +401,7 @@ class Command(BaseCommand):
                 'price': data['price'],
                 'rating': data['rating'],
                 'download_count': data['download_count'],
-                'icon': f'icons/placeholder_{program_type}.png',  # Placeholder
+                'icon': f'icons/{random.choice(icons)}',  # Placeholder
                 'download_url': f'https://example.com/download/{slug}',
                 'is_published': True,
             }
@@ -404,21 +414,21 @@ class Command(BaseCommand):
             self._create_media(program)
         else:
             self.stdout.write(f"  {program_type.capitalize()} already exists: {title}")
-    
+
     def _create_media(self, program):
         # Create screenshots
         for i in range(1, 4):
             Media.objects.create(
                 program=program,
                 media_type='screenshot',
-                file=f'media/placeholder_screenshot_{i}.jpg'  # Placeholder
+                file=f'media/{random.choice(media)}'  # Placeholder
             )
         
         # Create banner
         Media.objects.create(
             program=program,
             media_type='banner',
-            file='media/placeholder_banner.jpg'  # Placeholder
+            file=f'media/{random.choice(media)}'  # Placeholder
         )
         
         # Create video for some programs
@@ -426,7 +436,7 @@ class Command(BaseCommand):
             Media.objects.create(
                 program=program,
                 media_type='video',
-                file='media/placeholder_video.mp4'  # Placeholder
+                file='/media/video.mp4'  # Placeholder
             )
     
     def create_reviews(self):
@@ -455,6 +465,14 @@ class Command(BaseCommand):
                     "Very useful, use it every day.",
                     "One of the best apps in this category.",
                     "Easy to use and very intuitive.",
+                    "I hate this app and my life",
+                    "I hate this app and my life",
+                    "I hate this app and my life",
+                    "I hate this app and my life",
+                    "I hate this app and my life",
+                    "I hate this app and my life",
+                    "I hate this app and my life",
+                    "I hate this app and my life",
                     "Amazing features and performance.",
                     "Decent app, worth the download.",
                     "Impressive design and functionality."
@@ -569,7 +587,8 @@ class Command(BaseCommand):
                     "category": category,  # Use the Category instance
                     "description": data["description"],
                     "publish_date": data["publish_date"],
-                    "rating": data["rating"]
+                    "rating": data["rating"],
+                    "cover_image": f'book_covers/{random.choice(book_covers)}',
                 }
             )
             if created:

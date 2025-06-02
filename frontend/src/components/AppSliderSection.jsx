@@ -7,6 +7,9 @@ import 'swiper/css/pagination';
 import img1 from '../assets/1.jpg';
 import img2 from '../assets/2.jpg';
 import img3 from '../assets/3.jpg';
+import { useStore } from '@tanstack/react-store';
+import { appStore, programStore } from '../store';
+import { Link } from 'react-router-dom';
 
 const slideData = [
   {
@@ -36,6 +39,8 @@ const slideData = [
 ];
 
 export const AppSliderSection = () => {
+  const apps = useStore(programStore, (state) => state.programs.filter((program) => program.type === 'app').slice(4, 8));
+  console.log(apps);
   return (
     <Container className="py-4">
       <Carousel
@@ -67,13 +72,14 @@ export const AppSliderSection = () => {
           />
         }
       >
-        {slideData.map((slide, index) => (
+        {apps.map((slide, index) => (
           <Carousel.Item key={index}>
+            <Link to={`/details/programs/${slide.slug}`}>
             <img
               className="d-block w-100 carousel-image"
-              src={slide.img}
-              alt={slide.alt}
-            />
+              src={slide.media[0].file}
+              alt={slide.title}
+              />
             <Carousel.Caption
               style={{
                 backdropFilter: 'blur(3px)',
@@ -81,14 +87,14 @@ export const AppSliderSection = () => {
                 borderRadius: '10px',
                 padding: '10px',
               }}
-            >
+              >
               <h5
                 style={{
                   color: 'white',
                   textShadow: '0px 0px 12px rgba(0, 0, 0, 0.8)',
                   fontSize: '29px',
                 }}
-              >
+                >
                 {slide.title}
               </h5>
               <p
@@ -97,10 +103,11 @@ export const AppSliderSection = () => {
                   textShadow: '0px 0px 12px rgba(0, 0, 0, 0.8)',
                   fontSize: '29px',
                 }}
-              >
+                >
                 {slide.description}
               </p>
             </Carousel.Caption>
+                </Link>
           </Carousel.Item>
         ))}
       </Carousel>

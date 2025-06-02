@@ -40,6 +40,11 @@ const initialState = {
     loading: false,
     error: null
   },
+  developerRequests: {
+    data: [],
+    loading: false,
+    error: null
+  },
   loading: false,
   error: null
 };
@@ -513,6 +518,106 @@ const generateRandomToken = () => {
   return token;
 };
 
+// Fetch developer requests
+const fetchDeveloperRequests = async () => {
+  adminStore.setState(state => ({ 
+    ...state, 
+    developerRequests: { ...state.developerRequests, loading: true, error: null } 
+  }));
+  
+  try {
+    const response = await axios.get(`${API_URL}/requests/`);
+    
+    // Process the data to include user information
+    const requests = response.data;
+    
+    adminStore.setState(state => ({
+      ...state,
+      developerRequests: {
+        data: requests,
+        loading: false,
+        error: null
+      }
+    }));
+    
+    return requests;
+  } catch (error) {
+    console.error('Error fetching developer requests:', error);
+    
+    adminStore.setState(state => ({
+      ...state,
+      developerRequests: {
+        ...state.developerRequests,
+        loading: false,
+        error: error.response?.data || { detail: 'Failed to fetch developer requests' }
+      }
+    }));
+    
+    // Return empty results instead of throwing the error
+    return [];
+  }
+};
+
+// Change developer request state
+const changeDeveloperRequestState = async (userId, newState) => {
+  adminStore.setState(state => ({ 
+    ...state, 
+    developerRequests: { ...state.developerRequests, loading: true, error: null } 
+  }));
+  
+  try {
+    const response = await axios.post(`${API_URL}/requests/change_state/`, { 
+      user_id: userId,
+      state: newState 
+    });
+    
+    // Update the local state to reflect the change
+    adminStore.setState(state => ({
+      ...state,
+      developerRequests: {
+        ...state.developerRequests,
+        data: state.developerRequests.data.map(request => 
+          request.user.id === userId 
+            ? { ...request, state: newState } 
+            : request
+        ),
+        loading: false,
+        error: null
+      }
+    }));
+    
+    return response.data;
+  } catch (error) {
+    console.error(`Error changing developer request state to ${newState}:`, error);
+    
+    adminStore.setState(state => ({
+      ...state,
+      developerRequests: {
+        ...state.developerRequests,
+        loading: false,
+        error: error.response?.data || { detail: `Failed to change developer request state to ${newState}` }
+      }
+    }));
+    
+    throw error;
+  }
+};
+
+// Approve a developer request
+const approveDeveloperRequest = async (userId) => {
+  return changeDeveloperRequestState(userId, 'approved');
+};
+
+// Reject a developer request
+const rejectDeveloperRequest = async (userId) => {
+  return changeDeveloperRequestState(userId, 'rejected');
+};
+
+// Revoke an approved developer request
+const revokeApproval = async (userId) => {
+  return changeDeveloperRequestState(userId, 'pending');
+};
+
 export { 
   adminStore, 
   fetchDashboardStats,
@@ -522,6 +627,10 @@ export {
   fetchAdminUsers,
   fetchAdminCategories,
   fetchAdminTokens,
+  fetchDeveloperRequests,
+  approveDeveloperRequest,
+  rejectDeveloperRequest,
+  revokeApproval,
   createToken,
   revokeToken
 };

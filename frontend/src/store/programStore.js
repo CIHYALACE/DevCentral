@@ -441,6 +441,32 @@ const addProgram = async (programData, mediaFiles) => {
   }
 };
 
+const deleteMedia = async (mediaId) => {
+  programStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.delete(`${API_URL}/media/${mediaId}/`);
+    programStore.setState((state) => ({ ...state, loading: false }));
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting media:', error.response?.data || error.message);
+    programStore.setState((state) => ({ ...state, error, loading: false }));
+    throw error;
+  }
+};
+
+const deleteProgram = async (slug) => {
+  programStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.delete(`${API_URL}/programs/${slug}/`);
+    programStore.setState((state) => ({ ...state, loading: false }));
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting program:', error.response?.data || error.message);
+    programStore.setState((state) => ({ ...state, error, loading: false }));
+    throw error;
+  }
+};
+
 export { 
   programStore, 
   fetchPrograms, 
@@ -456,5 +482,7 @@ export {
   recordDownload,
   submitReview,
   fetchPublishedPrograms,
-  updateProgram
+  updateProgram,
+  deleteMedia,
+  deleteProgram
 };

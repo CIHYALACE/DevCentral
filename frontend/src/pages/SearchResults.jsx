@@ -70,7 +70,7 @@ export default function SearchResults() {
           
           <div className="row g-3">
             {programs.map((program) => (
-              <div key={program.id} className="col-12 mb-3 mb-md-0 col-md-6 col-lg-4">
+              <div key={program.id} className="col-12 col-sm-6 col-lg-3">
                 <ProgramCard program={program} />
               </div>
             ))}

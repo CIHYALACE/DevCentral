@@ -61,4 +61,17 @@ const fetchProgramReviews = async (programId, page = 1, pageSize = 5) => {
   }
 };
 
-export { reviewStore, fetchReviews, fetchProgramReviews };
+const deleteReview = async (id) =>{
+  reviewStore.setState((state) => ({ ...state, loading: true, error: null }));
+  try {
+    const response = await axios.delete(`${API_URL}/reviews/${id}/`);
+    reviewStore.setState((state) => ({ ...state, loading: false }));
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting review:', error.response?.data || error.message);
+    reviewStore.setState((state) => ({ ...state, error, loading: false }));
+    throw error;
+  }
+}
+
+export { reviewStore, fetchReviews, fetchProgramReviews,deleteReview };

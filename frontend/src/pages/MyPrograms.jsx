@@ -47,12 +47,6 @@ const MyPrograms = () => {
     <div className="my-programs-container">
       <div className="my-programs-header d-flex justify-content-between align-items-center mb-4">
         <h2>My Programs</h2>
-        <Link 
-          to="/profile/add-program" 
-          className="btn btn-primary"
-        >
-          + Add New Program
-        </Link>
       </div>
 
       {userApps.length === 0 ? (
