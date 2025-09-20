@@ -27,3 +27,4 @@ urllib3==2.3.0
 django-filter
 dotenv
 django-cors-headers
+huggingface_hub
